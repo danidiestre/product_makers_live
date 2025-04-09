@@ -23,6 +23,12 @@ const AppProfilePage: FC = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
   
+  // Background pattern style for when there's no cover image
+  const patternStyle = {
+    backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.05) 1px, transparent 0)`,
+    backgroundSize: '24px 24px',
+  }
+  
   if (!app) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-12 text-center">
@@ -64,92 +70,32 @@ const AppProfilePage: FC = () => {
               }`}>{app.name}</h1>
             </div>
           </div>
-          
-          <div className="hidden md:flex items-center space-x-6">
-            {/* Tech pills */}
-            <div className="flex space-x-2">
-              {app.technologies?.slice(0, 3).map((tech, index) => (
-                <div key={index} className="flex items-center text-xs bg-gray-100 px-2 py-1 rounded">
-                  <Code className="h-3 w-3 text-gray-500 mr-1.5" />
-                  <span className="text-gray-700">{tech}</span>
-                </div>
-              ))}
-              {app.technologies && app.technologies.length > 3 && (
-                <span className="text-xs text-gray-500 py-1">+{app.technologies.length - 3} more</span>
-              )}
-            </div>
-            
-            {/* External links */}
-            <div className="flex space-x-3">
-              {app.externalLinks?.website && (
-                <a 
-                  href={app.externalLinks.website}
-                  className="text-gray-500 hover:text-blue-600 transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Website"
-                >
-                  <Globe className="h-5 w-5" />
-                </a>
-              )}
-              {app.externalLinks?.github && (
-                <a 
-                  href={app.externalLinks.github}
-                  className="text-gray-500 hover:text-gray-900 transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                >
-                  <Github className="h-5 w-5" />
-                </a>
-              )}
-              {app.externalLinks?.appStore && (
-                <a 
-                  href={app.externalLinks.appStore}
-                  className="text-gray-500 hover:text-blue-600 transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="App Store"
-                >
-                  <Smartphone className="h-5 w-5" />
-                </a>
-              )}
-              {app.externalLinks?.playStore && (
-                <a 
-                  href={app.externalLinks.playStore}
-                  className="text-gray-500 hover:text-green-600 transition-colors"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Google Play"
-                >
-                  <Play className="h-5 w-5" />
-                </a>
-              )}
-            </div>
-            
-            {/* Upvote button */}
-            <button 
-              onClick={handleUpvote}
-              className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
-                hasUpvoted 
-                  ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              <ThumbsUp className="h-4 w-4" />
-              <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
-            </button>
-          </div>
         </div>
       </div>
       
       {/* Content with padding for fixed header */}
       <div className="pt-20">
         {/* App header - Hero section */}
-        <div className="bg-gradient-to-b from-blue-50 to-white">
-          <div className="max-w-4xl mx-auto px-4 pt-8 pb-12">
+        <div className="bg-gradient-to-b from-gray-50 via-white to-white relative">
+          {/* Cover image */}
+          <div className="w-full h-48 md:h-64 bg-gradient-to-r from-gray-100 to-gray-200 overflow-hidden relative mb-8">
+            {app.coverImage ? (
+              <img 
+                src={app.coverImage} 
+                alt={`${app.name} cover`} 
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50">
+                <div className="absolute inset-0" style={patternStyle}></div>
+              </div>
+            )}
+          </div>
+
+          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+          <div className="max-w-4xl mx-auto px-4 pt-0 pb-12">
             <div className="flex items-start gap-6 mb-8">
-              <div className="h-24 w-24 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100 shadow-lg">
+              <div className="h-24 w-24 rounded-xl overflow-hidden flex-shrink-0 bg-white shadow-lg border border-gray-100">
                 <img src={app.imageUrl} alt={app.name} className="h-full w-full object-cover" />
               </div>
               <div className="flex-1">
@@ -172,7 +118,7 @@ const AppProfilePage: FC = () => {
                 <h1 className="text-3xl font-bold text-gray-900">{app.name}</h1>
                 
                 {/* Makers */}
-                <div className="flex items-center mt-2 mb-4">
+                <div className="flex items-center mt-2 mb-3">
                   <div className="flex -space-x-2 mr-3">
                     {app.makers?.slice(0, 3).map((maker, index) => (
                       <div key={index} className="h-7 w-7 rounded-full overflow-hidden border-2 border-white">
@@ -184,103 +130,131 @@ const AppProfilePage: FC = () => {
                     By {app.makers?.map(m => m.name).join(', ')}
                   </span>
                 </div>
-                
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {app.tags?.map((tag) => (
-                    <span key={tag} className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">
-                      {tag}
+
+                {/* App type and description */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {app.externalLinks?.appStore && (
+                    <span className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded-md flex items-center">
+                      <Smartphone className="h-3 w-3 mr-1" />
+                      iOS
                     </span>
-                  ))}
+                  )}
+                  {app.externalLinks?.playStore && (
+                    <span className="text-xs bg-green-50 text-green-700 px-2 py-1 rounded-md flex items-center">
+                      <Play className="h-3 w-3 mr-1" />
+                      Android
+                    </span>
+                  )}
+                  {app.externalLinks?.website && (
+                    <span className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-md flex items-center">
+                      <Globe className="h-3 w-3 mr-1" />
+                      Web
+                    </span>
+                  )}
+                </div>
+
+                <p className="text-sm text-gray-600 mb-4 line-clamp-2">{app.description}</p>
+
+                {/* External links */}
+                <div className="flex flex-col space-y-4">
+                  <div className="flex flex-wrap gap-3">
+                    {app.externalLinks?.website && (
+                      <a 
+                        href={app.externalLinks.website} 
+                        className="flex items-center text-sm text-gray-600 hover:text-blue-600"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Globe className="h-4 w-4 mr-1" />
+                        Website
+                      </a>
+                    )}
+                    {app.externalLinks?.github && (
+                      <a 
+                        href={app.externalLinks.github} 
+                        className="flex items-center text-sm text-gray-600 hover:text-gray-900"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="h-4 w-4 mr-1" />
+                        GitHub
+                      </a>
+                    )}
+                    {app.externalLinks?.appStore && (
+                      <a 
+                        href={app.externalLinks.appStore} 
+                        className="flex items-center text-sm text-gray-600 hover:text-blue-600"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Smartphone className="h-4 w-4 mr-1" />
+                        App Store
+                      </a>
+                    )}
+                    {app.externalLinks?.playStore && (
+                      <a 
+                        href={app.externalLinks.playStore} 
+                        className="flex items-center text-sm text-gray-600 hover:text-green-600"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Play className="h-4 w-4 mr-1" />
+                        Play Store
+                      </a>
+                    )}
+                  </div>
+
+                  {/* Main CTAs */}
+                  <div className="flex items-center gap-3">
+                    {/* Visit project button */}
+                    {app.externalLinks?.website && (
+                      <a
+                        href={app.externalLinks.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200"
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                        <span>Visit Project</span>
+                      </a>
+                    )}
+
+                    {/* Upvote button */}
+                    <button 
+                      onClick={handleUpvote}
+                      className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                        hasUpvoted 
+                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-2 border-blue-200' 
+                          : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200'
+                      }`}
+                    >
+                      <ThumbsUp className={`h-4 w-4 ${hasUpvoted ? 'text-blue-600' : 'text-gray-500'}`} />
+                      <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
               <div className="md:hidden flex space-x-2">
                 <button 
                   onClick={handleUpvote}
-                  className={`flex items-center space-x-1 px-4 py-2 rounded-md transition-colors ${
+                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                     hasUpvoted 
-                      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-2 border-blue-200' 
+                      : 'bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200'
                   }`}
                 >
-                  <ThumbsUp className="h-4 w-4" />
+                  <ThumbsUp className={`h-4 w-4 ${hasUpvoted ? 'text-blue-600' : 'text-gray-500'}`} />
                   <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
                 </button>
-                <button className="p-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200">
-                  <Share2 className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-            
-            {/* Tech stack */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              <h2 className="text-sm font-medium text-gray-700 mr-2">Tech Stack:</h2>
-              {app.technologies?.map((tech, index) => (
-                <div key={index} className="flex items-center bg-white border rounded px-2 py-1">
-                  <Code className="h-3 w-3 text-gray-500 mr-1.5" />
-                  <span className="text-xs text-gray-700">{tech}</span>
-                </div>
-              ))}
-            </div>
-            
-            {/* External links & launch date */}
-            <div className="flex flex-wrap justify-between items-center p-4 bg-white shadow-sm rounded-lg border border-gray-100">
-              <div className="flex items-center">
-                <Calendar className="h-4 w-4 text-gray-500 mr-2" />
-                <span className="text-sm text-gray-700">
-                  Launched on {new Date(app.launchDate).toLocaleDateString('en-US', {
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric'
-                  })}
-                </span>
-              </div>
-              
-              <div className="flex space-x-4 mt-3 sm:mt-0">
                 {app.externalLinks?.website && (
-                  <a 
-                    href={app.externalLinks.website} 
-                    className="flex items-center text-sm text-blue-600 hover:text-blue-800"
+                  <a
+                    href={app.externalLinks.website}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg font-medium bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200"
                   >
-                    <Globe className="h-4 w-4 mr-1" />
-                    Website
-                  </a>
-                )}
-                
-                {app.externalLinks?.github && (
-                  <a 
-                    href={app.externalLinks.github} 
-                    className="flex items-center text-sm text-gray-600 hover:text-gray-800"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Github className="h-4 w-4 mr-1" />
-                    GitHub
-                  </a>
-                )}
-                
-                {app.externalLinks?.appStore && (
-                  <a 
-                    href={app.externalLinks.appStore} 
-                    className="flex items-center text-sm text-blue-600 hover:text-blue-800"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Smartphone className="h-4 w-4 mr-1" />
-                    App Store
-                  </a>
-                )}
-                
-                {app.externalLinks?.playStore && (
-                  <a 
-                    href={app.externalLinks.playStore} 
-                    className="flex items-center text-sm text-green-600 hover:text-green-800"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Play className="h-4 w-4 mr-1" />
-                    Google Play
+                    <ExternalLink className="h-4 w-4" />
+                    <span>Visit</span>
                   </a>
                 )}
               </div>
@@ -356,28 +330,59 @@ const AppProfilePage: FC = () => {
               
               {/* Metrics */}
               {app.metrics && (
-                <section className="mb-6 p-4 bg-gray-50 rounded-lg shadow-sm">
+                <section className="mb-6">
                   <h3 className="text-sm font-medium text-gray-900 mb-3">Metrics</h3>
-                  <ul className="space-y-2">
+                  <div className="grid gap-3">
+                    {/* Launch date card */}
+                    <div className="flex items-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:border-purple-500 transition-colors">
+                      <div className="p-2 bg-purple-50 rounded-lg">
+                        <Calendar className="h-5 w-5 text-purple-600" />
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm text-gray-500">Launch Date</p>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {new Date(app.launchDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </p>
+                      </div>
+                    </div>
                     {app.metrics.downloads && (
-                      <li className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Downloads</span>
-                        <span className="text-sm font-medium text-gray-900">{app.metrics.downloads.toLocaleString()}</span>
-                      </li>
+                      <div className="flex items-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:border-blue-500 transition-colors">
+                        <div className="p-2 bg-blue-50 rounded-lg">
+                          <ArrowLeft className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-sm text-gray-500">Downloads</p>
+                          <p className="text-lg font-semibold text-gray-900">{app.metrics.downloads.toLocaleString()}</p>
+                        </div>
+                      </div>
                     )}
                     {app.metrics.activeUsers && (
-                      <li className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Active Users</span>
-                        <span className="text-sm font-medium text-gray-900">{app.metrics.activeUsers.toLocaleString()}</span>
-                      </li>
+                      <div className="flex items-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:border-green-500 transition-colors">
+                        <div className="p-2 bg-green-50 rounded-lg">
+                          <MessageSquare className="h-5 w-5 text-green-600" />
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-sm text-gray-500">Active Users</p>
+                          <p className="text-lg font-semibold text-gray-900">{app.metrics.activeUsers.toLocaleString()}</p>
+                        </div>
+                      </div>
                     )}
                     {app.metrics.avgRating && (
-                      <li className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">Average Rating</span>
-                        <span className="text-sm font-medium text-gray-900">{app.metrics.avgRating}</span>
-                      </li>
+                      <div className="flex items-center p-4 bg-white rounded-lg border border-gray-200 shadow-sm hover:border-yellow-500 transition-colors">
+                        <div className="p-2 bg-yellow-50 rounded-lg">
+                          <ThumbsUp className="h-5 w-5 text-yellow-600" />
+                        </div>
+                        <div className="ml-4">
+                          <p className="text-sm text-gray-500">Average Rating</p>
+                          <p className="text-lg font-semibold text-gray-900">{app.metrics.avgRating}</p>
+                        </div>
+                      </div>
                     )}
-                  </ul>
+                  </div>
                 </section>
               )}
             </div>

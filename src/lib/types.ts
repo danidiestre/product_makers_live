@@ -30,6 +30,7 @@ export interface App {
   name: string
   description: string
   imageUrl: string
+  coverImage?: string
   screenshots?: string[]
   votes: number
   tags?: string[]

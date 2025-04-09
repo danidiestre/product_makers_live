@@ -7,6 +7,7 @@ export const MOCK_APPS: App[] = [
     name: 'BrowserAgent',
     description: 'Browser-based AI agents - unlimited runs, fixed cost. BrowserAgent is a revolutionary platform that allows you to create and deploy AI agents directly in your browser. It offers unlimited agent runs for a fixed monthly cost, making it perfect for businesses of all sizes that need reliable AI functionality without unpredictable usage-based pricing.',
     imageUrl: 'https://picsum.photos/200/200?random=1',
+    coverImage: 'https://picsum.photos/1920/400?random=1',
     screenshots: [
       'https://picsum.photos/800/450?random=11',
       'https://picsum.photos/800/450?random=12',
@@ -43,6 +44,7 @@ export const MOCK_APPS: App[] = [
     name: 'Gemini Personalization',
     description: 'Get help made just for you. Gemini Personalization uses advanced AI to learn your preferences, work style, and needs to provide increasingly personalized assistance. It adapts to your unique requirements over time, making it more useful with each interaction.',
     imageUrl: 'https://picsum.photos/200/200?random=2',
+    coverImage: 'https://picsum.photos/1920/400?random=2',
     screenshots: [
       'https://picsum.photos/800/450?random=21',
       'https://picsum.photos/800/450?random=22',
@@ -74,6 +76,7 @@ export const MOCK_APPS: App[] = [
     name: 'GrammarPaw',
     description: 'AI writing assistant for Mac. GrammarPaw uses advanced machine learning algorithms to analyze your writing and suggest improvements to grammar, style, and clarity. It integrates seamlessly with all major writing applications on macOS.',
     imageUrl: 'https://picsum.photos/200/200?random=3',
+    coverImage: 'https://picsum.photos/1920/400?random=3',
     screenshots: [
       'https://picsum.photos/800/450?random=31',
       'https://picsum.photos/800/450?random=32',
@@ -105,6 +108,7 @@ export const MOCK_APPS: App[] = [
     name: 'Interlify',
     description: 'Connect your APIs to LLMs in minutes. Interlify provides a no-code platform to integrate your existing APIs with large language models, enabling advanced AI capabilities with minimal development effort.',
     imageUrl: 'https://picsum.photos/200/200?random=4',
+    coverImage: 'https://picsum.photos/1920/400?random=4',
     screenshots: [
       'https://picsum.photos/800/450?random=41',
       'https://picsum.photos/800/450?random=42',
@@ -135,6 +139,7 @@ export const MOCK_APPS: App[] = [
     name: 'Direct Sponsorships by beehiiv',
     description: 'Selling ads any other way is selling yourself short. Direct Sponsorships provides newsletter creators with a streamlined platform to manage sponsorships, negotiate with advertisers, and maximize revenue from their audience.',
     imageUrl: 'https://picsum.photos/200/200?random=5',
+    coverImage: 'https://picsum.photos/1920/400?random=5',
     screenshots: [
       'https://picsum.photos/800/450?random=51',
       'https://picsum.photos/800/450?random=52',
