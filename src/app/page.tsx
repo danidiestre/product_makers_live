@@ -1,3 +1,5 @@
+'use client'
+
 import { Navbar } from '@/components/Navbar'
 import { AppList } from '@/components/AppList'
 import Footer from '@/components/Footer'
