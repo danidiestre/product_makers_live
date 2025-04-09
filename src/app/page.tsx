@@ -1,7 +1,6 @@
 import { Navbar } from '@/components/Navbar'
 import { AppList } from '@/components/AppList'
 import Footer from '@/components/Footer'
-import Image from 'next/image'
 
 export default function Home() {
   return (
@@ -26,17 +25,6 @@ export default function Home() {
           
           <div className="max-w-6xl mx-auto px-4 relative z-10">
             <div className="text-center max-w-3xl mx-auto">
-              {/* App Icon */}
-              <div className="flex justify-center mb-8">
-                <Image 
-                  src="/assets/icon_blue.svg" 
-                  alt="Product Makers" 
-                  width={80} 
-                  height={80} 
-                  className="animate-pulse"
-                />
-              </div>
-              
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 discover amazing products built by makers
               </h1>
