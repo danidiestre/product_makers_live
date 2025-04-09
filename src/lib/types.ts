@@ -17,6 +17,10 @@ export interface Maker {
   name: string
   role: string
   avatar: string
+  bio?: string
+  twitter?: string
+  github?: string
+  website?: string
 }
 
 export interface Metrics {

@@ -211,10 +211,6 @@ export const AppCard: FC<AppCardProps> = ({
             </a>
           )}
         </div>
-        <div className="flex items-center text-gray-500 text-sm">
-          <MessageCircle className="h-4 w-4 mr-1" />
-          <span>{commentsCount}</span>
-        </div>
       </div>
     </div>
   )
