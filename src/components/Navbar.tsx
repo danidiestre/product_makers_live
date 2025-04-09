@@ -1,18 +1,69 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Tooltip } from '@/components/Tooltip'
+import { FC, ReactNode, useState, useRef, useEffect } from 'react'
+
+// Custom tooltip that appears below the element
+interface BottomTooltipProps {
+  content: string
+  children: ReactNode
+}
+
+const BottomTooltip: FC<BottomTooltipProps> = ({ content, children }) => {
+  const [isVisible, setIsVisible] = useState(false)
+  const triggerRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (isVisible && triggerRef.current && tooltipRef.current) {
+      const triggerRect = triggerRef.current.getBoundingClientRect()
+      const tooltipRect = tooltipRef.current.getBoundingClientRect()
+      
+      const centerX = triggerRect.left + (triggerRect.width / 2)
+      const bottom = triggerRect.bottom + 8 // Position below the element
+
+      tooltipRef.current.style.setProperty('--tooltip-x', `${centerX}px`)
+      tooltipRef.current.style.setProperty('--tooltip-y', `${bottom}px`)
+    }
+  }, [isVisible])
+
+  return (
+    <div 
+      ref={triggerRef}
+      className="relative inline-flex"
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      {isVisible && (
+        <div 
+          ref={tooltipRef}
+          className="fixed transform -translate-x-1/2 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded-md whitespace-nowrap z-[100]" 
+          style={{
+            left: 'var(--tooltip-x, 50%)',
+            top: 'var(--tooltip-y, 0)',
+          }}
+        >
+          {content}
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-full">
+            <div className="border-4 border-transparent border-b-gray-900" />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-brand-blue">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Tooltip content="LETS GO MAKERS!!">
+          <BottomTooltip content="LETS GO MAKERS!!">
             <Link href="/" className="font-bold text-xl lowercase text-white flex items-center gap-2">
               <div className="w-3 h-3 bg-yellow-400 mt-1"></div>
               product makers
             </Link>
-          </Tooltip>
+          </BottomTooltip>
           <nav className="hidden md:flex gap-6">
             <Link href="/about" className="text-white/80 hover:text-white transition-colors lowercase">
               about us
