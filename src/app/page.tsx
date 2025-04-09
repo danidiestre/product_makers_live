@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/Navbar'
 import { AppList } from '@/components/AppList'
-import { Footer } from '@/components/Footer'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
