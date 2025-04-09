@@ -23,6 +23,111 @@ export default function Home() {
           <div className="absolute top-20 left-20 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-5xl opacity-5"></div>
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-5xl opacity-5"></div>
           
+          {/* Animated floating elements */}
+          <div className="absolute inset-0 overflow-hidden">
+            {/* Floating + symbol */}
+            <div 
+              className="absolute w-16 h-16 opacity-5" 
+              style={{
+                top: '15%',
+                left: '10%',
+                animation: 'float 20s ease-in-out infinite',
+                background: `url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 5V19M5 12H19' stroke='%232563EB' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                filter: 'blur(2px)',
+              }}
+            ></div>
+            
+            {/* Floating circle */}
+            <div 
+              className="absolute w-12 h-12 bg-indigo-300 rounded-full opacity-8" 
+              style={{
+                top: '30%',
+                right: '15%',
+                animation: 'float 15s ease-in-out infinite 2s',
+                filter: 'blur(8px)',
+              }}
+            ></div>
+            
+            {/* Floating square */}
+            <div 
+              className="absolute w-10 h-10 bg-blue-200 rounded-md opacity-5" 
+              style={{
+                bottom: '25%',
+                left: '30%',
+                animation: 'floatReverse 25s ease-in-out infinite 1s',
+                filter: 'blur(6px)',
+              }}
+            ></div>
+            
+            {/* Floating times symbol */}
+            <div 
+              className="absolute w-14 h-14 opacity-5" 
+              style={{
+                top: '65%',
+                right: '25%',
+                animation: 'float 18s ease-in-out infinite 3s',
+                background: `url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 6L6 18M6 6L18 18' stroke='%237C3AED' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                filter: 'blur(2px)',
+              }}
+            ></div>
+            
+            {/* Floating diamond */}
+            <div 
+              className="absolute w-16 h-16 opacity-5" 
+              style={{
+                top: '45%',
+                left: '40%',
+                animation: 'floatReverse 22s ease-in-out infinite',
+                transform: 'rotate(45deg)',
+                background: 'rgba(191, 219, 254, 0.2)',
+                filter: 'blur(5px)',
+              }}
+            ></div>
+          </div>
+          
+          {/* Animation keyframes */}
+          <style jsx>{`
+            @keyframes float {
+              0% {
+                transform: translateY(0) translateX(0);
+              }
+              25% {
+                transform: translateY(-10px) translateX(5px);
+              }
+              50% {
+                transform: translateY(0) translateX(10px);
+              }
+              75% {
+                transform: translateY(10px) translateX(5px);
+              }
+              100% {
+                transform: translateY(0) translateX(0);
+              }
+            }
+            
+            @keyframes floatReverse {
+              0% {
+                transform: translateY(0) translateX(0);
+              }
+              25% {
+                transform: translateY(10px) translateX(-5px);
+              }
+              50% {
+                transform: translateY(0) translateX(-10px);
+              }
+              75% {
+                transform: translateY(-10px) translateX(-5px);
+              }
+              100% {
+                transform: translateY(0) translateX(0);
+              }
+            }
+          `}</style>
+          
           <div className="max-w-6xl mx-auto px-4 relative z-10">
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
