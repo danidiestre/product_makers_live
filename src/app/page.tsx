@@ -8,19 +8,19 @@ export default function Home() {
       <Navbar />
       <main className="flex-1">
         {/* Hero Section with Background */}
-        <section className="relative bg-[#0A0A0A] py-12 md:py-16">
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 lowercase">
+        <section className="relative bg-gradient-to-br from-gray-50 via-white to-blue-50/20 py-16 md:py-20 border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 discover amazing products built by makers
               </h1>
-              <p className="text-xl text-gray-300 mb-8 lowercase">
+              <p className="text-lg md:text-xl text-gray-600 mb-8">
                 product makers is a community showcasing innovative apps and tools created by independent developers and small teams.
               </p>
               <div className="inline-flex justify-center gap-4">
                 <a 
                   href="#featured-apps" 
-                  className="px-6 py-3 rounded-lg bg-white text-gray-900 font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 hover:bg-gray-50 lowercase flex items-center gap-2"
+                  className="px-6 py-3 rounded-lg bg-brand-blue text-white font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 hover:bg-brand-blue/90 lowercase flex items-center gap-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                     <circle cx="11" cy="11" r="8"/>
@@ -56,7 +56,7 @@ export default function Home() {
         </section>
         
         {/* Product List Section */}
-        <div id="featured-apps" className="container mx-auto px-4 py-16">
+        <div id="featured-apps" className="container mx-auto px-4 py-8">
           <AppList />
         </div>
       </main>
