@@ -1,48 +1,51 @@
 'use client'
 
-import { FC, ReactNode, useState } from 'react'
+import { FC, ReactNode, useState, useRef, useEffect } from 'react'
 
 interface TooltipProps {
-  children: ReactNode
   content: string
-  position?: 'top' | 'right' | 'bottom' | 'left'
+  children: ReactNode
 }
 
-export const Tooltip: FC<TooltipProps> = ({
-  children,
-  content,
-  position = 'top'
-}) => {
+export const Tooltip: FC<TooltipProps> = ({ content, children }) => {
   const [isVisible, setIsVisible] = useState(false)
+  const triggerRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
 
-  const positionClasses = {
-    top: 'bottom-full left-1/2 transform -translate-x-1/2 mb-1',
-    right: 'left-full top-1/2 transform -translate-y-1/2 ml-1',
-    bottom: 'top-full left-1/2 transform -translate-x-1/2 mt-1',
-    left: 'right-full top-1/2 transform -translate-y-1/2 mr-1'
-  }
+  useEffect(() => {
+    if (isVisible && triggerRef.current && tooltipRef.current) {
+      const triggerRect = triggerRef.current.getBoundingClientRect()
+      const tooltipRect = tooltipRef.current.getBoundingClientRect()
+      
+      const centerX = triggerRect.left + (triggerRect.width / 2)
+      const top = triggerRect.top - tooltipRect.height - 8
+
+      tooltipRef.current.style.setProperty('--tooltip-x', `${centerX}px`)
+      tooltipRef.current.style.setProperty('--tooltip-y', `${top}px`)
+    }
+  }, [isVisible])
 
   return (
     <div 
-      className="relative inline-block"
+      ref={triggerRef}
+      className="relative inline-flex"
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
       {isVisible && (
         <div 
-          className={`absolute z-10 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded shadow-sm ${positionClasses[position]}`}
-          role="tooltip"
+          ref={tooltipRef}
+          className="fixed transform -translate-x-1/2 px-2 py-1 text-xs font-medium text-white bg-gray-900 rounded-md whitespace-nowrap z-[100]" 
+          style={{
+            left: 'var(--tooltip-x, 50%)',
+            top: 'var(--tooltip-y, 0)',
+          }}
         >
           {content}
-          <div 
-            className={`absolute ${
-              position === 'top' ? 'top-full left-1/2 transform -translate-x-1/2 border-t-gray-900' : 
-              position === 'right' ? 'right-full top-1/2 transform -translate-y-1/2 border-r-gray-900' :
-              position === 'bottom' ? 'bottom-full left-1/2 transform -translate-x-1/2 border-b-gray-900' :
-              'left-full top-1/2 transform -translate-y-1/2 border-l-gray-900'
-            } border-solid border-4 border-transparent`}
-          />
+          <div className="absolute left-1/2 -translate-x-1/2 top-full">
+            <div className="border-4 border-transparent border-t-gray-900" />
+          </div>
         </div>
       )}
     </div>

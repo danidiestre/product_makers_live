@@ -6,6 +6,8 @@ import { Tooltip } from './Tooltip'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { App, ExternalLinks } from '@/lib/types'
+import { hasVotedToday, toggleVote } from '@/lib/utils'
+import { useState, useEffect } from 'react'
 
 interface BadgeProps {
   type: 'new' | 'trending' | 'top'
@@ -58,7 +60,7 @@ export const AppCard: FC<AppCardProps> = ({
   name,
   description,
   imageUrl,
-  votes,
+  votes: initialVotes,
   badges = [],
   tags = [],
   commentsCount = 0,
@@ -66,22 +68,41 @@ export const AppCard: FC<AppCardProps> = ({
   makers = [],
   onUpvote,
 }) => {
+  const [votes, setVotes] = useState(initialVotes)
+  const [hasVoted, setHasVoted] = useState(false)
+  
+  useEffect(() => {
+    setHasVoted(hasVotedToday(id))
+  }, [id])
+
+  const handleUpvote = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    const newVoteState = toggleVote(id)
+    setHasVoted(newVoteState)
+    setVotes(prev => newVoteState ? prev + 1 : prev - 1)
+    onUpvote?.()
+  }
+
   return (
     <div 
       className="flex flex-col border rounded-lg overflow-hidden hover:border-blue-500 transition-all bg-white"
       data-testid={`app-card-${id}`}
     >
-      <Link 
-        href={`/app/${id}`}
-        className="flex p-4 cursor-pointer" 
-      >
-        <div className="h-16 w-16 rounded-lg overflow-hidden flex-shrink-0 mr-4 flex items-center justify-center bg-gray-100">
-          <img src={imageUrl} alt={name} className="h-full w-full object-cover" />
+      <div className="flex p-4">
+        <div className="h-16 w-16 rounded-lg overflow-hidden flex-shrink-0 mr-4 flex items-center justify-center bg-white border border-gray-100 p-2 relative">
+          <img src={imageUrl} alt={name} className="h-full w-full object-contain" />
+          {badges.includes('new') && (
+            <div className="absolute bottom-0 left-0 right-0 bg-brand-blue/90 text-white text-[10px] font-medium py-0.5 text-center">
+              NEW
+            </div>
+          )}
         </div>
         <div className="flex-1">
           <div className="flex items-start justify-between">
             <div className="flex-1 pr-4">
-              <h3 className="font-semibold text-gray-900 text-lg">{name}</h3>
+              <Link href={`/app/${id}`} className="inline-block">
+                <h3 className="font-semibold text-gray-900 text-lg hover:text-brand-blue transition-colors">{name}</h3>
+              </Link>
               
               {/* App Type Indicators */}
               <div className="flex flex-wrap gap-2 mt-2">
@@ -118,38 +139,50 @@ export const AppCard: FC<AppCardProps> = ({
                     ))}
                   </div>
                   <span className="text-xs text-gray-500">
-                    By {makers.map(m => m.name).join(', ')}
+                    By {makers.map((m, i) => (
+                      <span key={i}>
+                        <Link href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-brand-blue transition-colors">
+                          {m.name}
+                        </Link>
+                        {i < makers.length - 1 ? ', ' : ''}
+                      </span>
+                    ))}
                   </span>
                 </div>
               )}
-              
-              <div className="flex flex-wrap mt-2 gap-2">
-                {badges.map((badgeType) => (
-                  <Badge key={badgeType} type={badgeType} />
-                ))}
-                {tags.map((tag) => (
-                  <Tag key={tag} label={tag} />
-                ))}
-              </div>
             </div>
             <div className="flex-shrink-0">
-              <Tooltip content="Upvote this app">
-                <button 
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    onUpvote?.()
-                  }}
-                  className="flex flex-col items-center bg-gray-50 py-2 px-3 rounded-md hover:bg-gray-100 border border-gray-200"
-                  aria-label="Upvote"
-                >
-                  <ChevronUp className="h-5 w-5 text-gray-500 hover:text-blue-500" />
-                  <span className="text-sm font-bold text-gray-800">{votes}</span>
-                </button>
-              </Tooltip>
+              <div className="flex gap-2">
+                <Link href={`/app/${id}#comments`}>
+                  <Tooltip content="View comments">
+                    <button 
+                      className="flex flex-col items-center py-2 px-3 rounded-md border border-gray-200 bg-gray-50 hover:bg-gray-100 transition-all"
+                      aria-label="View comments"
+                    >
+                      <MessageCircle className="h-5 w-5 text-gray-500" />
+                      <span className="text-sm font-bold text-gray-800">{commentsCount}</span>
+                    </button>
+                  </Tooltip>
+                </Link>
+                <Tooltip content={hasVoted ? "Remove upvote" : "Upvote this app"}>
+                  <button 
+                    onClick={handleUpvote}
+                    className={`flex flex-col items-center py-2 px-3 rounded-md border transition-all ${
+                      hasVoted 
+                        ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
+                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                    }`}
+                    aria-label={hasVoted ? "Remove upvote" : "Upvote"}
+                  >
+                    <ChevronUp className={`h-5 w-5 ${hasVoted ? 'text-blue-500' : 'text-gray-500'}`} />
+                    <span className={`text-sm font-bold ${hasVoted ? 'text-blue-600' : 'text-gray-800'}`}>{votes}</span>
+                  </button>
+                </Tooltip>
+              </div>
             </div>
           </div>
         </div>
-      </Link>
+      </div>
       <div className="bg-gray-50 py-2 px-4 flex justify-between items-center border-t border-gray-100">
         {/* External Links */}
         <div className="flex space-x-3">

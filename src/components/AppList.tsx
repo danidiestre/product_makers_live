@@ -3,7 +3,7 @@
 import { FC, useState } from 'react'
 import { AppCard } from './AppCard'
 import { CountdownTimer } from './CountdownTimer'
-import { Filter, SortDesc, SortAsc } from 'lucide-react'
+import { Filter, SortDesc, SortAsc, ThumbsUp, Clock } from 'lucide-react'
 import clsx from 'clsx'
 import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
@@ -50,67 +50,64 @@ export const AppList: FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Featured Apps</h2>
-        <CountdownTimer 
-          hours={timeRemaining.hours} 
-          minutes={timeRemaining.minutes} 
-          seconds={timeRemaining.seconds} 
-        />
-      </div>
-      
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-        <div className="flex border-b w-full sm:w-auto overflow-x-auto pb-px">
-          <ViewTab 
-            label="Daily" 
-            active={viewMode === 'daily'} 
-            onClick={() => setViewMode('daily')} 
-          />
-          <ViewTab 
-            label="Weekly" 
-            active={viewMode === 'weekly'} 
-            onClick={() => setViewMode('weekly')} 
-          />
-          <ViewTab 
-            label="All Time" 
-            active={viewMode === 'alltime'} 
-            onClick={() => setViewMode('alltime')} 
-          />
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-2 pb-8">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+        <div className="flex flex-col gap-2 w-full sm:w-auto">
+          <h2 className="text-2xl font-bold text-gray-900">Featured Apps</h2>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 bg-gray-100/80 backdrop-blur-sm p-1 rounded-lg">
+              <button
+                onClick={() => setSortKey('votes')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1.5 ${
+                  sortKey === 'votes'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <ThumbsUp className="h-4 w-4" />
+                Most Voted
+              </button>
+              <button
+                onClick={() => setSortKey('date')}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all flex items-center gap-1.5 ${
+                  sortKey === 'date'
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                <Clock className="h-4 w-4" />
+                Latest
+              </button>
+            </div>
+            <button
+              onClick={() => setSortAsc(!sortAsc)}
+              className="p-2 rounded-lg bg-gray-100/80 backdrop-blur-sm text-gray-600 hover:text-gray-900 transition-colors"
+              aria-label="Toggle sort direction"
+            >
+              {sortAsc ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
-        
-        <div className="flex space-x-3 mt-4 sm:mt-0">
-          <button 
-            className={clsx(
-              "inline-flex items-center px-3 py-1.5 border rounded-md text-sm hover:bg-gray-50 transition-colors",
-              sortKey === 'date' ? "bg-blue-50 border-blue-200 text-blue-700" : "bg-white"
-            )}
-            onClick={() => setSortKey('date')}
-          >
-            <Filter className="h-4 w-4 mr-1.5" />
-            Date
-          </button>
-          <button 
-            className={clsx(
-              "inline-flex items-center px-3 py-1.5 border rounded-md text-sm hover:bg-gray-50 transition-colors",
-              sortKey === 'votes' ? "bg-blue-50 border-blue-200 text-blue-700" : "bg-white"
-            )}
-            onClick={() => {
-              if (sortKey === 'votes') {
-                setSortAsc(!sortAsc)
-              } else {
-                setSortKey('votes')
-                setSortAsc(false)
-              }
-            }}
-          >
-            {sortAsc ? (
-              <SortAsc className="h-4 w-4 mr-1.5" />
-            ) : (
-              <SortDesc className="h-4 w-4 mr-1.5" />
-            )}
-            Votes
-          </button>
+
+        <div className="flex flex-col sm:items-end gap-3 w-full sm:w-auto">
+          <CountdownTimer className="sm:justify-end" />
+          
+          {/* Time period tabs */}
+          <div className="flex p-1 bg-gray-100/80 backdrop-blur-sm rounded-lg">
+            {['daily', 'weekly', 'all time'].map((period) => (
+              <button
+                key={period}
+                onClick={() => setViewMode(period as ViewMode)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${
+                  viewMode === period
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {period.charAt(0).toUpperCase() + period.slice(1)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
       

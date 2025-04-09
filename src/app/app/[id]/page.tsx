@@ -95,8 +95,8 @@ const AppProfilePage: FC = () => {
           <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
           <div className="max-w-4xl mx-auto px-4 pt-0 pb-12">
             <div className="flex items-start gap-6 mb-8">
-              <div className="h-24 w-24 rounded-xl overflow-hidden flex-shrink-0 bg-white shadow-lg border border-gray-100">
-                <img src={app.imageUrl} alt={app.name} className="h-full w-full object-cover" />
+              <div className="h-24 w-24 rounded-xl overflow-hidden flex-shrink-0 bg-white shadow-lg border border-gray-100 p-3 flex items-center justify-center">
+                <img src={app.imageUrl} alt={app.name} className="h-full w-full object-contain" />
               </div>
               <div className="flex-1">
                 <div className="flex flex-wrap gap-2 mb-2">
