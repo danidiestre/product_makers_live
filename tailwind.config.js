@@ -15,7 +15,13 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["Manrope", "sans-serif"],
+      },
       colors: {
+        brand: {
+          blue: "#002AFC",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
