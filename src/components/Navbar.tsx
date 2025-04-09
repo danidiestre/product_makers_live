@@ -1,15 +1,18 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Tooltip } from '@/components/Tooltip'
 
 export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full bg-brand-blue">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-6">
-          <Link href="/" className="font-bold text-xl lowercase text-white flex items-center gap-2">
-            <div className="w-3 h-3 bg-yellow-400 mt-1"></div>
-            product makers
-          </Link>
+          <Tooltip content="LETS GO MAKERS!!">
+            <Link href="/" className="font-bold text-xl lowercase text-white flex items-center gap-2">
+              <div className="w-3 h-3 bg-yellow-400 mt-1"></div>
+              product makers
+            </Link>
+          </Tooltip>
           <nav className="hidden md:flex gap-6">
             <Link href="/about" className="text-white/80 hover:text-white transition-colors lowercase">
               about us
