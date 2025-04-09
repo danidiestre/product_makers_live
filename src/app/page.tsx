@@ -7,9 +7,23 @@ export default function Home() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-1">
-        {/* Hero Section with Background */}
-        <section className="relative bg-gradient-to-br from-gray-50 via-white to-blue-50/20 py-16 md:py-20 border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-4">
+        {/* Hero Section with Subtle Modern Gradient */}
+        <section className="relative overflow-hidden py-16 md:py-20 border-b border-gray-200">
+          {/* Subtle gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50"></div>
+          
+          {/* Light pattern overlay */}
+          <div className="absolute inset-0 opacity-10" 
+               style={{
+                 backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E\")",
+               }}
+          ></div>
+          
+          {/* Soft gradient accents */}
+          <div className="absolute top-20 left-20 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-5xl opacity-5"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-5xl opacity-5"></div>
+          
+          <div className="max-w-6xl mx-auto px-4 relative z-10">
             <div className="text-center max-w-3xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 discover amazing products built by makers
@@ -17,7 +31,7 @@ export default function Home() {
               <p className="text-lg md:text-xl text-gray-600 mb-8">
                 product makers is a community showcasing innovative apps and tools created by independent developers and small teams.
               </p>
-              <div className="inline-flex justify-center gap-4">
+              <div className="inline-flex justify-center gap-4 flex-wrap">
                 <a 
                   href="#featured-apps" 
                   className="px-6 py-3 rounded-lg bg-brand-blue text-white font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 hover:bg-brand-blue/90 lowercase flex items-center gap-2"
