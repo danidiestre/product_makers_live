@@ -5,49 +5,8 @@ import { AppCard } from './AppCard'
 import { CountdownTimer } from './CountdownTimer'
 import { Filter, SortDesc, SortAsc } from 'lucide-react'
 import clsx from 'clsx'
-
-// Mock data for UI only
-const MOCK_APPS = [
-  {
-    id: '1',
-    name: 'Figma',
-    description: 'Design, prototype, and gather feedback all in one place with Figma.',
-    imageUrl: 'https://placehold.co/100',
-    votes: 120,
-    badges: ['trending'] as Array<'trending' | 'new' | 'top'>,
-  },
-  {
-    id: '2',
-    name: 'Notion',
-    description: 'All-in-one workspace for notes, tasks, wikis, and databases.',
-    imageUrl: 'https://placehold.co/100',
-    votes: 85,
-    badges: ['new'] as Array<'trending' | 'new' | 'top'>,
-  },
-  {
-    id: '3',
-    name: 'Linear',
-    description: "The issue tracking tool you'll enjoy using.",
-    imageUrl: 'https://placehold.co/100',
-    votes: 210,
-    badges: ['top'] as Array<'trending' | 'new' | 'top'>,
-  },
-  {
-    id: '4',
-    name: 'Raycast',
-    description: 'Control your tools with a few keystrokes.',
-    imageUrl: 'https://placehold.co/100',
-    votes: 65,
-  },
-  {
-    id: '5',
-    name: 'Supabase',
-    description: 'Open source Firebase alternative with authentication and database.',
-    imageUrl: 'https://placehold.co/100',
-    votes: 95,
-    badges: ['new'] as Array<'trending' | 'new' | 'top'>,
-  },
-]
+import { getAllApps } from '@/lib/data'
+import { App } from '@/lib/types'
 
 type SortKey = 'votes' | 'date'
 type ViewMode = 'daily' | 'weekly' | 'alltime'
@@ -74,9 +33,10 @@ export const AppList: FC = () => {
   const [sortKey, setSortKey] = useState<SortKey>('votes')
   const [sortAsc, setSortAsc] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('daily')
+  const [apps] = useState<App[]>(getAllApps())
   
   // Sort apps based on current criteria
-  const sortedApps = [...MOCK_APPS].sort((a, b) => {
+  const sortedApps = [...apps].sort((a, b) => {
     const modifier = sortAsc ? 1 : -1
     return sortKey === 'votes' 
       ? (a.votes - b.votes) * modifier
@@ -90,8 +50,8 @@ export const AppList: FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
         <h2 className="text-2xl font-bold text-gray-900">Featured Apps</h2>
         <CountdownTimer 
           hours={timeRemaining.hours} 
@@ -100,8 +60,8 @@ export const AppList: FC = () => {
         />
       </div>
       
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex space-x-1 border-b">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div className="flex border-b w-full sm:w-auto overflow-x-auto pb-px">
           <ViewTab 
             label="Daily" 
             active={viewMode === 'daily'} 
@@ -119,17 +79,30 @@ export const AppList: FC = () => {
           />
         </div>
         
-        <div className="flex space-x-2">
+        <div className="flex space-x-3 mt-4 sm:mt-0">
           <button 
-            className="inline-flex items-center px-3 py-1.5 border rounded-md text-sm bg-white hover:bg-gray-50"
+            className={clsx(
+              "inline-flex items-center px-3 py-1.5 border rounded-md text-sm hover:bg-gray-50 transition-colors",
+              sortKey === 'date' ? "bg-blue-50 border-blue-200 text-blue-700" : "bg-white"
+            )}
             onClick={() => setSortKey('date')}
           >
             <Filter className="h-4 w-4 mr-1.5" />
             Date
           </button>
           <button 
-            className="inline-flex items-center px-3 py-1.5 border rounded-md text-sm bg-white hover:bg-gray-50"
-            onClick={() => setSortKey('votes')}
+            className={clsx(
+              "inline-flex items-center px-3 py-1.5 border rounded-md text-sm hover:bg-gray-50 transition-colors",
+              sortKey === 'votes' ? "bg-blue-50 border-blue-200 text-blue-700" : "bg-white"
+            )}
+            onClick={() => {
+              if (sortKey === 'votes') {
+                setSortAsc(!sortAsc)
+              } else {
+                setSortKey('votes')
+                setSortAsc(false)
+              }
+            }}
           >
             {sortAsc ? (
               <SortAsc className="h-4 w-4 mr-1.5" />
@@ -137,26 +110,16 @@ export const AppList: FC = () => {
               <SortDesc className="h-4 w-4 mr-1.5" />
             )}
             Votes
-            <span 
-              className="ml-1 text-xs text-gray-500"
-              onClick={(e) => {
-                e.stopPropagation()
-                setSortAsc(!sortAsc)
-              }}
-            >
-              {sortAsc ? '(asc)' : '(desc)'}
-            </span>
           </button>
         </div>
       </div>
       
-      <div className="space-y-4">
+      <div className="grid gap-4">
         {sortedApps.length > 0 ? (
           sortedApps.map(app => (
             <AppCard 
               key={app.id}
               {...app}
-              onClick={() => console.log(`View details for ${app.name}`)}
               onUpvote={() => console.log(`Upvoted ${app.name}`)}
             />
           ))
