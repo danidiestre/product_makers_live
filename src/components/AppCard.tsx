@@ -53,6 +53,7 @@ interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
     avatar: string
   }>
   onUpvote?: () => void
+  ranking?: number
 }
 
 export const AppCard: FC<AppCardProps> = ({
@@ -67,6 +68,7 @@ export const AppCard: FC<AppCardProps> = ({
   externalLinks,
   makers = [],
   onUpvote,
+  ranking,
 }) => {
   const [votes, setVotes] = useState(initialVotes)
   const [hasVoted, setHasVoted] = useState(false)
@@ -100,9 +102,16 @@ export const AppCard: FC<AppCardProps> = ({
         <div className="flex-1">
           <div className="flex items-start justify-between">
             <div className="flex-1 pr-4">
-              <Link href={`/app/${id}`} className="inline-block">
-                <h3 className="font-semibold text-gray-900 text-lg hover:text-brand-blue transition-colors">{name}</h3>
-              </Link>
+              <div className="flex items-center gap-2">
+                {ranking && (
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold bg-brand-blue text-white rounded">
+                    #{ranking}
+                  </span>
+                )}
+                <Link href={`/app/${id}`} className="inline-block">
+                  <h3 className="font-semibold text-gray-900 text-lg hover:text-brand-blue transition-colors">{name}</h3>
+                </Link>
+              </div>
               
               {/* App Type Indicators */}
               <div className="flex flex-wrap gap-2 mt-2">

@@ -146,11 +146,12 @@ export function AppList({ searchQuery, limit }: AppListProps) {
       )}
       
       <div className="grid gap-4">
-        {displayApps.map(app => (
+        {displayApps.map((app, index) => (
           <AppCard 
             key={app.id}
             {...app}
             onUpvote={() => console.log(`Upvoted ${app.name}`)}
+            ranking={limit ? index + 1 : undefined}
           />
         ))}
       </div>
