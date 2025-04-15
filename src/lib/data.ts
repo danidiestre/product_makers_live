@@ -195,7 +195,18 @@ export const MOCK_APPS: App[] = [
       appStore: 'https://apps.apple.com/example-grammarpaw',
     },
     makers: [
-      { name: 'David Kim', role: 'Founder', avatar: 'https://i.pravatar.cc/150?u=davidkim', makerCategory: 'Developer', isVerified: true },
+      { 
+        id: 'david1',
+        name: 'David Kim', 
+        role: 'Founder', 
+        avatar: 'https://i.pravatar.cc/150?u=davidkim', 
+        bio: 'AI enthusiast and full-stack developer',
+        category: 'Developer',
+        isVerified: true,
+        joinedDate: '2023-11-15',
+        followers: 720,
+        makerCategory: 'Developer'
+      },
     ],
     metrics: {
       downloads: 8700,
@@ -226,8 +237,30 @@ export const MOCK_APPS: App[] = [
       github: 'https://github.com/example/interlify',
     },
     makers: [
-      { name: 'Sarah Johnson', role: 'Co-founder', avatar: 'https://i.pravatar.cc/150?u=sarahjohnson', makerCategory: 'Marketing', isVerified: true },
-      { name: 'Michael Lee', role: 'Co-founder', avatar: 'https://i.pravatar.cc/150?u=michaellee', makerCategory: 'Developer', isVerified: false },
+      { 
+        id: 'sarah1',
+        name: 'Sarah Johnson', 
+        role: 'Co-founder', 
+        avatar: 'https://i.pravatar.cc/150?u=sarahjohnson', 
+        bio: 'Marketing expert with a passion for newsletter monetization',
+        category: 'Marketing',
+        isVerified: true,
+        joinedDate: '2023-09-20',
+        followers: 930,
+        makerCategory: 'Marketing'
+      },
+      { 
+        id: 'michael1',
+        name: 'Michael Lee', 
+        role: 'Co-founder', 
+        avatar: 'https://i.pravatar.cc/150?u=michaellee', 
+        bio: 'Backend developer specializing in API integrations',
+        category: 'Developer',
+        isVerified: false,
+        joinedDate: '2023-09-20',
+        followers: 650,
+        makerCategory: 'Developer'
+      },
     ],
     metrics: {
       activeUsers: 2800,
@@ -253,7 +286,30 @@ export const MOCK_APPS: App[] = [
       website: 'https://directsponsorships.example.com',
     },
     makers: [
-      { name: 'Tyler Wilson', role: 'Product Manager', avatar: 'https://i.pravatar.cc/150?u=tylerwilson', makerCategory: 'Marketing', isVerified: false },
+      { 
+        id: 'sarah1',
+        name: 'Sarah Johnson', 
+        role: 'Co-founder', 
+        avatar: 'https://i.pravatar.cc/150?u=sarahjohnson', 
+        bio: 'Marketing expert with a passion for newsletter monetization',
+        category: 'Marketing',
+        isVerified: true,
+        joinedDate: '2023-09-20',
+        followers: 930,
+        makerCategory: 'Marketing'
+      },
+      { 
+        id: 'michael1',
+        name: 'Michael Lee', 
+        role: 'Co-founder', 
+        avatar: 'https://i.pravatar.cc/150?u=michaellee', 
+        bio: 'Backend developer specializing in API integrations',
+        category: 'Developer',
+        isVerified: false,
+        joinedDate: '2023-09-20',
+        followers: 650,
+        makerCategory: 'Developer'
+      },
     ],
     metrics: {
       activeUsers: 1200,
