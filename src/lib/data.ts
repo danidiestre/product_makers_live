@@ -1,11 +1,116 @@
 import { App, Maker } from './types'
 
+// Main makers data
+const makers: Maker[] = [
+  {
+    id: '1',
+    name: 'John Doe',
+    role: 'Senior Product Designer',
+    avatar: '/avatars/john-doe.png',
+    bio: 'Passionate about creating beautiful and functional user interfaces.',
+    category: 'Designer',
+    isVerified: true,
+    joinedDate: '2024-01-15',
+    followers: 1200,
+    twitter: 'johndoe',
+    github: 'johndoe',
+    website: 'https://johndoe.design'
+  },
+  {
+    id: '2',
+    name: 'Jane Smith',
+    role: 'Full Stack Developer',
+    avatar: '/avatars/jane-smith.png',
+    bio: 'Building scalable web applications with modern technologies.',
+    category: 'Developer',
+    isVerified: true,
+    joinedDate: '2024-02-01',
+    followers: 850,
+    twitter: 'janesmith',
+    github: 'janesmith'
+  },
+  {
+    id: '3',
+    name: 'Mike Johnson',
+    role: 'Growth Marketing Manager',
+    avatar: '/avatars/mike-johnson.png',
+    bio: 'Helping products reach their target audience effectively.',
+    category: 'Marketing',
+    isVerified: false,
+    joinedDate: '2024-03-10',
+    followers: 650,
+    twitter: 'mikejohnson'
+  },
+  {
+    id: '4',
+    name: 'Sarah Williams',
+    role: 'UI/UX Designer',
+    avatar: '/avatars/sarah-williams.png',
+    bio: 'Creating delightful user experiences through thoughtful design.',
+    category: 'Designer',
+    isVerified: true,
+    joinedDate: '2024-02-15',
+    followers: 920,
+    twitter: 'sarahw',
+    website: 'https://sarahwilliams.design'
+  },
+  {
+    id: '5',
+    name: 'David Chen',
+    role: 'Product Manager',
+    avatar: '/avatars/david-chen.png',
+    bio: 'Bridging the gap between business needs and user experience.',
+    category: 'Other',
+    isVerified: true,
+    joinedDate: '2024-01-20',
+    followers: 1500,
+    twitter: 'davidchen'
+  }
+]
+
+// Additional mock makers for the makers page
+export const ADDITIONAL_MAKERS: Maker[] = [
+  {
+    id: 'maker1',
+    name: 'Emma Watson',
+    role: 'UX Designer',
+    avatar: 'https://i.pravatar.cc/150?u=emmawatson',
+    bio: 'Creating user-centered digital experiences with passion and precision.',
+    category: 'Designer',
+    isVerified: true,
+    joinedDate: '2024-01-01',
+    followers: 1500
+  },
+  {
+    id: 'maker2',
+    name: 'Ryan Johnson',
+    role: 'Full Stack Developer',
+    avatar: 'https://i.pravatar.cc/150?u=ryanjohnson',
+    bio: 'Building scalable web applications with modern technologies.',
+    category: 'Developer',
+    isVerified: false,
+    joinedDate: '2024-01-15',
+    followers: 800
+  },
+  {
+    id: 'maker3',
+    name: 'Sophia Martinez',
+    role: 'Growth Marketer',
+    avatar: 'https://i.pravatar.cc/150?u=sophiamartinez',
+    bio: 'Driving user acquisition and retention through data-driven strategies.',
+    category: 'Marketing',
+    isVerified: true,
+    joinedDate: '2024-02-01',
+    followers: 1200
+  }
+]
+
 // Mock data for UI only - will be replaced with real data fetching
 export const MOCK_APPS: App[] = [
   {
     id: '1',
     name: 'BrowserAgent',
-    description: 'Browser-based AI agents - unlimited runs, fixed cost. BrowserAgent is a revolutionary platform that allows you to create and deploy AI agents directly in your browser. It offers unlimited agent runs for a fixed monthly cost, making it perfect for businesses of all sizes that need reliable AI functionality without unpredictable usage-based pricing.',
+    description: 'Browser-based AI agents - unlimited runs, fixed cost.',
     imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/chrome/chrome.png',
     coverImage: 'https://picsum.photos/1920/400?random=1',
     screenshots: [
@@ -29,10 +134,7 @@ export const MOCK_APPS: App[] = [
       playStore: 'https://play.google.com/store/example',
       github: 'https://github.com/example/browseragent',
     },
-    makers: [
-      { name: 'Jane Doe', role: 'Founder & CEO', avatar: 'https://i.pravatar.cc/150?u=janedoe', makerCategory: 'Developer', isVerified: true },
-      { name: 'John Smith', role: 'CTO', avatar: 'https://i.pravatar.cc/150?u=johnsmith', makerCategory: 'Developer', isVerified: true },
-    ],
+    makers: [makers[1], makers[2]], // Reference existing makers
     metrics: {
       downloads: 12500,
       activeUsers: 5300,
@@ -42,7 +144,7 @@ export const MOCK_APPS: App[] = [
   {
     id: '2',
     name: 'Gemini Personalization',
-    description: 'Get help made just for you. Gemini Personalization uses advanced AI to learn your preferences, work style, and needs to provide increasingly personalized assistance. It adapts to your unique requirements over time, making it more useful with each interaction.',
+    description: 'Get help made just for you.',
     imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/google/google.png',
     coverImage: 'https://picsum.photos/1920/400?random=2',
     screenshots: [
@@ -62,10 +164,7 @@ export const MOCK_APPS: App[] = [
     externalLinks: {
       website: 'https://gemini-personalization.example.com',
     },
-    makers: [
-      { name: 'Alex Chen', role: 'Product Lead', avatar: 'https://i.pravatar.cc/150?u=alexchen', makerCategory: 'Designer', isVerified: true },
-      { name: 'Maria Garcia', role: 'Lead Engineer', avatar: 'https://i.pravatar.cc/150?u=mariagarcia', makerCategory: 'Developer', isVerified: true },
-    ],
+    makers: [makers[3], makers[4]], // Reference existing makers
     metrics: {
       activeUsers: 35000,
       avgRating: 4.6,
@@ -162,53 +261,27 @@ export const MOCK_APPS: App[] = [
   },
 ]
 
-// Additional mock makers for the makers page
-export const ADDITIONAL_MAKERS: Maker[] = [
-  { name: 'Emma Watson', role: 'UX Designer', avatar: 'https://i.pravatar.cc/150?u=emmawatson', makerCategory: 'Designer', isVerified: true, bio: 'Creating user-centered digital experiences with passion and precision.' },
-  { name: 'Ryan Johnson', role: 'Full Stack Developer', avatar: 'https://i.pravatar.cc/150?u=ryanjohnson', makerCategory: 'Developer', isVerified: false, bio: 'Building scalable web applications with modern technologies.' },
-  { name: 'Sophia Martinez', role: 'Growth Marketer', avatar: 'https://i.pravatar.cc/150?u=sophiamartinez', makerCategory: 'Marketing', isVerified: true, bio: 'Driving user acquisition and retention through data-driven strategies.' },
-  { name: 'James Wilson', role: 'Frontend Developer', avatar: 'https://i.pravatar.cc/150?u=jameswilson', makerCategory: 'Developer', isVerified: true, bio: 'Crafting beautiful and performant user interfaces.' },
-  { name: 'Olivia Brown', role: 'Product Designer', avatar: 'https://i.pravatar.cc/150?u=oliviabrown', makerCategory: 'Designer', isVerified: false, bio: 'Turning complex problems into elegant design solutions.' },
-]
+// Helper functions
+export function getAllMakers(): Maker[] {
+  return [...makers, ...ADDITIONAL_MAKERS]
+}
 
-export const getAppById = (id: string): App | undefined => {
+export function getMakersByCategory(category: string): Maker[] {
+  const allMakers = getAllMakers()
+  if (category === 'All') return allMakers
+  return allMakers.filter(maker => maker.category === category)
+}
+
+export function getAppById(id: string): App | undefined {
   return MOCK_APPS.find(app => app.id === id)
 }
 
-export const getAllApps = (): App[] => {
+export function getAllApps(): App[] {
   return [...MOCK_APPS]
 }
 
-export const getTopApps = (limit: number = 5): App[] => {
+export function getTopApps(limit: number = 5): App[] {
   return [...MOCK_APPS]
     .sort((a, b) => b.votes - a.votes)
     .slice(0, limit)
-}
-
-export const getAllMakers = (): Maker[] => {
-  // Extract makers from apps
-  const appMakers = MOCK_APPS.flatMap(app => app.makers || [])
-  
-  // Combine with additional makers
-  const allMakers = [...appMakers, ...ADDITIONAL_MAKERS]
-  
-  // Remove duplicates by name
-  const uniqueMakers = allMakers.reduce((acc, maker) => {
-    if (!acc.some(m => m.name === maker.name)) {
-      acc.push(maker)
-    }
-    return acc
-  }, [] as Maker[])
-  
-  return uniqueMakers
-}
-
-export const getMakersByCategory = (category?: 'Designer' | 'Developer' | 'Marketing' | 'Other'): Maker[] => {
-  const makers = getAllMakers()
-  
-  if (!category) {
-    return makers
-  }
-  
-  return makers.filter(maker => maker.makerCategory === category)
 } 

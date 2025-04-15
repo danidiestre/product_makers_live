@@ -13,16 +13,20 @@ export interface ExternalLinks {
   github?: string
 }
 
-export interface Maker {
+export type Maker = {
+  id: string
   name: string
-  role: string
   avatar: string
-  bio?: string
+  role: string
+  bio: string
+  isVerified: boolean
+  category: 'Designer' | 'Developer' | 'Marketing' | 'Other'
+  joinedDate: string
+  followers: number
   twitter?: string
   github?: string
   website?: string
   makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Other'
-  isVerified?: boolean
 }
 
 export interface Metrics {
