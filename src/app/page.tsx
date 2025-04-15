@@ -68,10 +68,10 @@ export default function Home() {
           {/* Product List Section with semantic elements */}
           <section id="featured-apps" aria-labelledby="featured-products-heading" className="max-w-4xl mx-auto px-4 py-12">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <h2 id="featured-products-heading" className="text-lg font-medium text-gray-900 flex items-center gap-2 whitespace-nowrap">
+              <h2 id="featured-products-heading" className="text-lg font-medium text-gray-900 flex items-center gap-2 whitespace-nowrap mx-auto sm:mx-0">
                 🔥 <span className="text-gray-600">This Week's Top Products</span>
               </h2>
-              <div className="overflow-x-auto pb-1">
+              <div className="overflow-x-auto pb-1 mx-auto sm:mx-0">
                 <WeeklyCountdown />
               </div>
             </div>

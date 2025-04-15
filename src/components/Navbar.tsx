@@ -241,4 +241,4 @@ export function Navbar() {
       )}
     </header>
   )
-} 
+}     
