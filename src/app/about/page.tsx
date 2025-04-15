@@ -5,6 +5,7 @@ import { Navbar } from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { ChevronDown } from 'lucide-react'
 import Script from 'next/script'
+import Image from 'next/image'
 
 // Metadata is handled in metadata.ts in the same directory for Next.js 13+
 // Cannot use export const metadata in client components
@@ -145,7 +146,16 @@ export default function AboutPage() {
             <div className="space-y-16">
               {/* What we are */}
               <section className="prose prose-lg mx-auto" aria-labelledby="what-is">
-                <h2 className="text-2xl font-semibold mb-4" id="what-is">What is Product Makers?</h2>
+                <div className="flex flex-col items-center mb-6">
+                  <Image 
+                    src="/assets/maker.png" 
+                    alt="Product Maker Illustration" 
+                    width={600} 
+                    height={600}
+                    className="rounded-lg mb-4"
+                  />
+                </div>
+                <h2 className="text-2xl font-semibold mb-4 text-center" id="what-is">What is Product Makers?</h2>
                 <p className="text-gray-600">
                   Product Makers is a vibrant community platform where indie makers, designers, and entrepreneurs come together to showcase their products, share knowledge, and support each other's journey in building successful digital products.
                 </p>
