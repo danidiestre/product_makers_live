@@ -1,14 +1,15 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import { AppCard } from './AppCard'
 import { CountdownTimer } from './CountdownTimer'
-import { Filter, SortDesc, SortAsc, ThumbsUp, Clock, Globe, Smartphone, Play, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Filter, SortDesc, SortAsc, ThumbsUp, Clock, Globe, Smartphone, Play, SlidersHorizontal, ChevronLeft, ChevronRight, Search } from 'lucide-react'
 import clsx from 'clsx'
 import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Input } from '@/components/ui/input'
 
 type SortKey = 'votes' | 'name'
 type ViewMode = 'daily' | 'weekly' | 'all time'
@@ -34,7 +35,11 @@ const ViewTab: FC<{
   </button>
 )
 
-export const AppList: FC = () => {
+type AppListProps = {
+  searchQuery: string
+}
+
+export const AppList: FC<AppListProps> = ({ searchQuery }) => {
   const [sortKey, setSortKey] = useState<SortKey>('votes')
   const [sortAsc, setSortAsc] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('daily')
@@ -42,20 +47,28 @@ export const AppList: FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [apps] = useState<App[]>(getAllApps())
   
-  // Filter apps based on platform
+  // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
-    if (platformFilter === 'all') return true
-    if (platformFilter === 'web') return app.externalLinks?.website
-    if (platformFilter === 'ios') return app.externalLinks?.appStore
-    if (platformFilter === 'android') return app.externalLinks?.playStore
-    if (platformFilter === 'others') {
-      return !app.externalLinks?.website && 
-             !app.externalLinks?.appStore && 
-             !app.externalLinks?.playStore
-    }
-    return true
+    const matchesPlatform = platformFilter === 'all' ? true
+      : platformFilter === 'web' ? app.externalLinks?.website
+      : platformFilter === 'ios' ? app.externalLinks?.appStore
+      : platformFilter === 'android' ? app.externalLinks?.playStore
+      : !app.externalLinks?.website && !app.externalLinks?.appStore && !app.externalLinks?.playStore
+
+    const searchTerm = searchQuery.toLowerCase()
+    const matchesSearch = searchQuery === '' ? true
+      : app.name.toLowerCase().includes(searchTerm) ||
+        app.description.toLowerCase().includes(searchTerm) ||
+        (app.tags?.some(tag => tag.toLowerCase().includes(searchTerm)) ?? false)
+
+    return matchesPlatform && matchesSearch
   })
   
+  // Reset to first page when search query changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
+
   // Sort apps based on current criteria
   const sortedApps = [...filteredApps].sort((a, b) => {
     const modifier = sortAsc ? 1 : -1
