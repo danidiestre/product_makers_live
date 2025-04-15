@@ -74,7 +74,7 @@ export const ADDITIONAL_MAKERS: Maker[] = [
     id: 'maker1',
     name: 'Emma Watson',
     role: 'UX Designer',
-    avatar: 'https://i.pravatar.cc/150?u=emmawatson',
+    avatar: '/avatars/avatar-1.png',
     bio: 'Creating user-centered digital experiences with passion and precision.',
     category: 'Designer',
     isVerified: true,
@@ -85,7 +85,7 @@ export const ADDITIONAL_MAKERS: Maker[] = [
     id: 'maker2',
     name: 'Ryan Johnson',
     role: 'Full Stack Developer',
-    avatar: 'https://i.pravatar.cc/150?u=ryanjohnson',
+    avatar: '/avatars/avatar-2.png',
     bio: 'Building scalable web applications with modern technologies.',
     category: 'Developer',
     isVerified: false,
@@ -96,7 +96,7 @@ export const ADDITIONAL_MAKERS: Maker[] = [
     id: 'maker3',
     name: 'Sophia Martinez',
     role: 'Growth Marketer',
-    avatar: 'https://i.pravatar.cc/150?u=sophiamartinez',
+    avatar: '/avatars/avatar-3.png',
     bio: 'Driving user acquisition and retention through data-driven strategies.',
     category: 'Marketing',
     isVerified: true,
@@ -134,7 +134,30 @@ export const MOCK_APPS: App[] = [
       playStore: 'https://play.google.com/store/example',
       github: 'https://github.com/example/browseragent',
     },
-    makers: [makers[1], makers[2]], // Reference existing makers
+    makers: [
+      {
+        id: 'maker-john',
+        name: 'John Doe',
+        role: 'Senior Product Designer',
+        avatar: '/avatars/john-doe.png',
+        bio: 'Passionate about creating beautiful and functional user interfaces.',
+        category: 'Designer',
+        joinedDate: '2024-01-15',
+        followers: 1200,
+        isVerified: true
+      },
+      {
+        id: 'maker-jane',
+        name: 'Jane Smith',
+        role: 'Full Stack Developer',
+        avatar: '/avatars/jane-smith.png',
+        bio: 'Building scalable web applications with modern technologies.',
+        category: 'Developer',
+        joinedDate: '2024-02-01',
+        followers: 850,
+        isVerified: true
+      }
+    ],
     metrics: {
       downloads: 12500,
       activeUsers: 5300,
@@ -164,7 +187,30 @@ export const MOCK_APPS: App[] = [
     externalLinks: {
       website: 'https://gemini-personalization.example.com',
     },
-    makers: [makers[3], makers[4]], // Reference existing makers
+    makers: [
+      {
+        id: 'maker-sarah',
+        name: 'Sarah Williams',
+        role: 'UI/UX Designer',
+        avatar: '/avatars/sarah-williams.png',
+        bio: 'Creating delightful user experiences through thoughtful design.',
+        category: 'Designer',
+        joinedDate: '2024-02-15',
+        followers: 920,
+        isVerified: true
+      },
+      {
+        id: 'maker-david',
+        name: 'David Chen',
+        role: 'Product Manager',
+        avatar: '/avatars/david-chen.png',
+        bio: 'Bridging the gap between business needs and user experience.',
+        category: 'Other',
+        joinedDate: '2024-01-20',
+        followers: 1500,
+        isVerified: true
+      }
+    ],
     metrics: {
       activeUsers: 35000,
       avgRating: 4.6,
@@ -195,18 +241,17 @@ export const MOCK_APPS: App[] = [
       appStore: 'https://apps.apple.com/example-grammarpaw',
     },
     makers: [
-      { 
-        id: 'david1',
-        name: 'David Kim', 
-        role: 'Founder', 
-        avatar: 'https://i.pravatar.cc/150?u=davidkim', 
-        bio: 'AI enthusiast and full-stack developer',
+      {
+        id: 'maker-david',
+        name: 'David Kim',
+        role: 'Founder',
+        avatar: '/avatars/avatar-4.png',
+        bio: 'Building innovative language tools for developers',
         category: 'Developer',
-        isVerified: true,
-        joinedDate: '2023-11-15',
-        followers: 720,
-        makerCategory: 'Developer'
-      },
+        joinedDate: '2023-12-01',
+        followers: 750,
+        isVerified: true
+      }
     ],
     metrics: {
       downloads: 8700,
@@ -237,30 +282,28 @@ export const MOCK_APPS: App[] = [
       github: 'https://github.com/example/interlify',
     },
     makers: [
-      { 
-        id: 'sarah1',
-        name: 'Sarah Johnson', 
-        role: 'Co-founder', 
-        avatar: 'https://i.pravatar.cc/150?u=sarahjohnson', 
-        bio: 'Marketing expert with a passion for newsletter monetization',
+      {
+        id: 'maker-sarah',
+        name: 'Sarah Johnson',
+        role: 'Co-founder',
+        avatar: '/avatars/avatar-5.png',
+        bio: 'Marketing expert with a passion for AI',
         category: 'Marketing',
-        isVerified: true,
-        joinedDate: '2023-09-20',
-        followers: 930,
-        makerCategory: 'Marketing'
+        joinedDate: '2023-11-15',
+        followers: 920,
+        isVerified: true
       },
-      { 
-        id: 'michael1',
-        name: 'Michael Lee', 
-        role: 'Co-founder', 
-        avatar: 'https://i.pravatar.cc/150?u=michaellee', 
-        bio: 'Backend developer specializing in API integrations',
+      {
+        id: 'maker-michael',
+        name: 'Michael Lee',
+        role: 'Co-founder',
+        avatar: '/avatars/avatar-6.png',
+        bio: 'Full-stack developer specializing in AI integrations',
         category: 'Developer',
-        isVerified: false,
-        joinedDate: '2023-09-20',
-        followers: 650,
-        makerCategory: 'Developer'
-      },
+        joinedDate: '2023-11-15',
+        followers: 840,
+        isVerified: false
+      }
     ],
     metrics: {
       activeUsers: 2800,
@@ -286,30 +329,17 @@ export const MOCK_APPS: App[] = [
       website: 'https://directsponsorships.example.com',
     },
     makers: [
-      { 
-        id: 'sarah1',
-        name: 'Sarah Johnson', 
-        role: 'Co-founder', 
-        avatar: 'https://i.pravatar.cc/150?u=sarahjohnson', 
-        bio: 'Marketing expert with a passion for newsletter monetization',
+      {
+        id: 'maker-tyler',
+        name: 'Tyler Wilson',
+        role: 'Product Manager',
+        avatar: '/avatars/avatar-7.png',
+        bio: 'Product leader focused on creator economy',
         category: 'Marketing',
-        isVerified: true,
-        joinedDate: '2023-09-20',
-        followers: 930,
-        makerCategory: 'Marketing'
-      },
-      { 
-        id: 'michael1',
-        name: 'Michael Lee', 
-        role: 'Co-founder', 
-        avatar: 'https://i.pravatar.cc/150?u=michaellee', 
-        bio: 'Backend developer specializing in API integrations',
-        category: 'Developer',
-        isVerified: false,
-        joinedDate: '2023-09-20',
-        followers: 650,
-        makerCategory: 'Developer'
-      },
+        joinedDate: '2024-01-10',
+        followers: 680,
+        isVerified: false
+      }
     ],
     metrics: {
       activeUsers: 1200,
