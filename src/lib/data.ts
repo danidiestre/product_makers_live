@@ -1,4 +1,4 @@
-import { App } from './types'
+import { App, Maker } from './types'
 
 // Mock data for UI only - will be replaced with real data fetching
 export const MOCK_APPS: App[] = [
@@ -30,8 +30,8 @@ export const MOCK_APPS: App[] = [
       github: 'https://github.com/example/browseragent',
     },
     makers: [
-      { name: 'Jane Doe', role: 'Founder & CEO', avatar: 'https://i.pravatar.cc/150?u=janedoe' },
-      { name: 'John Smith', role: 'CTO', avatar: 'https://i.pravatar.cc/150?u=johnsmith' },
+      { name: 'Jane Doe', role: 'Founder & CEO', avatar: 'https://i.pravatar.cc/150?u=janedoe', makerCategory: 'Developer', isVerified: true },
+      { name: 'John Smith', role: 'CTO', avatar: 'https://i.pravatar.cc/150?u=johnsmith', makerCategory: 'Developer', isVerified: true },
     ],
     metrics: {
       downloads: 12500,
@@ -63,8 +63,8 @@ export const MOCK_APPS: App[] = [
       website: 'https://gemini-personalization.example.com',
     },
     makers: [
-      { name: 'Alex Chen', role: 'Product Lead', avatar: 'https://i.pravatar.cc/150?u=alexchen' },
-      { name: 'Maria Garcia', role: 'Lead Engineer', avatar: 'https://i.pravatar.cc/150?u=mariagarcia' },
+      { name: 'Alex Chen', role: 'Product Lead', avatar: 'https://i.pravatar.cc/150?u=alexchen', makerCategory: 'Designer', isVerified: true },
+      { name: 'Maria Garcia', role: 'Lead Engineer', avatar: 'https://i.pravatar.cc/150?u=mariagarcia', makerCategory: 'Developer', isVerified: true },
     ],
     metrics: {
       activeUsers: 35000,
@@ -96,7 +96,7 @@ export const MOCK_APPS: App[] = [
       appStore: 'https://apps.apple.com/example-grammarpaw',
     },
     makers: [
-      { name: 'David Kim', role: 'Founder', avatar: 'https://i.pravatar.cc/150?u=davidkim' },
+      { name: 'David Kim', role: 'Founder', avatar: 'https://i.pravatar.cc/150?u=davidkim', makerCategory: 'Developer', isVerified: true },
     ],
     metrics: {
       downloads: 8700,
@@ -127,8 +127,8 @@ export const MOCK_APPS: App[] = [
       github: 'https://github.com/example/interlify',
     },
     makers: [
-      { name: 'Sarah Johnson', role: 'Co-founder', avatar: 'https://i.pravatar.cc/150?u=sarahjohnson' },
-      { name: 'Michael Lee', role: 'Co-founder', avatar: 'https://i.pravatar.cc/150?u=michaellee' },
+      { name: 'Sarah Johnson', role: 'Co-founder', avatar: 'https://i.pravatar.cc/150?u=sarahjohnson', makerCategory: 'Marketing', isVerified: true },
+      { name: 'Michael Lee', role: 'Co-founder', avatar: 'https://i.pravatar.cc/150?u=michaellee', makerCategory: 'Developer', isVerified: false },
     ],
     metrics: {
       activeUsers: 2800,
@@ -154,12 +154,21 @@ export const MOCK_APPS: App[] = [
       website: 'https://directsponsorships.example.com',
     },
     makers: [
-      { name: 'Tyler Wilson', role: 'Product Manager', avatar: 'https://i.pravatar.cc/150?u=tylerwilson' },
+      { name: 'Tyler Wilson', role: 'Product Manager', avatar: 'https://i.pravatar.cc/150?u=tylerwilson', makerCategory: 'Marketing', isVerified: false },
     ],
     metrics: {
       activeUsers: 1200,
     }
   },
+]
+
+// Additional mock makers for the makers page
+export const ADDITIONAL_MAKERS: Maker[] = [
+  { name: 'Emma Watson', role: 'UX Designer', avatar: 'https://i.pravatar.cc/150?u=emmawatson', makerCategory: 'Designer', isVerified: true, bio: 'Creating user-centered digital experiences with passion and precision.' },
+  { name: 'Ryan Johnson', role: 'Full Stack Developer', avatar: 'https://i.pravatar.cc/150?u=ryanjohnson', makerCategory: 'Developer', isVerified: false, bio: 'Building scalable web applications with modern technologies.' },
+  { name: 'Sophia Martinez', role: 'Growth Marketer', avatar: 'https://i.pravatar.cc/150?u=sophiamartinez', makerCategory: 'Marketing', isVerified: true, bio: 'Driving user acquisition and retention through data-driven strategies.' },
+  { name: 'James Wilson', role: 'Frontend Developer', avatar: 'https://i.pravatar.cc/150?u=jameswilson', makerCategory: 'Developer', isVerified: true, bio: 'Crafting beautiful and performant user interfaces.' },
+  { name: 'Olivia Brown', role: 'Product Designer', avatar: 'https://i.pravatar.cc/150?u=oliviabrown', makerCategory: 'Designer', isVerified: false, bio: 'Turning complex problems into elegant design solutions.' },
 ]
 
 export const getAppById = (id: string): App | undefined => {
@@ -174,4 +183,32 @@ export const getTopApps = (limit: number = 5): App[] => {
   return [...MOCK_APPS]
     .sort((a, b) => b.votes - a.votes)
     .slice(0, limit)
+}
+
+export const getAllMakers = (): Maker[] => {
+  // Extract makers from apps
+  const appMakers = MOCK_APPS.flatMap(app => app.makers || [])
+  
+  // Combine with additional makers
+  const allMakers = [...appMakers, ...ADDITIONAL_MAKERS]
+  
+  // Remove duplicates by name
+  const uniqueMakers = allMakers.reduce((acc, maker) => {
+    if (!acc.some(m => m.name === maker.name)) {
+      acc.push(maker)
+    }
+    return acc
+  }, [] as Maker[])
+  
+  return uniqueMakers
+}
+
+export const getMakersByCategory = (category?: 'Designer' | 'Developer' | 'Marketing' | 'Other'): Maker[] => {
+  const makers = getAllMakers()
+  
+  if (!category) {
+    return makers
+  }
+  
+  return makers.filter(maker => maker.makerCategory === category)
 } 

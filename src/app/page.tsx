@@ -3,6 +3,7 @@
 import { Navbar } from '@/components/Navbar'
 import { AppList } from '@/components/AppList'
 import Footer from '@/components/Footer'
+import StreamCountdown from '@/components/StreamCountdown'
 
 export default function Home() {
   return (
@@ -138,7 +139,8 @@ export default function Home() {
               <p className="text-lg md:text-xl text-gray-600 mb-8">
                 product makers is a community showcasing innovative apps and tools created by independent developers and small teams.
               </p>
-              <div className="inline-flex justify-center gap-4 flex-wrap">
+              <StreamCountdown />
+              <div className="inline-flex justify-center gap-4 flex-wrap mt-8">
                 <a 
                   href="#featured-apps" 
                   className="px-6 py-3 rounded-lg bg-brand-blue text-white font-medium transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 hover:bg-brand-blue/90 lowercase flex items-center gap-2"

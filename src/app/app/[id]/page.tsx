@@ -8,6 +8,7 @@ import { getAppById } from '@/lib/data'
 import { Tooltip } from '@/components/Tooltip'
 import { Navbar } from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
+import { FeaturedBadge } from '@/components/FeaturedBadge'
 
 const AppProfilePage: FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -399,6 +400,18 @@ const AppProfilePage: FC = () => {
                       </div>
                     </div>
                   ))}
+                </div>
+              </section>
+              
+              {/* Featured Badge */}
+              <section className="mb-6 bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
+                  <h3 className="font-semibold text-gray-900">Featured Badge</h3>
+                </div>
+                <div className="p-6">
+                  <div className="flex justify-center">
+                    <FeaturedBadge />
+                  </div>
                 </div>
               </section>
               

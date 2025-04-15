@@ -1,5 +1,5 @@
 import { Navbar } from '@/components/Navbar'
-import { Footer } from '@/components/Footer'
+import Footer from '@/components/Footer'
 import { Cta } from '@/components/Cta'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'

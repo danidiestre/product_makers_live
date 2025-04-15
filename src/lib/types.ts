@@ -21,6 +21,8 @@ export interface Maker {
   twitter?: string
   github?: string
   website?: string
+  makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Other'
+  isVerified?: boolean
 }
 
 export interface Metrics {
