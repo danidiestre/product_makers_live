@@ -61,7 +61,7 @@ export const AppList: FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6">
+    <div>
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
         {/* Platform filter */}
         <div className="flex p-0.5 bg-gray-100/80 backdrop-blur-sm rounded-lg">

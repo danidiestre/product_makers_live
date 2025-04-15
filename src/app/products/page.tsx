@@ -14,7 +14,7 @@ export default function ProductsPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               {/* Title and search */}
               <div>
-                <h1 className="text-2xl font-semibold text-gray-900">All Products</h1>
+                <h1 className="text-4xl font-bold text-gray-900 lowercase">the products</h1>
                 <p className="text-sm text-gray-500 mt-1">
                   Discover innovative apps and tools created by indie makers
                 </p>
@@ -36,9 +36,11 @@ export default function ProductsPage() {
         </div>
 
         {/* Product List */}
-        <div className="container mx-auto px-4 py-6">
-          <AppList />
-        </div>
+        <section className="py-4">
+          <div className="max-w-4xl mx-auto px-4">
+            <AppList />
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
