@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { Clock } from 'lucide-react'
-import NumberFlow, { NumberFlowGroup } from '@number-flow/react'
 
 interface TimeLeft {
   days: number
@@ -11,17 +10,17 @@ interface TimeLeft {
   seconds: number
 }
 
+// Format numbers to ensure they always have two digits
+const formatNumber = (num: number) => {
+  return num.toString().padStart(2, '0');
+};
+
 const TimeUnit = ({ value, unit }: { value: number; unit: string }) => (
-  <div className="flex items-center">
-    <div className="flex items-center justify-center bg-gray-100 rounded px-2 py-0.5 min-w-[2.25rem]">
-      <NumberFlow
-        trend={-1}
-        value={value}
-        format={{ minimumIntegerDigits: 2 }}
-        style={{ ['--number-flow-char-height' as string]: '0.85em' }}
-      />
+  <div className="flex items-center mx-0.5">
+    <div className="flex items-center justify-center bg-gray-100 rounded px-1.5 py-0.5 min-w-[1.75rem] text-sm text-gray-800 font-medium">
+      {formatNumber(value)}
     </div>
-    <span className="text-xs text-gray-500 ml-1 mr-2">{unit}</span>
+    <span className="text-xs text-gray-500 ml-1">{unit}</span>
   </div>
 )
 
@@ -64,16 +63,17 @@ export function WeeklyCountdown() {
   }, [])
 
   return (
-    <div className="flex items-center gap-2 text-sm">
-      <Clock className="w-3.5 h-3.5 text-gray-500" />
-      <NumberFlowGroup>
-        <div className="flex items-center font-medium text-gray-900">
-          <TimeUnit value={timeLeft.days} unit="d" />
-          <TimeUnit value={timeLeft.hours} unit="h" />
-          <TimeUnit value={timeLeft.minutes} unit="m" />
-          <TimeUnit value={timeLeft.seconds} unit="s" />
-        </div>
-      </NumberFlowGroup>
+    <div className="flex items-center gap-2 text-sm whitespace-nowrap">
+      <div className="flex items-center">
+        <Clock className="w-3.5 h-3.5 text-gray-500 mr-1.5" />
+        <span className="text-xs text-gray-500 font-medium">Ends in:</span>
+      </div>
+      <div className="flex items-center">
+        <TimeUnit value={timeLeft.days} unit="d" />
+        <TimeUnit value={timeLeft.hours} unit="h" />
+        <TimeUnit value={timeLeft.minutes} unit="m" />
+        <TimeUnit value={timeLeft.seconds} unit="s" />
+      </div>
     </div>
   )
 } 

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
 
 const StreamCountdown = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -41,6 +40,11 @@ const StreamCountdown = () => {
 
   if (!isVisible) return null;
 
+  // Format numbers to ensure they always have two digits
+  const formatNumber = (num: number, minLength = 2) => {
+    return num.toString().padStart(minLength, '0');
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
       <div className="bg-[#FDF4F2] rounded-lg border border-[#FADCD9] shadow-sm">
@@ -62,35 +66,19 @@ const StreamCountdown = () => {
               </a>
               <span className="ml-1 text-gray-500">
                 · Join next stream in{' '}
-                <NumberFlowGroup>
-                  <span
-                    style={{ fontVariantNumeric: 'tabular-nums' } as React.CSSProperties}
-                    className="inline-flex items-baseline font-medium"
-                  >
-                    <NumberFlow trend={-1} value={timeComponents.days} />
-                    <span className="mx-0.5">d</span>
-                    <NumberFlow
-                      trend={-1}
-                      value={timeComponents.hours}
-                      format={{ minimumIntegerDigits: 2 }}
-                    />
-                    <span className="mx-0.5">h</span>
-                    <NumberFlow
-                      trend={-1}
-                      value={timeComponents.minutes}
-                      digits={{ 1: { max: 5 } }}
-                      format={{ minimumIntegerDigits: 2 }}
-                    />
-                    <span className="mx-0.5">m</span>
-                    <NumberFlow
-                      trend={-1}
-                      value={timeComponents.seconds}
-                      digits={{ 1: { max: 5 } }}
-                      format={{ minimumIntegerDigits: 2 }}
-                    />
-                    <span className="ml-0.5">s</span>
-                  </span>
-                </NumberFlowGroup>
+                <span
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                  className="inline-flex items-baseline font-medium"
+                >
+                  <span>{timeComponents.days}</span>
+                  <span className="mx-0.5">d</span>
+                  <span>{formatNumber(timeComponents.hours)}</span>
+                  <span className="mx-0.5">h</span>
+                  <span>{formatNumber(timeComponents.minutes)}</span>
+                  <span className="mx-0.5">m</span>
+                  <span>{formatNumber(timeComponents.seconds)}</span>
+                  <span className="ml-0.5">s</span>
+                </span>
               </span>
             </p>
           </div>
