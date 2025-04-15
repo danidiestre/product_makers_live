@@ -85,11 +85,11 @@ export const AppCard: FC<AppCardProps> = ({
 
   return (
     <div 
-      className="flex flex-col border rounded-lg overflow-hidden hover:border-blue-500 transition-all bg-white"
+      className="flex flex-col rounded-lg overflow-hidden bg-background ring-1 ring-black/[0.04] shadow-[0_1px_2px_0_rgb(0,0,0,0.03)] hover:shadow-[0_2px_4px_0_rgb(0,0,0,0.02)] hover:ring-black/[0.08] transition-all duration-300"
       data-testid={`app-card-${id}`}
     >
       <div className="flex p-4">
-        <div className="h-16 w-16 rounded-lg overflow-hidden flex-shrink-0 mr-4 flex items-center justify-center bg-white border border-gray-100 p-2 relative">
+        <div className="h-16 w-16 rounded-lg overflow-hidden flex-shrink-0 mr-4 flex items-center justify-center bg-white ring-1 ring-black/[0.03] p-2 relative">
           <img src={imageUrl} alt={name} className="h-full w-full object-contain" />
           {badges.includes('new') && (
             <div className="absolute bottom-0 left-0 right-0 bg-brand-blue/90 text-white text-[10px] font-medium py-0.5 text-center">
@@ -183,13 +183,13 @@ export const AppCard: FC<AppCardProps> = ({
           </div>
         </div>
       </div>
-      <div className="bg-gray-50 py-2 px-4 flex justify-between items-center border-t border-gray-100">
+      <div className="bg-muted/30 py-2 px-4 flex justify-between items-center border-t border-black/[0.03]">
         {/* External Links */}
         <div className="flex space-x-3">
           {externalLinks?.website && (
             <a 
               href={externalLinks.website} 
-              className="flex items-center text-xs text-gray-600 hover:text-blue-600"
+              className="flex items-center text-xs text-muted-foreground hover:text-brand-blue"
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
@@ -201,7 +201,7 @@ export const AppCard: FC<AppCardProps> = ({
           {externalLinks?.github && (
             <a 
               href={externalLinks.github} 
-              className="flex items-center text-xs text-gray-600 hover:text-gray-900"
+              className="flex items-center text-xs text-muted-foreground hover:text-brand-blue"
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}

@@ -26,7 +26,8 @@ export type Maker = {
   twitter?: string
   github?: string
   website?: string
-  makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Other'
+  linkedin?: string
+  makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other'
 }
 
 export interface Metrics {
@@ -52,4 +53,6 @@ export interface App {
   externalLinks?: ExternalLinks
   makers?: Maker[]
   metrics?: Metrics
-} 
+}
+
+export type MakerCategory = 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' 

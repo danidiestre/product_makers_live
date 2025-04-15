@@ -7,8 +7,7 @@ import { Maker } from '@/lib/types'
 import clsx from 'clsx'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Search } from 'lucide-react'
+import { SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react'
 
 type MakerCategory = 'Designer' | 'Developer' | 'Marketing' | 'Other' | 'All'
 type SortOption = 'date' | 'name' | 'popularity'
@@ -17,25 +16,17 @@ interface MakersListProps {
   initialMakers: Maker[]
 }
 
+const MAKERS_PER_PAGE = 12
+
 export function MakersList({ initialMakers }: MakersListProps) {
   const [selectedCategory, setSelectedCategory] = useState<MakerCategory>('All')
   const [sortBy, setSortBy] = useState<SortOption>('date')
-  const [searchQuery, setSearchQuery] = useState('')
   const [displayedMakers, setDisplayedMakers] = useState(initialMakers)
+  const [currentPage, setCurrentPage] = useState(1)
 
-  // Filter and sort makers when category, sort option, or search changes
+  // Filter and sort makers when category or sort option changes
   useEffect(() => {
     let filtered = [...initialMakers]
-    
-    // Apply search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      filtered = filtered.filter(maker => 
-        maker.name.toLowerCase().includes(query) ||
-        maker.role.toLowerCase().includes(query) ||
-        maker.bio?.toLowerCase().includes(query)
-      )
-    }
     
     // Apply category filter
     if (selectedCategory !== 'All') {
@@ -56,7 +47,13 @@ export function MakersList({ initialMakers }: MakersListProps) {
     }
     
     setDisplayedMakers(filtered)
-  }, [selectedCategory, sortBy, searchQuery, initialMakers])
+    setCurrentPage(1) // Reset to first page when filters change
+  }, [selectedCategory, sortBy, initialMakers])
+
+  // Calculate pagination
+  const totalPages = Math.ceil(displayedMakers.length / MAKERS_PER_PAGE)
+  const startIndex = (currentPage - 1) * MAKERS_PER_PAGE
+  const paginatedMakers = displayedMakers.slice(startIndex, startIndex + MAKERS_PER_PAGE)
 
   // Calculate category counts
   const categoryStats = [
@@ -69,20 +66,6 @@ export function MakersList({ initialMakers }: MakersListProps) {
 
   return (
     <div>
-      {/* Search input */}
-      <div className="mb-6">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            type="text"
-            placeholder="Search makers by name, role, or bio..."
-            value={searchQuery}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         {/* Category Filter */}
         <div className="flex flex-wrap gap-2">
@@ -104,8 +87,8 @@ export function MakersList({ initialMakers }: MakersListProps) {
 
         {/* Sort Dropdown */}
         <Select value={sortBy} onValueChange={(value: SortOption) => setSortBy(value)}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sort by..." />
+          <SelectTrigger className="w-8 h-8 p-0 border-0 bg-transparent hover:bg-transparent focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none [&>svg:last-child]:hidden">
+            <SlidersHorizontal className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="date">Most Recent</SelectItem>
@@ -115,12 +98,54 @@ export function MakersList({ initialMakers }: MakersListProps) {
         </Select>
       </div>
 
-      {displayedMakers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {displayedMakers.map((maker) => (
-            <MakerCard key={maker.id} maker={maker} />
-          ))}
-        </div>
+      {paginatedMakers.length > 0 ? (
+        <>
+          <div className="grid grid-cols-1 gap-6">
+            {paginatedMakers.map((maker) => (
+              <MakerCard key={maker.id} maker={maker} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-8 flex items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Button
+                    key={page}
+                    variant={currentPage === page ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(page)}
+                    className={clsx(
+                      "min-w-[2rem]",
+                      currentPage === page ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                    )}
+                  >
+                    {page}
+                  </Button>
+                ))}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </>
       ) : (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
           <p className="text-gray-600 mb-2">No makers found</p>
