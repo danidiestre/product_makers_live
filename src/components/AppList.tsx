@@ -4,12 +4,13 @@ import { FC, useState, useEffect } from 'react'
 import { AppCard } from './AppCard'
 import { CountdownTimer } from './CountdownTimer'
 import { Filter, SortDesc, SortAsc, ThumbsUp, Clock, Globe, Smartphone, Play, SlidersHorizontal, ChevronLeft, ChevronRight, Search } from 'lucide-react'
-import clsx from 'clsx'
+import { clsx } from 'clsx'
 import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
+import Link from 'next/link'
 
 type SortKey = 'votes' | 'name'
 type ViewMode = 'daily' | 'weekly' | 'all time'
@@ -35,11 +36,12 @@ const ViewTab: FC<{
   </button>
 )
 
-type AppListProps = {
-  searchQuery: string
+interface AppListProps {
+  searchQuery: string;
+  limit?: number;
 }
 
-export const AppList: FC<AppListProps> = ({ searchQuery }) => {
+export function AppList({ searchQuery, limit }: AppListProps) {
   const [sortKey, setSortKey] = useState<SortKey>('votes')
   const [sortAsc, setSortAsc] = useState(false)
   const [viewMode, setViewMode] = useState<ViewMode>('daily')
@@ -95,124 +97,118 @@ export const AppList: FC<AppListProps> = ({ searchQuery }) => {
     ).length }
   ]
 
-  const timeRemaining = {
-    hours: 8,
-    minutes: 32,
-    seconds: 15
-  }
+  // Display limited apps on home page, or all apps with pagination on products page
+  const displayApps = limit ? sortedApps.slice(0, limit) : paginatedApps;
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        {/* Platform filter */}
-        <div className="flex flex-wrap gap-2">
-          {platformStats.map(({ id, label, icon, count }) => (
-            <Button
-              key={id}
-              variant={platformFilter === id ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                setPlatformFilter(id as PlatformFilter)
-                setCurrentPage(1) // Reset to first page when filter changes
-              }}
-              className={clsx(
-                "transition-colors",
-                platformFilter === id ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-              )}
-            >
-              <span className="flex items-center gap-1.5">
-                {icon}
-                {label} ({count})
-              </span>
-            </Button>
-          ))}
-        </div>
+    <div className="grid gap-4">
+      {!limit && (
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+          {/* Platform filter */}
+          <div className="flex flex-wrap gap-2">
+            {platformStats.map(({ id, label, icon, count }) => (
+              <Button
+                key={id}
+                variant={platformFilter === id ? "default" : "outline"}
+                size="sm"
+                onClick={() => {
+                  setPlatformFilter(id as PlatformFilter)
+                  setCurrentPage(1) // Reset to first page when filter changes
+                }}
+                className={clsx(
+                  "transition-colors",
+                  platformFilter === id ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                )}
+              >
+                <span className="flex items-center gap-1.5">
+                  {icon}
+                  {label} ({count})
+                </span>
+              </Button>
+            ))}
+          </div>
 
-        {/* Sort Dropdown */}
-        <Select value={viewMode} onValueChange={(value: ViewMode) => {
-          setViewMode(value)
-          setCurrentPage(1) // Reset to first page when sort changes
-        }}>
-          <SelectTrigger className="w-8 h-8 p-0 border-0 bg-transparent hover:bg-transparent focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none [&>svg:last-child]:hidden">
-            <SlidersHorizontal className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="daily">Most Popular Today</SelectItem>
-            <SelectItem value="weekly">Most Popular This Week</SelectItem>
-            <SelectItem value="all time">Most Popular All Time</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+          {/* Sort Dropdown */}
+          <Select value={viewMode} onValueChange={(value: ViewMode) => {
+            setViewMode(value)
+            setCurrentPage(1) // Reset to first page when sort changes
+          }}>
+            <SelectTrigger className="w-8 h-8 p-0 border-0 bg-transparent hover:bg-transparent focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none [&>svg:last-child]:hidden">
+              <SlidersHorizontal className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="daily">Most Popular Today</SelectItem>
+              <SelectItem value="weekly">Most Popular This Week</SelectItem>
+              <SelectItem value="all time">Most Popular All Time</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       
       <div className="grid gap-4">
-        {paginatedApps.length > 0 ? (
-          <>
-            {paginatedApps.map(app => (
-              <AppCard 
-                key={app.id}
-                {...app}
-                onUpvote={() => console.log(`Upvoted ${app.name}`)}
-              />
-            ))}
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-8 flex items-center justify-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                      className={clsx(
-                        "min-w-[2rem]",
-                        currentPage === page ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                      )}
-                    >
-                      {page}
-                    </Button>
-                  ))}
-                </div>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="text-center py-12 bg-gray-50 rounded-lg">
-            <p className="text-gray-500">No products found for the current filter.</p>
-            <button 
-              className="mt-4 text-sm text-blue-600 hover:text-blue-800"
-              onClick={() => {
-                setSortKey('votes')
-                setSortAsc(false)
-                setViewMode('daily')
-                setPlatformFilter('all')
-                setCurrentPage(1)
-              }}
-            >
-              Reset filters
-            </button>
-          </div>
-        )}
+        {displayApps.map(app => (
+          <AppCard 
+            key={app.id}
+            {...app}
+            onUpvote={() => console.log(`Upvoted ${app.name}`)}
+          />
+        ))}
       </div>
+
+      {limit && sortedApps.length > limit && (
+        <Link 
+          href="/products" 
+          className="group relative flex items-center gap-2 rounded-lg border border-gray-200 bg-white p-6 hover:border-gray-300 hover:shadow-sm transition-all"
+        >
+          <div className="flex-grow text-center">
+            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-brand-blue transition-colors">
+              See all products
+            </h3>
+            <p className="text-sm text-gray-500 mt-1">
+              Discover more amazing products built by makers
+            </p>
+          </div>
+        </Link>
+      )}
+
+      {!limit && totalPages > 1 && (
+        <div className="mt-8 flex items-center justify-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <Button
+                key={page}
+                variant={currentPage === page ? "default" : "outline"}
+                size="sm"
+                onClick={() => setCurrentPage(page)}
+                className={clsx(
+                  "min-w-[2rem]",
+                  currentPage === page ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                )}
+              >
+                {page}
+              </Button>
+            ))}
+          </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 } 
