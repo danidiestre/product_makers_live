@@ -56,10 +56,10 @@ export default function Home() {
             <div className="max-w-4xl mx-auto px-4">
               <div className="text-center max-w-3xl mx-auto">
                 <h1 id="hero-heading" className="text-4xl md:text-5xl text-gray-900 mb-5">
-                  discover amazing <span className="font-bold">products</span> built by <span className="font-bold">makers</span>
+                  descubre los <span className="font-bold">productos</span> creados por <span className="font-bold">makers</span>
                 </h1>
                 <p className="text-lg text-gray-600">
-                  product makers is a community showcasing innovative apps and tools created by indie makers and small teams.
+                  product makers es la comunidad hispana de makers de productos digitales.
                 </p>
               </div>
             </div>
@@ -69,7 +69,7 @@ export default function Home() {
           <section id="featured-apps" aria-labelledby="featured-products-heading" className="max-w-4xl mx-auto px-4 py-12">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <h2 id="featured-products-heading" className="text-lg font-medium text-gray-900 flex items-center gap-2 whitespace-nowrap mx-auto sm:mx-0">
-                🔥 <span className="text-gray-600">This Week's Top Products</span>
+                🔥 <span className="text-gray-600">Mejores productos de la semana</span>
               </h2>
               <div className="overflow-x-auto pb-1 mx-auto sm:mx-0">
                 <WeeklyCountdown />

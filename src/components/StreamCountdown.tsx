@@ -54,18 +54,18 @@ const StreamCountdown = () => {
           </div>
           <div className="flex-grow">
             <p className="text-gray-700 text-sm">
-              <span className="font-bold">This site is being built live!</span>{' '}
-              Watch us code{' '}
+              <span className="font-bold">Construyendo en directo</span>{' '}
+              {' '}
               <a 
                 href="https://youtube.com/@productmakers" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-brand-blue font-medium hover:underline"
               >
-                on YouTube
+                por YouTube
               </a>
               <span className="ml-1 text-gray-500">
-                · Join next stream in{' '}
+                · Únete al siguiente stream en{' '}
                 <span
                   style={{ fontVariantNumeric: 'tabular-nums' }}
                   className="inline-flex items-baseline font-medium"

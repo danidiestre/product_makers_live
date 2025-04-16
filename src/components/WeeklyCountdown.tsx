@@ -66,7 +66,7 @@ export function WeeklyCountdown() {
     <div className="flex items-center gap-2 text-sm whitespace-nowrap">
       <div className="flex items-center">
         <Clock className="w-3.5 h-3.5 text-gray-500 mr-1.5" />
-        <span className="text-xs text-gray-500 font-medium">Ends in:</span>
+        <span className="text-xs text-gray-500 font-medium">Acaba en:</span>
       </div>
       <div className="flex items-center">
         <TimeUnit value={timeLeft.days} unit="d" />

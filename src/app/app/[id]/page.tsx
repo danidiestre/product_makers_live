@@ -173,7 +173,7 @@ const AppProfilePage: FC = () => {
                         className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium bg-brand-blue text-white hover:bg-brand-blue/90 transition-colors duration-200"
                       >
                         <ExternalLink className="h-4 w-4" />
-                        <span>Visit Project</span>
+                        <span>Link Proyecto</span>
                       </a>
                     )}
 
@@ -218,7 +218,7 @@ const AppProfilePage: FC = () => {
                         className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-gray-200 transition-all duration-200"
                       >
                         <Share2 className="h-4 w-4 text-gray-500" />
-                        <span>Share</span>
+                        <span>Compartir</span>
                       </button>
                     </Tooltip>
                   </div>
@@ -235,18 +235,18 @@ const AppProfilePage: FC = () => {
             <div className="md:col-span-2">
               {/* Description */}
               <section className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">About {app.name}</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Sobre {app.name}</h2>
                 <div className="space-y-6">
                   <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
                     <div className="flex gap-4">
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-2">Problem</h4>
-                        <p className="text-sm text-gray-600">Users struggle with [specific problem] leading to [negative outcome].</p>
+                        <h4 className="font-medium text-gray-900 mb-2">Problema</h4>
+                        <p className="text-sm text-gray-600">Los usuarios luchan con [problema específico] que conduce a [resultado negativo].</p>
                       </div>
                       <div className="border-l border-gray-200"></div>
                       <div>
-                        <h4 className="font-medium text-gray-900 mb-2">Solution</h4>
-                        <p className="text-sm text-gray-600">We provide [key solution] that helps users [achieve desired outcome].</p>
+                        <h4 className="font-medium text-gray-900 mb-2">Solución</h4>
+                        <p className="text-sm text-gray-600">Ofrecemos [solución clave] que ayuda a los usuarios a [alcanzar el resultado deseado].</p>
                       </div>
                     </div>
                   </div>
@@ -256,7 +256,7 @@ const AppProfilePage: FC = () => {
               
               {/* Screenshots */}
               <section className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Screenshots</h2>
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Capturas de pantalla</h2>
                 <div className="grid grid-cols-1 gap-4">
                   {app.screenshots?.map((screenshot, index) => (
                     <div key={index} className="rounded-lg overflow-hidden border border-gray-200 shadow-sm">
@@ -290,9 +290,9 @@ const AppProfilePage: FC = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-medium text-gray-900">Sarah Chen</span>
-                        <span className="text-sm text-gray-500">2 days ago</span>
+                        <span className="text-sm text-gray-500">hace 2 días</span>
                       </div>
-                      <p className="text-gray-700">This is exactly what I've been looking for! The UI is so clean and intuitive. Have you considered adding keyboard shortcuts for power users?</p>
+                      <p className="text-gray-700">¡Este es exactamente lo que estaba buscando! El diseño es tan limpio y fácil de usar. ¿Has considerado agregar atajos de teclado para usuarios avanzados?</p>
                     </div>
                   </div>
 
@@ -305,9 +305,9 @@ const AppProfilePage: FC = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="font-medium text-gray-900">Alex Rivera</span>
-                        <span className="text-sm text-gray-500">1 day ago</span>
+                        <span className="text-sm text-gray-500">hace 1 día</span>
                       </div>
-                      <p className="text-gray-700">Great work on this! I'm curious about the tech stack you used. Any plans to make it open source?</p>
+                      <p className="text-gray-700">¡Gran trabajo en esto! Estoy curioso por el stack tecnológico que usaste. ¿Alguna idea de hacerlo de código abierto?</p>
                     </div>
                   </div>
                 </div>
@@ -316,8 +316,8 @@ const AppProfilePage: FC = () => {
                 <div className="border rounded-lg p-6 bg-gray-50">
                   <div className="text-center">
                     <MessageSquare className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <h3 className="text-gray-700 font-medium mb-2">Join the conversation</h3>
-                    <p className="text-gray-500 text-sm mb-4">Sign in to leave a comment</p>
+                    <h3 className="text-gray-700 font-medium mb-2">Únete a la conversación</h3>
+                    <p className="text-gray-500 text-sm mb-4">Inicia sesión para dejar un comentario</p>
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -330,7 +330,7 @@ const AppProfilePage: FC = () => {
                           <polyline points="10 17 15 12 10 7"/>
                           <line x1="15" x2="3" y1="12" y2="12"/>
                         </svg>
-                        Sign in to comment
+                        Inicia sesión para comentar
                       </Link>
                     </Button>
                   </div>
@@ -343,7 +343,7 @@ const AppProfilePage: FC = () => {
               {/* App makers */}
               <section className="mb-6 bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                  <h3 className="font-semibold text-gray-900">Meet the Makers</h3>
+                  <h3 className="font-semibold text-gray-900">Conoce a los makers</h3>
                 </div>
                 <div className="divide-y divide-gray-100">
                   {app.makers?.map((maker, index) => (
@@ -406,7 +406,7 @@ const AppProfilePage: FC = () => {
               {/* Featured Badge */}
               <section className="mb-6 bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                  <h3 className="font-semibold text-gray-900">Featured Badge</h3>
+                  <h3 className="font-semibold text-gray-900">Badge Destacado</h3>
                 </div>
                 <div className="p-6">
                   <div className="flex justify-center">
@@ -418,7 +418,7 @@ const AppProfilePage: FC = () => {
               {/* Release Information */}
               <section className="mb-6 bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                  <h3 className="font-semibold text-gray-900">Release Information</h3>
+                  <h3 className="font-semibold text-gray-900">Información de lanzamiento</h3>
                 </div>
                 <div className="p-6">
                   <div className="flex items-center gap-4">
@@ -426,7 +426,7 @@ const AppProfilePage: FC = () => {
                       <Calendar className="h-5 w-5 text-brand-blue" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Initial Release</p>
+                      <p className="text-sm text-gray-500">Lanzamiento inicial</p>
                       <p className="text-base font-medium text-gray-900">
                         {new Date(app.launchDate).toLocaleDateString('en-US', {
                           year: 'numeric',
@@ -443,7 +443,7 @@ const AppProfilePage: FC = () => {
               {app.metrics && (
                 <section className="mb-6 bg-white rounded-lg border border-gray-200 overflow-hidden">
                   <div className="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                    <h3 className="font-semibold text-gray-900">App Metrics</h3>
+                    <h3 className="font-semibold text-gray-900">Métricas</h3>
                   </div>
                   <div className="divide-y divide-gray-100">
                     {/* Launch date */}
@@ -453,7 +453,7 @@ const AppProfilePage: FC = () => {
                           <Calendar className="h-5 w-5 text-brand-blue" />
                         </div>
                         <div>
-                          <p className="text-sm text-gray-500">Launch Date</p>
+                          <p className="text-sm text-gray-500">Fecha de lanzamiento</p>
                           <p className="text-base font-medium text-gray-900">
                             {new Date(app.launchDate).toLocaleDateString('en-US', {
                               year: 'numeric',
@@ -473,7 +473,7 @@ const AppProfilePage: FC = () => {
                             <ArrowLeft className="h-5 w-5 text-brand-blue" />
                           </div>
                           <div>
-                            <p className="text-sm text-gray-500">Downloads</p>
+                            <p className="text-sm text-gray-500">Descargas</p>
                             <p className="text-base font-medium text-gray-900">
                               {app.metrics.downloads.toLocaleString()}
                             </p>
@@ -490,7 +490,7 @@ const AppProfilePage: FC = () => {
                             <MessageSquare className="h-5 w-5 text-brand-blue" />
                           </div>
                           <div>
-                            <p className="text-sm text-gray-500">Active Users</p>
+                            <p className="text-sm text-gray-500">Usuarios activos</p>
                             <p className="text-base font-medium text-gray-900">
                               {app.metrics.activeUsers.toLocaleString()}
                             </p>
@@ -507,7 +507,7 @@ const AppProfilePage: FC = () => {
                             <ThumbsUp className="h-5 w-5 text-brand-blue" />
                           </div>
                           <div>
-                            <p className="text-sm text-gray-500">Average Rating</p>
+                            <p className="text-sm text-gray-500">Puntuación promedio</p>
                             <p className="text-base font-medium text-gray-900">
                               {app.metrics.avgRating}
                             </p>

@@ -24,89 +24,89 @@ export default function AboutPage() {
   // FAQ items
   const faqItems = [
     {
-      question: "What is Product Makers?",
-      answer: "Product Makers is a Spanish-speaking community for people who create digital products, focused on sharing real experiences and helping others develop viable products from scratch."
+      question: "¿Qué es Product Makers?",
+      answer: "Product Makers es una comunidad hispanohablante para quienes crean productos digitales, donde se comparten experiencias reales y se ayuda a otros a construir productos viables desde cero."
     },
     {
-      question: "What is the main goal of this community?",
+      question: "¿Cuál es el objetivo principal de esta comunidad?",
       answer: <>
         <p className="text-gray-600 mb-3">
-          To create a space where makers can:
+          Crear un espacio donde los makers puedan:
         </p>
         <ul className="text-gray-600 list-disc pl-6 space-y-1">
-          <li>Learn from each other</li>
-          <li>Share tools and processes</li>
-          <li>Receive real-time feedback</li>
-          <li>Develop real products, not just theoretical ideas</li>
+          <li>Aprender unos de otros</li>
+          <li>Compartir herramientas y procesos</li>
+          <li>Recibir feedback en tiempo real</li>
+          <li>Desarrollar productos reales, no solo ideas teóricas</li>
         </ul>
       </>
     },
     {
-      question: "What defines a Product Maker?",
-      answer: "A Product Maker is someone capable of building and launching digital products by themselves or in collaboration. They don't need to be an expert in everything, but they understand and participate in the entire process: ideation, design, development, validation, go-to-market, etc."
+      question: "¿Qué define a un Product Maker?",
+      answer: "Un Product Maker es alguien capaz de construir y lanzar productos digitales por su cuenta o en colaboración. No necesita ser experto en todo, pero entiende y participa en todo el proceso: ideación, diseño, desarrollo, validación, lanzamiento, etc."
     },
     {
-      question: "Who is this community for?",
-      answer: "Designers, developers, PMs, indie hackers, CTOs, entrepreneurs, and anyone interested in creating digital products, either from scratch or within established companies."
+      question: "¿A quién está dirigida esta comunidad?",
+      answer: "Diseñadores, desarrolladores, PMs, indie hackers, CTOs, emprendedores y cualquier persona interesada en crear productos digitales, ya sea desde cero o dentro de una empresa."
     },
     {
-      question: "Do I need technical knowledge to participate?",
-      answer: "Not necessarily. While many members come from the product world, anyone interested in learning, sharing, and building is welcome."
+      question: "¿Necesito conocimientos técnicos para participar?",
+      answer: "No necesariamente. Aunque muchos miembros vienen del mundo del producto, cualquiera con ganas de aprender, compartir y construir es bienvenido."
     },
     {
-      question: "What type of content will be shared?",
+      question: "¿Qué tipo de contenido se compartirá?",
       answer: <ul className="text-gray-600 list-disc pl-6 space-y-1">
-        <li>Product development in public (building in public)</li>
-        <li>Interviews and case studies</li>
-        <li>Thematic talks about UX, ASO, SEO, growth, etc.</li>
-        <li>Workflow comparisons</li>
-        <li>Tools and methodologies (MVPs, MCPs, design-to-code, etc.)</li>
+        <li>Desarrollo de producto en público (building in public)</li>
+        <li>Entrevistas y casos de estudio</li>
+        <li>Charlas temáticas sobre UX, ASO, SEO, growth, etc.</li>
+        <li>Comparación de flujos de trabajo</li>
+        <li>Herramientas y metodologías (MVPs, MCPs, diseño a código, etc.)</li>
       </ul>
     },
     {
-      question: "Where can I follow the content?",
-      answer: "All content will be shared on the Product Makers YouTube channel. Events will be announced on platforms like LinkedIn and Instagram, and registrations will be done through Luma."
+      question: "¿Dónde puedo seguir el contenido?",
+      answer: "Todo el contenido se compartirá en el canal de YouTube de Product Makers. Los eventos se anunciarán en plataformas como LinkedIn e Instagram, y las inscripciones se harán a través de Luma."
     },
     {
-      question: "Is there a platform for the community?",
+      question: "¿Hay una plataforma para la comunidad?",
       answer: <>
         <p className="text-gray-600 mb-3">
-          Yes, Discord is being used for:
+          Sí, usamos Discord para:
         </p>
         <ul className="text-gray-600 list-disc pl-6 space-y-1">
-          <li>Sharing resources</li>
-          <li>Resolving doubts</li>
-          <li>Receiving feedback</li>
-          <li>Connecting with other makers</li>
+          <li>Compartir recursos</li>
+          <li>Resolver dudas</li>
+          <li>Recibir feedback</li>
+          <li>Conectar con otros makers</li>
         </ul>
         <p className="text-gray-600 mt-3">
-          A virtual coworking voice channel has also been created.
+          También hemos creado un canal de voz como coworking virtual.
         </p>
       </>
     },
     {
-      question: "What's the spirit behind the community?",
-      answer: "Zero bullshit. Everything is real, practical, and based on experience. We aim to elevate each other, collaborate, and form a solid creative ecosystem in the Spanish-speaking world."
+      question: "¿Cuál es el espíritu de la comunidad?",
+      answer: "Cero bullshit. Todo es real, práctico y basado en la experiencia. Queremos impulsarnos entre todos, colaborar y construir un ecosistema creativo sólido en el mundo hispanohablante."
     },
     {
-      question: "Does this have commercial purposes?",
-      answer: "No. The project was born with the goal of creating value and community, without immediate intention of monetization. If there are ever sponsors, it will be without compromising the independence or utility of the community."
+      question: "¿Esto tiene fines comerciales?",
+      answer: "No. El proyecto nació con el objetivo de crear valor y comunidad, sin intención inmediata de monetización. Si en algún momento hay patrocinadores, será sin comprometer la independencia ni la utilidad de la comunidad."
     },
     {
-      question: "How can I participate?",
+      question: "¿Cómo puedo participar?",
       answer: <ol className="text-gray-600 list-decimal pl-6 space-y-1">
-        <li>Sign up for events via Luma.</li>
-        <li>Join Discord.</li>
-        <li>Share your projects, ideas, and questions.</li>
-        <li>Subscribe to the Product Makers YouTube channel.</li>
+        <li>Apúntate a los eventos vía Luma.</li>
+        <li>Únete al Discord.</li>
+        <li>Comparte tus proyectos, ideas y dudas.</li>
+        <li>Suscríbete al canal de YouTube de Product Makers.</li>
       </ol>
     },
     {
-      question: "Why in Spanish?",
-      answer: "Because it's the natural language of the organizing team and the target audience. We want to create quality and accessible content for Spain and Latin America."
+      question: "¿Por qué en español?",
+      answer: "Porque es el idioma natural del equipo organizador y del público objetivo. Queremos crear contenido de calidad y accesible para España y Latinoamérica."
     }
-  ];
-  
+  ]
+    
   // JSON-LD for better SEO
   const jsonLd = {
     "@context": "https://schema.org",
@@ -137,9 +137,9 @@ export default function AboutPage() {
         <article className="py-20 bg-background"> {/* Changed section to article for better semantics */}
           <div className="container max-w-4xl">
             <header className="text-center mb-16">
-              <h1 className="text-4xl font-bold mb-4" id="about-title">About Product Makers</h1>
+              <h1 className="text-4xl font-bold mb-4" id="about-title">¿Qué es Product Makers?</h1>
               <p className="text-xl text-muted-foreground">
-                A community of creators, innovators, and builders.
+                La comunidad de creadores de productos digitales.
               </p>
             </header>
 
@@ -155,37 +155,36 @@ export default function AboutPage() {
                     className="rounded-lg mb-4"
                   />
                 </div>
-                <h2 className="text-2xl font-semibold mb-4 text-center" id="what-is">What is Product Makers?</h2>
+                <h2 className="text-2xl font-semibold mb-4 text-center" id="what-is">¿Cuál es el objetivo de esta comunidad?</h2>
                 <p className="text-gray-600">
-                  Product Makers is a vibrant community platform where indie makers, designers, and entrepreneurs come together to showcase their products, share knowledge, and support each other's journey in building successful digital products.
-                </p>
+                Product Makers es una comunidad vibrante donde makers independientes, diseñadores y emprendedores se reúnen para mostrar sus productos, compartir conocimiento y apoyarse mutuamente en el camino de construir productos digitales exitosos.                </p>
               </section>
 
               {/* Vision */}
               <section className="prose prose-lg mx-auto" aria-labelledby="vision">
-                <h2 className="text-2xl font-semibold mb-4" id="vision">Our Vision</h2>
+                <h2 className="text-2xl font-semibold mb-4" id="vision">Nuestra visión</h2>
                 <p className="text-gray-600">
-                  We envision a world where anyone with a great product idea has the resources, support, and platform to bring it to life. We believe in democratizing product creation and fostering an inclusive environment where makers can thrive.
+                Imaginamos un mundo donde cualquier persona con una gran idea de producto tenga los recursos, el apoyo y la plataforma necesarios para hacerla realidad. Creemos en democratizar la creación de productos y en fomentar un entorno inclusivo donde los makers puedan crecer y prosperar.
                 </p>
               </section>
 
               {/* Mission */}
               <section className="prose prose-lg mx-auto" aria-labelledby="mission">
-                <h2 className="text-2xl font-semibold mb-4" id="mission">Our Mission</h2>
+                <h2 className="text-2xl font-semibold mb-4" id="mission">Nuestra misión</h2>
                 <p className="text-gray-600">
-                  Our mission is to empower the next generation of product makers by:
+                Nuestra misión es impulsar a la próxima generación de makers de producto a través de:
                 </p>
                 <ul className="text-gray-600 list-disc pl-6 space-y-2">
-                  <li>Providing a platform to showcase and discover innovative products</li>
-                  <li>Facilitating knowledge sharing and collaboration among makers</li>
-                  <li>Building a supportive community that celebrates creativity and entrepreneurship</li>
-                  <li>Offering resources and tools to help makers succeed</li>
+                  <li>Una plataforma para mostrar y descubrir productos innovadores</li>
+                  <li>El intercambio de conocimiento y la colaboración entre makers</li>
+                  <li>Una comunidad que celebra la creatividad y el espíritu emprendedor</li>
+                  <li>Recursos y herramientas que ayuden a los makers a tener éxito</li>
                 </ul>
               </section>
               
               {/* FAQ Section */}
               <section className="prose prose-lg mx-auto" aria-labelledby="faq-heading">
-                <h2 className="text-2xl font-semibold mb-8 text-center" id="faq-heading">Frequently Asked Questions</h2>
+                <h2 className="text-2xl font-semibold mb-8 text-center" id="faq-heading">Preguntas frecuentes</h2>
                 
                 <div className="grid grid-cols-1 gap-6">
                   {faqItems.map((faq, index) => (

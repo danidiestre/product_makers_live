@@ -35,9 +35,9 @@ export default function MakersPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 {/* Title and description */}
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900 lowercase">the makers</h1>
+                  <h1 className="text-4xl font-bold text-gray-900 lowercase">los makers</h1>
                   <p className="text-sm text-gray-500 mt-1">
-                    Meet our amazing makers building the future
+                    descubre los makers que están construyendo el futuro
                   </p>
                 </div>
 
@@ -47,7 +47,7 @@ export default function MakersPage() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="text"
-                      placeholder="Search makers..."
+                      placeholder="busca a makers..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full sm:w-[300px] pl-10"

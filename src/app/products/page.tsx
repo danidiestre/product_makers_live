@@ -35,9 +35,9 @@ export default function Products() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 {/* Title and description */}
                 <div>
-                  <h1 className="text-4xl font-bold text-gray-900 lowercase">the products</h1>
+                  <h1 className="text-4xl font-bold text-gray-900 lowercase">los productos</h1>
                   <p className="text-sm text-gray-500 mt-1">
-                    Discover innovative apps and tools created by indie makers
+                    descubre los productos creados por makers
                   </p>
                 </div>
                 
@@ -47,7 +47,7 @@ export default function Products() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="text"
-                      placeholder="Search products..."
+                      placeholder="busca productos..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full sm:w-[300px] pl-10"
