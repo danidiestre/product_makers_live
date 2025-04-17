@@ -22,13 +22,13 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   // Filter makers based on category and search query
   const filteredMakers = makers.filter(maker => {
     const matchesCategory = selectedCategory === 'All' || maker.category === selectedCategory
-    
+
     const searchTerm = searchQuery.toLowerCase()
     const matchesSearch = searchQuery === '' ? true
       : maker.name.toLowerCase().includes(searchTerm) ||
-        maker.role.toLowerCase().includes(searchTerm) ||
-        maker.bio.toLowerCase().includes(searchTerm) ||
-        maker.category.toLowerCase().includes(searchTerm)
+      maker.role.toLowerCase().includes(searchTerm) ||
+      maker.bio.toLowerCase().includes(searchTerm) ||
+      maker.category.toLowerCase().includes(searchTerm)
 
     return matchesCategory && matchesSearch
   })
@@ -47,15 +47,15 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   const categories = ['All', 'Developer', 'Designer', 'Marketing', 'Other']
   const categoryCounts = categories.map(category => ({
     name: category,
-    count: category === 'All' 
-      ? makers.length 
+    count: category === 'All'
+      ? makers.length
       : makers.filter(maker => maker.category === category).length
   }))
 
   return (
-    <div>
+    <div className="w-full grid gap-6">
       {/* Category filters */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      <div className="flex flex-wrap gap-2">
         {categoryCounts.map(({ name, count }) => (
           <Button
             key={name}
@@ -83,7 +83,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
       {paginatedMakers.length === 0 && (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
           <p className="text-gray-500">No makers found for the current filters.</p>
-          <button 
+          <button
             className="mt-4 text-sm text-blue-600 hover:text-blue-800"
             onClick={() => {
               setSelectedCategory('All')
@@ -105,7 +105,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          
+
           <div className="flex items-center gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <Button

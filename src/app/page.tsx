@@ -1,11 +1,17 @@
 'use client'
 
+import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
+import { LayoutMain } from '@/components/layout/LayoutMain'
+import { LayoutSection } from '@/components/layout/LayoutSection'
+import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Navbar } from '@/components/Navbar'
-import { AppList } from '@/components/AppList'
 import Footer from '@/components/Footer'
+import { AppList } from '@/components/AppList'
 import StreamCountdown from '@/components/StreamCountdown'
 import { WeeklyCountdown } from '@/components/WeeklyCountdown'
+import { Flame } from 'lucide-react'
 import Script from 'next/script'
+import StreamCountdownBanner from '@/components/StreamCountdownBanner'
 
 export default function Home() {
   // JSON-LD structured data for better SEO
@@ -23,63 +29,52 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <LayoutWrapper>
+
       {/* Add JSON-LD for SEO */}
-      <Script 
+      <Script
         id="product-makers-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      
-      {/* Gradient background wrapper */}
-      <div className="fixed inset-0 bg-gradient-to-b from-white via-[#FAFBFF] to-[#F8F9FF] pointer-events-none" />
-      
-      {/* Subtle mesh gradient overlay */}
-      <div 
-        className="fixed inset-0 opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `radial-gradient(at 100% 0%, rgb(124 58 237 / 0.15) 0px, transparent 50%),
-                           radial-gradient(at 0% 0%, rgb(37 99 235 / 0.1) 0px, transparent 50%),
-                           radial-gradient(at 100% 100%, rgb(236 72 153 / 0.1) 0px, transparent 50%),
-                           radial-gradient(at 0% 100%, rgb(234 179 8 / 0.1) 0px, transparent 50%)`
-        }}
-      />
 
-      <div className="relative">
-        <Navbar />
-        <main className="flex-1">
-          {/* StreamCountdown banner */}
-          <StreamCountdown />
-          
-          {/* Hero Section with semantic HTML5 elements */}
-          <section className="pt-8 pb-12 border-b border-gray-100" aria-labelledby="hero-heading">          
-            <div className="max-w-4xl mx-auto px-4">
-              <div className="text-center max-w-3xl mx-auto">
-                <h1 id="hero-heading" className="text-4xl md:text-5xl text-gray-900 mb-5">
-                  descubre los <span className="font-bold">productos</span> creados por <span className="font-bold">makers</span>
-                </h1>
-                <p className="text-lg text-gray-600">
-                  product makers es la comunidad hispana de makers de productos digitales.
-                </p>
-              </div>
-            </div>
-          </section>
-          
-          {/* Product List Section with semantic elements */}
-          <section id="featured-apps" aria-labelledby="featured-products-heading" className="max-w-4xl mx-auto px-4 py-12">
-            <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <h2 id="featured-products-heading" className="text-lg font-medium text-gray-900 flex items-center gap-2 whitespace-nowrap mx-auto sm:mx-0">
-                🔥 <span className="text-gray-600">Mejores productos de la semana</span>
+      {/* StreamCountdown banner */}
+      <StreamCountdownBanner />
+
+      <Navbar />
+
+      <LayoutMain>
+
+        {/* Hero Section with semantic HTML5 elements */}
+        <LayoutSection className="border-b bg-background" labelledby="hero-heading">
+          <LayoutContainer>
+            <h1 id="hero-heading" className="text-4xl md:text-6xl text-foreground text-balance text-center font-medium">
+              Descubre los <span className="font-bold">productos</span> creados por <span className="font-bold">makers</span>
+            </h1>
+            <p className="text-base md:text-lg text-muted-foreground text-balance font-medium text-center">
+              Product makers es la comunidad hispana de makers de productos digitales.
+            </p>
+          </LayoutContainer>
+        </LayoutSection>
+
+        {/* Product List Section with semantic elements */}
+        <LayoutSection labelledby="featured-products-heading">
+          <LayoutContainer>
+            <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 id="featured-products-heading" className="text-base font-medium text-muted-foreground flex items-center justify-center sm:justify-start gap-2">
+                <Flame size={20} className="text-red-600" />
+                <span>Mejores productos de la semana</span>
               </h2>
-              <div className="overflow-x-auto pb-1 mx-auto sm:mx-0">
-                <WeeklyCountdown />
-              </div>
+              <WeeklyCountdown />
             </div>
             <AppList searchQuery="" limit={10} />
-          </section>
-        </main>
-        <Footer />
-      </div>
-    </div>
+          </LayoutContainer>
+        </LayoutSection>
+
+      </LayoutMain>
+
+      <Footer />
+
+    </LayoutWrapper>
   )
 } 

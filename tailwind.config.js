@@ -21,6 +21,7 @@ module.exports = {
       colors: {
         brand: {
           blue: "#002AFC",
+          yellow: "#FFCD00",
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

@@ -26,8 +26,8 @@ const ViewTab: FC<{
   <button
     className={clsx(
       'px-4 py-2 text-sm font-medium',
-      active 
-        ? 'border-b-2 border-blue-500 text-blue-600' 
+      active
+        ? 'border-b-2 border-blue-500 text-blue-600'
         : 'text-gray-500 hover:text-gray-700'
     )}
     onClick={onClick}
@@ -48,24 +48,24 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [apps] = useState<App[]>(getAllApps())
-  
+
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
     const matchesPlatform = platformFilter === 'all' ? true
       : platformFilter === 'web' ? app.externalLinks?.website
-      : platformFilter === 'ios' ? app.externalLinks?.appStore
-      : platformFilter === 'android' ? app.externalLinks?.playStore
-      : !app.externalLinks?.website && !app.externalLinks?.appStore && !app.externalLinks?.playStore
+        : platformFilter === 'ios' ? app.externalLinks?.appStore
+          : platformFilter === 'android' ? app.externalLinks?.playStore
+            : !app.externalLinks?.website && !app.externalLinks?.appStore && !app.externalLinks?.playStore
 
     const searchTerm = searchQuery.toLowerCase()
     const matchesSearch = searchQuery === '' ? true
       : app.name.toLowerCase().includes(searchTerm) ||
-        app.description.toLowerCase().includes(searchTerm) ||
-        (app.tags?.some(tag => tag.toLowerCase().includes(searchTerm)) ?? false)
+      app.description.toLowerCase().includes(searchTerm) ||
+      (app.tags?.some(tag => tag.toLowerCase().includes(searchTerm)) ?? false)
 
     return matchesPlatform && matchesSearch
   })
-  
+
   // Reset to first page when search query changes
   useEffect(() => {
     setCurrentPage(1)
@@ -74,7 +74,7 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   // Sort apps based on current criteria
   const sortedApps = [...filteredApps].sort((a, b) => {
     const modifier = sortAsc ? 1 : -1
-    return sortKey === 'votes' 
+    return sortKey === 'votes'
       ? (a.votes - b.votes) * modifier
       : a.id.localeCompare(b.id) * modifier
   })
@@ -90,18 +90,20 @@ export function AppList({ searchQuery, limit }: AppListProps) {
     { id: 'web', label: 'Web', icon: <Globe className="h-3.5 w-3.5" />, count: apps.filter(app => app.externalLinks?.website).length },
     { id: 'ios', label: 'iOS', icon: <Smartphone className="h-3.5 w-3.5" />, count: apps.filter(app => app.externalLinks?.appStore).length },
     { id: 'android', label: 'Android', icon: <Play className="h-3.5 w-3.5" />, count: apps.filter(app => app.externalLinks?.playStore).length },
-    { id: 'others', label: 'Others', icon: <Filter className="h-3.5 w-3.5" />, count: apps.filter(app => 
-      !app.externalLinks?.website && 
-      !app.externalLinks?.appStore && 
-      !app.externalLinks?.playStore
-    ).length }
+    {
+      id: 'others', label: 'Others', icon: <Filter className="h-3.5 w-3.5" />, count: apps.filter(app =>
+        !app.externalLinks?.website &&
+        !app.externalLinks?.appStore &&
+        !app.externalLinks?.playStore
+      ).length
+    }
   ]
 
   // Display limited apps on home page, or all apps with pagination on products page
   const displayApps = limit ? sortedApps.slice(0, limit) : paginatedApps;
 
   return (
-    <div className="grid gap-4">
+    <div className="w-full grid gap-6">
       {!limit && (
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           {/* Platform filter */}
@@ -144,10 +146,10 @@ export function AppList({ searchQuery, limit }: AppListProps) {
           </Select>
         </div>
       )}
-      
+
       <div className="grid gap-4">
         {displayApps.map((app, index) => (
-          <AppCard 
+          <AppCard
             key={app.id}
             {...app}
             onUpvote={() => console.log(`Upvoted ${app.name}`)}
@@ -157,8 +159,8 @@ export function AppList({ searchQuery, limit }: AppListProps) {
       </div>
 
       {limit && sortedApps.length > limit && (
-        <Link 
-          href="/products" 
+        <Link
+          href="/products"
           className="group relative flex items-center gap-2 rounded-lg border border-gray-200 bg-white p-6 hover:border-gray-300 hover:shadow-sm transition-all"
         >
           <div className="flex-grow text-center">
@@ -182,7 +184,7 @@ export function AppList({ searchQuery, limit }: AppListProps) {
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          
+
           <div className="flex items-center gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <Button
