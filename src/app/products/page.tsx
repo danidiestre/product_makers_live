@@ -6,51 +6,64 @@ import Footer from '@/components/Footer'
 import { Search } from 'lucide-react'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
+import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
+import { LayoutMain } from '@/components/layout/LayoutMain'
+import { LayoutSection } from '@/components/layout/LayoutSection'
+import { LayoutContainer } from '@/components/layout/LayoutContainer'
+import StreamCountdownBanner from '@/components/StreamCountdownBanner'
 
-export default function ProductsPage() {
+export default function Products() {
   const [searchQuery, setSearchQuery] = useState('')
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <LayoutWrapper>
+
+      {/* StreamCountdown banner */}
+      <StreamCountdownBanner />
+
       <Navbar />
-      <main className="flex-1">
+
+      <LayoutMain>
+
         {/* Header */}
-        <div className="border-b border-gray-200 bg-white">
-          <div className="max-w-4xl mx-auto px-4 py-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <LayoutSection className="border-b py-6 bg-background">
+          <LayoutContainer>
+            <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
               {/* Title and description */}
-              <div>
-                <h1 className="text-4xl font-bold text-gray-900 lowercase">the products</h1>
-                <p className="text-sm text-gray-500 mt-1">
-                  Discover innovative apps and tools created by indie makers
+              <div className="flex flex-col gap-1">
+                <h1 className="text-3xl font-bold text-foreground">Productos</h1>
+                <p className="text-sm text-muted-foreground">
+                  Descubre los productos creados por makers
                 </p>
               </div>
-              
+
               {/* Search bar */}
               <div className="relative">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <Input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full sm:w-[300px] pl-10"
-                  />
-                </div>
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Busca productos..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full sm:w-[300px] pl-10"
+                />
               </div>
             </div>
-          </div>
-        </div>
+          </LayoutContainer>
+        </LayoutSection>
 
         {/* Product List */}
-        <section className="py-4">
-          <div className="max-w-4xl mx-auto px-4">
+        <LayoutSection>
+          <LayoutContainer>
             <AppList searchQuery={searchQuery} />
-          </div>
-        </section>
-      </main>
+          </LayoutContainer>
+        </LayoutSection>
+
+      </LayoutMain>
+
       <Footer />
-    </div>
+
+    </LayoutWrapper>
   )
 } 

@@ -8,7 +8,7 @@ interface FeaturedBadgeProps {
 
 export const FeaturedBadge = ({ className = '', variant = 'default', showLink = true }: FeaturedBadgeProps) => {
   return (
-    <div className={`inline-flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-gray-200 shadow-sm ${className}`}>
+    <div className={`w-full inline-flex items-center gap-2 px-3 py-2 bg-background rounded-lg border shadow-sm ${className}`}>
       {/* Medal Icon */}
       <div className="flex-shrink-0">
         <svg
@@ -30,12 +30,12 @@ export const FeaturedBadge = ({ className = '', variant = 'default', showLink = 
 
       {/* Text content */}
       <div className="flex items-center gap-2">
-        <span className={`font-medium ${variant === 'compact' ? 'text-sm' : 'text-base'}`}>
+        <span className={`font-medium text-balance ${variant === 'compact' ? 'text-sm' : 'text-base'}`}>
           Featured on <span className="text-brand-blue font-bold">product makers</span>
         </span>
         {showLink && (
-          <Link 
-            href="https://productmakers.com/featured" 
+          <Link
+            href="https://productmakers.com/featured"
             target="_blank"
             rel="noopener noreferrer"
             className="text-brand-blue hover:text-brand-blue/90"

@@ -4,8 +4,8 @@ import { App, Maker } from './types'
 const makers: Maker[] = [
   {
     id: '1',
-    name: 'John Doe',
-    role: 'Founder & Product Designer',
+    name: 'David Zafra',
+    role: 'Entrepreneur & Product Designer',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
     bio: 'Passionate about creating beautiful and functional user interfaces.',
     category: 'Designer',
@@ -13,15 +13,15 @@ const makers: Maker[] = [
     isVerified: true,
     joinedDate: '2024-01-15',
     followers: 1200,
-    twitter: 'johndoe',
-    github: 'johndoe',
-    website: 'https://johndoe.design',
-    linkedin: 'johndoe'
+    twitter: 'davidzafra',
+    github: 'davidzafra',
+    website: 'https://davidzafra.design',
+    linkedin: 'davidzafra'
   },
   {
     id: '2',
-    name: 'Jane Smith',
-    role: 'Full Stack Developer',
+    name: 'Daniel Diestre',
+    role: 'Product Manager',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     bio: 'Building scalable web applications with modern technologies.',
     category: 'Developer',
@@ -29,10 +29,10 @@ const makers: Maker[] = [
     isVerified: true,
     joinedDate: '2024-02-01',
     followers: 850,
-    twitter: 'janesmith',
-    github: 'janesmith',
-    website: 'https://janesmith.dev',
-    linkedin: 'jane-smith'
+    twitter: 'danieldiestre',
+    github: 'danieldiestre',
+    website: 'https://danieldiestre.dev',
+    linkedin: 'daniel-diestre'
   },
   {
     id: '3',

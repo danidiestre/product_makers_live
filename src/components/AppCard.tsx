@@ -53,6 +53,7 @@ interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
     avatar: string
   }>
   onUpvote?: () => void
+  ranking?: number
 }
 
 export const AppCard: FC<AppCardProps> = ({
@@ -67,6 +68,7 @@ export const AppCard: FC<AppCardProps> = ({
   externalLinks,
   makers = [],
   onUpvote,
+  ranking,
 }) => {
   const [votes, setVotes] = useState(initialVotes)
   const [hasVoted, setHasVoted] = useState(false)
@@ -88,8 +90,8 @@ export const AppCard: FC<AppCardProps> = ({
       className="flex flex-col rounded-lg overflow-hidden bg-background ring-1 ring-black/[0.04] shadow-[0_1px_2px_0_rgb(0,0,0,0.03)] hover:shadow-[0_2px_4px_0_rgb(0,0,0,0.02)] hover:ring-black/[0.08] transition-all duration-300"
       data-testid={`app-card-${id}`}
     >
-      <div className="flex p-4">
-        <div className="h-16 w-16 rounded-lg overflow-hidden flex-shrink-0 mr-4 flex items-center justify-center bg-white ring-1 ring-black/[0.03] p-2 relative">
+      <div className="flex p-5">
+        <div className="h-[60px] w-[60px] rounded-lg overflow-hidden flex-shrink-0 mr-4 flex items-center justify-center bg-white ring-1 ring-black/[0.03] p-2 relative">
           <img src={imageUrl} alt={name} className="h-full w-full object-contain" />
           {badges.includes('new') && (
             <div className="absolute bottom-0 left-0 right-0 bg-brand-blue/90 text-white text-[10px] font-medium py-0.5 text-center">
@@ -97,15 +99,22 @@ export const AppCard: FC<AppCardProps> = ({
             </div>
           )}
         </div>
-        <div className="flex-1">
-          <div className="flex items-start justify-between">
-            <div className="flex-1 pr-4">
-              <Link href={`/app/${id}`} className="inline-block">
-                <h3 className="font-semibold text-gray-900 text-lg hover:text-brand-blue transition-colors">{name}</h3>
-              </Link>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                {ranking && (
+                  <span className="inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold bg-brand-blue text-white rounded flex-shrink-0">
+                    #{ranking}
+                  </span>
+                )}
+                <Link href={`/app/${id}`} className="inline-block truncate">
+                  <h3 className="font-semibold text-gray-900 text-lg hover:text-brand-blue transition-colors">{name}</h3>
+                </Link>
+              </div>
               
               {/* App Type Indicators */}
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-2 mt-2.5">
                 {externalLinks?.website && (
                   <span className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded-md flex items-center">
                     <Globe className="h-3 w-3 mr-1" />
@@ -126,14 +135,14 @@ export const AppCard: FC<AppCardProps> = ({
                 )}
               </div>
               
-              <p className="text-sm text-gray-600 line-clamp-2 mt-2">{description}</p>
+              <p className="text-sm text-gray-600 line-clamp-2 mt-2.5">{description}</p>
               
               {/* Makers */}
               {makers.length > 0 && (
-                <div className="flex items-center mt-2">
+                <div className="flex items-center mt-3">
                   <div className="flex -space-x-2 mr-2">
                     {makers.slice(0, 3).map((maker, index) => (
-                      <div key={index} className="h-5 w-5 rounded-full overflow-hidden border-2 border-white">
+                      <div key={index} className="h-6 w-6 rounded-full overflow-hidden border-2 border-white">
                         <img src={maker.avatar} alt={maker.name} className="h-full w-full object-cover" />
                       </div>
                     ))}
@@ -156,18 +165,18 @@ export const AppCard: FC<AppCardProps> = ({
                 <Link href={`/app/${id}#comments`}>
                   <Tooltip content="View comments">
                     <button 
-                      className="flex flex-col items-center py-2 px-3 rounded-md border border-gray-200 bg-gray-50 hover:bg-gray-100 transition-all"
+                      className="flex flex-col items-center p-3 rounded-md border border-gray-200 bg-gray-50 hover:bg-gray-100 transition-all"
                       aria-label="View comments"
                     >
                       <MessageCircle className="h-5 w-5 text-gray-500" />
-                      <span className="text-sm font-bold text-gray-800">{commentsCount}</span>
+                      <span className="text-sm font-bold text-gray-800 mt-1">{commentsCount}</span>
                     </button>
                   </Tooltip>
                 </Link>
                 <Tooltip content={hasVoted ? "Remove upvote" : "Upvote this app"}>
                   <button 
                     onClick={handleUpvote}
-                    className={`flex flex-col items-center py-2 px-3 rounded-md border transition-all ${
+                    className={`flex flex-col items-center p-3 rounded-md border transition-all ${
                       hasVoted 
                         ? 'bg-blue-50 border-blue-200 hover:bg-blue-100' 
                         : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
@@ -175,7 +184,7 @@ export const AppCard: FC<AppCardProps> = ({
                     aria-label={hasVoted ? "Remove upvote" : "Upvote"}
                   >
                     <ChevronUp className={`h-5 w-5 ${hasVoted ? 'text-blue-500' : 'text-gray-500'}`} />
-                    <span className={`text-sm font-bold ${hasVoted ? 'text-blue-600' : 'text-gray-800'}`}>{votes}</span>
+                    <span className={`text-sm font-bold mt-1 ${hasVoted ? 'text-blue-600' : 'text-gray-800'}`}>{votes}</span>
                   </button>
                 </Tooltip>
               </div>
@@ -183,9 +192,9 @@ export const AppCard: FC<AppCardProps> = ({
           </div>
         </div>
       </div>
-      <div className="bg-muted/30 py-2 px-4 flex justify-between items-center border-t border-black/[0.03]">
+      <div className="bg-muted/30 py-2.5 px-5 flex justify-between items-center border-t border-black/[0.03]">
         {/* External Links */}
-        <div className="flex space-x-3">
+        <div className="flex space-x-4">
           {externalLinks?.website && (
             <a 
               href={externalLinks.website} 
@@ -194,7 +203,7 @@ export const AppCard: FC<AppCardProps> = ({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
             >
-              <Globe className="h-3 w-3 mr-1" />
+              <Globe className="h-3.5 w-3.5 mr-1.5" />
               <span>Website</span>
             </a>
           )}
@@ -206,7 +215,7 @@ export const AppCard: FC<AppCardProps> = ({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
             >
-              <Github className="h-3 w-3 mr-1" />
+              <Github className="h-3.5 w-3.5 mr-1.5" />
               <span>GitHub</span>
             </a>
           )}
