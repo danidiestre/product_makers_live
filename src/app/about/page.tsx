@@ -6,21 +6,26 @@ import Footer from '@/components/Footer'
 import { ChevronDown } from 'lucide-react'
 import Script from 'next/script'
 import Image from 'next/image'
+import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
+import { LayoutMain } from '@/components/layout/LayoutMain'
+import StreamCountdownBanner from '@/components/StreamCountdownBanner'
+import { LayoutSection } from '@/components/layout/LayoutSection'
+import { LayoutContainer } from '@/components/layout/LayoutContainer'
 
 // Metadata is handled in metadata.ts in the same directory for Next.js 13+
 // Cannot use export const metadata in client components
 
 export default function AboutPage() {
   const [openFaqs, setOpenFaqs] = useState<number[]>([0]) // First one open by default
-  
+
   const toggleFaq = (index: number) => {
-    setOpenFaqs(prev => 
-      prev.includes(index) 
+    setOpenFaqs(prev =>
+      prev.includes(index)
         ? prev.filter(i => i !== index)
         : [...prev, index]
     )
   }
-  
+
   // FAQ items
   const faqItems = [
     {
@@ -106,7 +111,7 @@ export default function AboutPage() {
       answer: "Porque es el idioma natural del equipo organizador y del público objetivo. Queremos crear contenido de calidad y accesible para España y Latinoamérica."
     }
   ]
-    
+
   // JSON-LD for better SEO
   const jsonLd = {
     "@context": "https://schema.org",
@@ -116,133 +121,148 @@ export default function AboutPage() {
       "name": faq.question,
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": typeof faq.answer === 'string' 
-          ? faq.answer 
+        "text": typeof faq.answer === 'string'
+          ? faq.answer
           : "See the Product Makers website for complete details."
       }
     }))
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <LayoutWrapper>
+
       {/* Add JSON-LD for FAQ rich snippets */}
-      <Script 
+      <Script
         id="about-faq-schema"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-    
+
+      {/* StreamCountdown banner */}
+      <StreamCountdownBanner />
+
       <Navbar />
-      <main className="flex-1">
-        <article className="py-20 bg-background"> {/* Changed section to article for better semantics */}
-          <div className="container max-w-4xl">
-            <header className="text-center mb-16">
-              <h1 className="text-4xl font-bold mb-4" id="about-title">¿Qué es Product Makers?</h1>
+
+      <LayoutMain>
+
+        <LayoutSection labelledby="about-title">
+          <LayoutContainer>
+            <div className="flex flex-col items-center gap-2">
+              <h1 className="text-4xl font-bold" id="about-title">¿Qué es Product Makers?</h1>
               <p className="text-xl text-muted-foreground">
                 La comunidad de creadores de productos digitales.
               </p>
-            </header>
+            </div>
+          </LayoutContainer>
+        </LayoutSection>
 
-            <div className="space-y-16">
-              {/* What we are */}
-              <section className="prose prose-lg mx-auto" aria-labelledby="what-is">
-                <div className="flex flex-col items-center mb-6">
-                  <Image 
-                    src="/assets/maker.png" 
-                    alt="Product Maker Illustration" 
-                    width={600} 
-                    height={600}
-                    className="rounded-lg mb-4"
-                  />
-                </div>
-                <h2 className="text-2xl font-semibold mb-4 text-center" id="what-is">¿Cuál es el objetivo de esta comunidad?</h2>
-                <p className="text-gray-600">
-                Product Makers es una comunidad vibrante donde makers independientes, diseñadores y emprendedores se reúnen para mostrar sus productos, compartir conocimiento y apoyarse mutuamente en el camino de construir productos digitales exitosos.                </p>
-              </section>
+        <LayoutSection className="pt-0" labelledby="what-is">
+          <LayoutContainer>
+            {/* What we are */}
+            <div className="w-full flex flex-col">
+              <Image
+                src="/assets/maker.png"
+                alt="Product Maker Illustration"
+                width={600}
+                height={600}
+                className="mx-auto mb-8"
+              />
+              <h2 className="text-2xl font-semibold mb-4" id="what-is">¿Cuál es el objetivo de esta comunidad?</h2>
+              <p className="text-muted-foreground">
+                Product Makers es una comunidad vibrante donde makers independientes, diseñadores y emprendedores se reúnen para mostrar sus productos, compartir conocimiento y apoyarse mutuamente en el camino de construir productos digitales exitosos.
+              </p>
+            </div>
+          </LayoutContainer>
+        </LayoutSection>
 
-              {/* Vision */}
-              <section className="prose prose-lg mx-auto" aria-labelledby="vision">
-                <h2 className="text-2xl font-semibold mb-4" id="vision">Nuestra visión</h2>
-                <p className="text-gray-600">
+        {/* Vision */}
+        <LayoutSection className="pt-0" aria-labelledby="vision">
+          <LayoutContainer>
+            <div className="w-full flex flex-col">
+              <h2 className="text-2xl font-semibold mb-4" id="vision">Nuestra visión</h2>
+              <p className="text-muted-foreground">
                 Imaginamos un mundo donde cualquier persona con una gran idea de producto tenga los recursos, el apoyo y la plataforma necesarios para hacerla realidad. Creemos en democratizar la creación de productos y en fomentar un entorno inclusivo donde los makers puedan crecer y prosperar.
-                </p>
-              </section>
+              </p>
+            </div>
+          </LayoutContainer>
+        </LayoutSection>
 
-              {/* Mission */}
-              <section className="prose prose-lg mx-auto" aria-labelledby="mission">
-                <h2 className="text-2xl font-semibold mb-4" id="mission">Nuestra misión</h2>
-                <p className="text-gray-600">
+        {/* Mission */}
+        <LayoutSection className="pt-0" aria-labelledby="mission">
+          <LayoutContainer>
+            <div className="w-full flex flex-col">
+              <h2 className="text-2xl font-semibold mb-4" id="mission">Nuestra misión</h2>
+              <p className="text-muted-foreground mb-4">
                 Nuestra misión es impulsar a la próxima generación de makers de producto a través de:
-                </p>
-                <ul className="text-gray-600 list-disc pl-6 space-y-2">
-                  <li>Una plataforma para mostrar y descubrir productos innovadores</li>
-                  <li>El intercambio de conocimiento y la colaboración entre makers</li>
-                  <li>Una comunidad que celebra la creatividad y el espíritu emprendedor</li>
-                  <li>Recursos y herramientas que ayuden a los makers a tener éxito</li>
-                </ul>
-              </section>
-              
-              {/* FAQ Section */}
-              <section className="prose prose-lg mx-auto" aria-labelledby="faq-heading">
-                <h2 className="text-2xl font-semibold mb-8 text-center" id="faq-heading">Preguntas frecuentes</h2>
-                
-                <div className="grid grid-cols-1 gap-6">
-                  {faqItems.map((faq, index) => (
-                    <div 
-                      key={index} 
-                      className={`bg-white rounded-lg border transition-shadow duration-300 ${
-                        openFaqs.includes(index) 
-                          ? 'border-brand-blue/30 shadow-lg shadow-brand-blue/5' 
-                          : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
+              </p>
+              <ul className="text-muted-foreground list-disc pl-6 space-y-2">
+                <li>Una plataforma para mostrar y descubrir productos innovadores</li>
+                <li>El intercambio de conocimiento y la colaboración entre makers</li>
+                <li>Una comunidad que celebra la creatividad y el espíritu emprendedor</li>
+                <li>Recursos y herramientas que ayuden a los makers a tener éxito</li>
+              </ul>
+            </div>
+          </LayoutContainer>
+        </LayoutSection>
+
+        {/* FAQ Section */}
+        <LayoutSection className="pt-0" aria-labelledby="faqs">
+          <LayoutContainer>
+            <div className="w-full flex flex-col">
+              <h2 className="text-2xl font-semibold mb-8" id="faqs">Preguntas frecuentes</h2>
+              <div className="grid grid-cols-1 gap-2">
+                {faqItems.map((faq, index) => (
+                  <div
+                    key={index}
+                    className={`bg-background rounded-md border transition-shadow duration-300 ${openFaqs.includes(index)
+                      ? 'border-border'
+                      : 'border-border hover:border-foreground/20'
                       }`}
+                  >
+                    <button
+                      onClick={() => toggleFaq(index)}
+                      className="flex justify-between items-center w-full text-left py-4 px-6 pr-4 focus:outline-none"
+                      aria-expanded={openFaqs.includes(index)}
+                      aria-controls={`faq-answer-${index}`}
                     >
-                      <button 
-                        onClick={() => toggleFaq(index)}
-                        className="flex justify-between items-center w-full text-left p-5 focus:outline-none"
-                        aria-expanded={openFaqs.includes(index)}
-                        aria-controls={`faq-answer-${index}`}
-                      >
-                        <h3 className={`text-xl font-medium transition-colors ${
-                          openFaqs.includes(index) ? 'text-brand-blue' : 'text-gray-900'
-                        }`}>
-                          {faq.question}
-                        </h3>
-                        <div className={`flex-shrink-0 ml-4 p-1 rounded-full transition-colors ${
-                          openFaqs.includes(index) ? 'bg-brand-blue/10' : 'bg-gray-100'
-                        }`}>
-                          <ChevronDown 
-                            aria-hidden="true"
-                            className={`h-5 w-5 transition-transform duration-300 ${
-                              openFaqs.includes(index) 
-                                ? 'rotate-180 text-brand-blue' 
-                                : 'text-gray-500'
-                            }`} 
-                          />
-                        </div>
-                      </button>
-                      
-                      <div 
-                        id={`faq-answer-${index}`}
-                        className={`transition-all duration-300 ease-in-out overflow-hidden ${
-                          openFaqs.includes(index) ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+                      <h3 className="text-lg font-medium transition-colors">
+                        {faq.question}
+                      </h3>
+                      <div className="flex-shrink-0 ml-4 p-1 rounded-full transition-colors">
+                        <ChevronDown
+                          size={20}
+                          aria-hidden="true"
+                          className={`transition-transform duration-300 ${openFaqs.includes(index)
+                            ? 'rotate-180 text-foreground'
+                            : 'text-muted-foreground'
+                            }`}
+                        />
+                      </div>
+                    </button>
+
+                    <div
+                      id={`faq-answer-${index}`}
+                      className={`transition-all duration-300 ease-in-out overflow-hidden ${openFaqs.includes(index) ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
                         }`}
-                      >
-                        <div className="p-5 pt-0 border-t border-gray-100">
-                          {typeof faq.answer === 'string' 
-                            ? <p className="text-gray-600">{faq.answer}</p>
-                            : faq.answer
-                          }
-                        </div>
+                    >
+                      <div className="py-4 px-6 pt-0">
+                        {typeof faq.answer === 'string'
+                          ? <p className="text-muted-foreground">{faq.answer}</p>
+                          : faq.answer
+                        }
                       </div>
                     </div>
-                  ))}
-                </div>
-              </section>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </article>
-      </main>
+          </LayoutContainer>
+        </LayoutSection>
+
+      </LayoutMain >
+
       <Footer />
-    </div>
+
+    </LayoutWrapper >
   )
 } 

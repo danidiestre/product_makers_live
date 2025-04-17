@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
 import '@/styles/globals.css'
+import { ThemeProvider } from "@/components/ThemeProvider"
 
-const manrope = Manrope({ 
+const manrope = Manrope({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap'
@@ -98,7 +99,16 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
         <link rel="canonical" href="https://productmakers.ai" />
       </head>
-      <body className={manrope.className}>{children}</body>
+      <body className={manrope.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 } 
