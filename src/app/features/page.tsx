@@ -1,6 +1,5 @@
 import { Navbar } from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { Cta } from '@/components/Cta'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -59,7 +58,7 @@ export default function FeaturesPage() {
       )
     }
   ];
-  
+
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
@@ -69,7 +68,7 @@ export default function FeaturesPage() {
           <div className="absolute inset-0 z-0 opacity-10">
             <div className="absolute inset-0 bg-grid-pattern" />
           </div>
-          
+
           <div className="container relative z-10">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Powerful Features for Product Makers</h1>
@@ -82,7 +81,7 @@ export default function FeaturesPage() {
             </div>
           </div>
         </section>
-        
+
         {/* Main Features Section */}
         <section className="py-20 bg-muted/30">
           <div className="container">
@@ -92,7 +91,7 @@ export default function FeaturesPage() {
                 Our comprehensive suite of tools helps you at every stage of the product development lifecycle.
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
               {mainFeatures.map((feature, index) => (
                 <div key={index} className="flex gap-6">
@@ -108,7 +107,7 @@ export default function FeaturesPage() {
             </div>
           </div>
         </section>
-        
+
         {/* Detailed Features */}
         <section className="py-20 bg-background">
           <div className="container">
@@ -118,7 +117,7 @@ export default function FeaturesPage() {
                 Our comprehensive tools cover every aspect of the product development lifecycle.
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div className="bg-muted/30 p-8 rounded-lg border">
                 <h3 className="text-2xl font-semibold mb-4">Ideation & Research</h3>
@@ -158,7 +157,7 @@ export default function FeaturesPage() {
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-muted/30 p-8 rounded-lg border">
                 <h3 className="text-2xl font-semibold mb-4">Design & Prototyping</h3>
                 <ul className="space-y-3">
@@ -197,7 +196,7 @@ export default function FeaturesPage() {
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-muted/30 p-8 rounded-lg border">
                 <h3 className="text-2xl font-semibold mb-4">Development & Testing</h3>
                 <ul className="space-y-3">
@@ -236,7 +235,7 @@ export default function FeaturesPage() {
                   </li>
                 </ul>
               </div>
-              
+
               <div className="bg-muted/30 p-8 rounded-lg border">
                 <h3 className="text-2xl font-semibold mb-4">Launch & Growth</h3>
                 <ul className="space-y-3">
@@ -278,8 +277,28 @@ export default function FeaturesPage() {
             </div>
           </div>
         </section>
-        
-        <Cta />
+
+        <section className="py-20 bg-primary text-primary-foreground">
+          <div className="container">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Building?</h2>
+              <p className="text-lg mb-8 text-primary-foreground/80">
+                Join thousands of makers who are creating the next generation of innovative products. Get started for free today.
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <Button size="lg" variant="secondary" asChild>
+                  <Link href="/signup">Get Started For Free</Link>
+                </Button>
+                <Button size="lg" variant="outline" className="bg-transparent border-primary-foreground/20 hover:bg-primary-foreground/10 text-primary-foreground" asChild>
+                  <Link href="/demo">Request Demo</Link>
+                </Button>
+              </div>
+              <p className="mt-6 text-sm text-primary-foreground/60">
+                No credit card required. Start building instantly.
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>
