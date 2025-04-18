@@ -7,9 +7,8 @@ import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Navbar } from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { AppList } from '@/components/AppList'
-import StreamCountdown from '@/components/StreamCountdown'
 import { WeeklyCountdown } from '@/components/WeeklyCountdown'
-import { Flame } from 'lucide-react'
+import { Blocks, Flame, WandSparkles } from 'lucide-react'
 import Script from 'next/script'
 import StreamCountdownBanner from '@/components/StreamCountdownBanner'
 
@@ -46,21 +45,26 @@ export default function Home() {
       <LayoutMain>
 
         {/* Hero Section with semantic HTML5 elements */}
-        <LayoutSection className="border-b bg-background" labelledby="hero-heading">
+        <LayoutSection className="border-b bg-background">
           <LayoutContainer>
-            <h1 id="hero-heading" className="text-4xl md:text-6xl text-foreground text-balance text-center font-medium">
-              Descubre los <span className="font-bold">productos</span> creados por <span className="font-bold">makers</span>
+            <h1 id="hero-heading" className="text-4xl md:text-6xl text-foreground text-balance text-center font-semibold inline-flex items-center justify-center flex-wrap gap-2 lg:gap-4">
+              <span>Descubre los</span>
+              <div className="w-14 h-14 bg-brand-blue rounded-md hidden lg:flex" />
+              <span>productos</span>
+              <span>creados por</span>
+              <div className="w-14 h-14 bg-brand-yellow rounded-md hidden lg:flex" />
+              <span>makers</span>
             </h1>
             <p className="text-base md:text-lg text-muted-foreground text-balance font-medium text-center">
-              Product makers es la comunidad hispana de makers de productos digitales.
+              La comunidad hispana de creadores de productos digitales.
             </p>
           </LayoutContainer>
         </LayoutSection>
 
         {/* Product List Section with semantic elements */}
-        <LayoutSection labelledby="featured-products-heading">
+        <LayoutSection>
           <LayoutContainer>
-            <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="w-full flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-between gap-4">
               <h2 id="featured-products-heading" className="text-base font-medium text-muted-foreground flex items-center justify-center sm:justify-start gap-2">
                 <Flame size={20} className="text-red-600" />
                 <span>Mejores productos de la semana</span>
