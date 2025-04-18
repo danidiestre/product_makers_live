@@ -3,10 +3,10 @@
 import { FC, useState, useEffect } from 'react'
 import { MakerCard } from './MakerCard'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { getAllMakers } from '@/lib/data'
 import { Maker } from '@/lib/types'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import clsx from 'clsx'
 
 const MAKERS_PER_PAGE = 12
 
@@ -55,25 +55,23 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   return (
     <div className="w-full grid gap-6">
       {/* Category filters */}
-      <div className="flex flex-wrap gap-2">
-        {categoryCounts.map(({ name, count }) => (
-          <Button
-            key={name}
-            variant={selectedCategory === name ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedCategory(name)}
-            className={clsx(
-              "transition-colors",
-              selectedCategory === name ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-            )}
-          >
-            {name} ({count})
-          </Button>
-        ))}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-background p-2 rounded-xl border">
+        <div className="flex flex-wrap gap-1">
+          {categoryCounts.map(({ name, count }) => (
+            <Button
+              key={name}
+              variant={selectedCategory === name ? "secondary" : "ghost"}
+              onClick={() => setSelectedCategory(name)}
+              className="flex items-center gap-2 pr-2 rounded-lg"
+            >
+              {name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="w-8">{count}</Badge>
+            </Button>
+          ))}
+        </div>
       </div>
 
       {/* Makers grid */}
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-4">
         {paginatedMakers.map((maker) => (
           <MakerCard key={maker.id} maker={maker} />
         ))}
@@ -81,42 +79,38 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
 
       {/* Show message if no makers found */}
       {paginatedMakers.length === 0 && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">No makers found for the current filters.</p>
-          <button
-            className="mt-4 text-sm text-blue-600 hover:text-blue-800"
+        <div className="text-center py-12 bg-background rounded-lg">
+          <p className="text-muted-foreground">No makers found for the current filters.</p>
+          <Button variant="secondary"
             onClick={() => {
               setSelectedCategory('All')
             }}
           >
             Reset filters
-          </button>
+          </Button>
         </div>
       )}
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="mt-8 flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center gap-2">
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
             disabled={currentPage === 1}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft size={20} />
           </Button>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <Button
                 key={page}
                 variant={currentPage === page ? "default" : "outline"}
-                size="sm"
+                size="icon"
                 onClick={() => setCurrentPage(page)}
-                className={clsx(
-                  "min-w-[2rem]",
-                  currentPage === page ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                )}
+                className={currentPage === page ? "bg-primary text-primary-foreground" : "hover:bg-muted"}
               >
                 {page}
               </Button>
@@ -125,11 +119,11 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
 
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight size={20} />
           </Button>
         </div>
       )}

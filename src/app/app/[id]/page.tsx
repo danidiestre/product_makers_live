@@ -5,7 +5,7 @@ import { ArrowLeft, Share2, ThumbsUp, MessageSquare, Calendar, ExternalLink, Cod
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { getAppById } from '@/lib/data'
-import { Tooltip } from '@/components/Tooltip'
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Navbar } from '@/components/Navbar'
 import { Button } from '@/components/ui/button'
 import { FeaturedBadge } from '@/components/FeaturedBadge'
@@ -192,38 +192,48 @@ const AppProfilePage: FC = () => {
                     </Link>
 
                     {/* Upvote button */}
-                    <Tooltip content={hasUpvoted ? "Remove upvote" : "Upvote this app"}>
-                      <button
-                        onClick={handleUpvote}
-                        className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${hasUpvoted
-                          ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-2 border-blue-200'
-                          : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-gray-200'
-                          }`}
-                      >
-                        <ThumbsUp className={`h-4 w-4 ${hasUpvoted ? 'text-blue-600' : 'text-gray-500'}`} />
-                        <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
-                      </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={handleUpvote}
+                          className={`flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${hasUpvoted
+                            ? 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-2 border-blue-200'
+                            : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-gray-200'
+                            }`}
+                        >
+                          <ThumbsUp className={`h-4 w-4 ${hasUpvoted ? 'text-blue-600' : 'text-gray-500'}`} />
+                          <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {hasUpvoted ? "Remove upvote" : "Upvote this app"}
+                      </TooltipContent>
                     </Tooltip>
 
                     {/* Share button */}
-                    <Tooltip content="Share this app">
-                      <button
-                        onClick={() => {
-                          if (navigator.share) {
-                            navigator.share({
-                              title: app.name,
-                              text: app.description,
-                              url: window.location.href,
-                            })
-                          } else {
-                            navigator.clipboard.writeText(window.location.href)
-                          }
-                        }}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-gray-200 transition-all duration-200"
-                      >
-                        <Share2 className="h-4 w-4 text-gray-500" />
-                        <span>Compartir</span>
-                      </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() => {
+                            if (navigator.share) {
+                              navigator.share({
+                                title: app.name,
+                                text: app.description,
+                                url: window.location.href,
+                              })
+                            } else {
+                              navigator.clipboard.writeText(window.location.href)
+                            }
+                          }}
+                          className="flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium bg-gray-50 text-gray-700 hover:bg-gray-100 border-2 border-gray-200 transition-all duration-200"
+                        >
+                          <Share2 className="h-4 w-4 text-gray-500" />
+                          <span>Compartir</span>
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        Share this app
+                      </TooltipContent>
                     </Tooltip>
                   </div>
                 </div>

@@ -11,6 +11,7 @@ import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import StreamCountdownBanner from '@/components/StreamCountdownBanner'
+import { PageHeader } from '@/components/PageHeader'
 
 export default function Products() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -28,16 +29,10 @@ export default function Products() {
         {/* Header */}
         <LayoutSection className="border-b py-6 bg-background">
           <LayoutContainer>
-            <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-
-              {/* Title and description */}
-              <div className="flex flex-col gap-1">
-                <h1 className="text-3xl font-bold text-foreground">Productos</h1>
-                <p className="text-sm text-muted-foreground">
-                  Descubre los productos creados por makers
-                </p>
-              </div>
-
+            <PageHeader
+              title="Productos"
+              description="Descubre los productos creados por makers."
+            >
               {/* Search bar */}
               <div className="relative">
                 <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -46,10 +41,10 @@ export default function Products() {
                   placeholder="Busca productos..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full sm:w-[300px] pl-10"
+                  className="w-full sm:w-[240px] pl-10"
                 />
               </div>
-            </div>
+            </PageHeader>
           </LayoutContainer>
         </LayoutSection>
 
