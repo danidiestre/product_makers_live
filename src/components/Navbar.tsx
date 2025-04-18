@@ -17,13 +17,13 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full bg-background border-b">
       <LayoutContainer className="w-full h-16 flex flex-shrink-0 flex-row items-center justify-between md:grid md:grid-cols-3 gap-6">
 
-        <Link href="/" className="flex items-center justify-center size-10 rounded-md bg-secondary border border-secondary overflow-hidden relative transition-colors">
+        <Link href="/" className="hidden items-center justify-center size-10 rounded-md bg-secondary border border-secondary overflow-hidden relative transition-colors">
           <span className="w-[28px] h-1 bg-foreground absolute top-[7px] left-[5px]" />
           <span className="font-extrabold text-xl text-foreground mt-2.5">PM</span>
         </Link>
 
         {/* Previous version with full text, no hidden */}
-        <Link href="/" className="hidden items-center justify-start gap-2 whitespace-nowrap">
+        <Link href="/" className="flex items-center justify-start gap-2 whitespace-nowrap">
           <div className="w-4 h-4 bg-brand-yellow"></div>
           <span className="font-bold text-base md:text-xl text-foreground mb-0.5">product makers</span>
         </Link>
