@@ -4,12 +4,11 @@ import { cn } from "@/lib/utils"
 interface LayoutSectionProps {
   children: any;
   className?: string;
-  labelledby?: string;
 }
 
-export function LayoutSection({ children, className, labelledby }: LayoutSectionProps) {
+export function LayoutSection({ children, className }: LayoutSectionProps) {
   return (
-    <section className={cn("py-12", className)} aria-labelledby={labelledby}>
+    <section className={cn("py-12", className)}>
       {children}
     </section>
   )

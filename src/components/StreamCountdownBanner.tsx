@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { XIcon } from "lucide-react"
 import Link from 'next/link'
 import { Button } from "@/components/ui/button"
@@ -10,17 +10,22 @@ import { getNextTuesdayAt18CEST } from "@/lib/utils"
 
 export default function StreamCountdownBanner() {
 
-  const nextLive = getNextTuesdayAt18CEST();
-
   const [isVisible, setIsVisible] = useState(true)
-  if (!isVisible) return null
+  const [nextLive, setNextLive] = useState<number | null>(null)
+
+  useEffect(() => {
+    const seconds = getNextTuesdayAt18CEST()
+    setNextLive(seconds)
+  }, [])
+
+  if (!isVisible || nextLive === null) return null
 
   return (
     <div className="w-full bg-foreground text-background py-4">
-      <LayoutContainer className="flex-row md:items-center gap-2 md:gap-2">
+      <LayoutContainer className="flex-row items-start md:items-center gap-2 md:gap-2">
         <div className="flex grow gap-3 md:items-center">
           <div
-            className="bg-[#f03] text-white flex size-10 shrink-0 items-center justify-center rounded-full"
+            className="bg-[#f03] text-white hidden md:flex size-10 shrink-0 items-center justify-center rounded-md"
             aria-hidden="true"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
