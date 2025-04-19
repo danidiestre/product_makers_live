@@ -48,7 +48,8 @@ const makers: Maker[] = [
     twitter: 'saulmases',
     github: 'saulmases',
     website: 'https://saulmases.com',
-    linkedin: 'saulmases'
+    linkedin: 'saulmases',
+    dribbble: 'saulmases'
   },
   {
     id: '4',
@@ -795,9 +796,10 @@ export const ADDITIONAL_MAKERS: Maker[] = [
 export const MOCK_APPS: App[] = [
   {
     id: '1',
-    name: 'BrowserAgent',
-    description: 'Browser-based AI agents - unlimited runs, fixed cost.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/chrome/chrome.png',
+    name: 'Figma',
+    tagline: 'The collaborative interface design tool',
+    description: 'A collaborative design tool for creating user interfaces, mobile apps, and websites with a wide range of features, including vector editing tools, prototyping, and version control, all in a cloud-based platform.',
+    imageUrl: 'https://ph-files.imgix.net/db00a7a1-6778-4e51-a953-de5a9a339bc9.jpeg',
     coverImage: 'https://picsum.photos/1920/400?random=1',
     screenshots: [
       'https://picsum.photos/800/450?random=11',
@@ -807,7 +809,7 @@ export const MOCK_APPS: App[] = [
     votes: 345,
     tags: ['SaaS', 'No-Code', 'Marketing automation'],
     commentsCount: 24,
-    badges: ['trending'],
+    badges: ['top', 'trending'],
     technologies: ['React', 'Node.js', 'WebAssembly', 'TensorFlow.js'],
     launchDate: '2023-10-15',
     updates: [
@@ -852,9 +854,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '2',
-    name: 'Gemini Personalization',
-    description: 'Get help made just for you.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/google/google.png',
+    name: 'OpenAI',
+    tagline: 'APIs and tools for building AI products',
+    description: 'The most powerful platform for building AI products. Build and scale AI experiences powered by industry-leading models and tools.',
+    imageUrl: 'https://ph-files.imgix.net/f904aec8-e324-4aed-ae3b-ff68795ce44f.png',
     coverImage: 'https://picsum.photos/1920/400?random=2',
     screenshots: [
       'https://picsum.photos/800/450?random=21',
@@ -871,7 +874,9 @@ export const MOCK_APPS: App[] = [
       { date: '2024-02-28', version: '1.0.1', description: 'Improved response accuracy and reduced latency' },
     ],
     externalLinks: {
-      website: 'https://gemini-personalization.example.com',
+      website: 'https://browseragent.example.com',
+      appStore: 'https://apps.apple.com/example',
+      playStore: 'https://play.google.com/store/example',
     },
     makers: [
       {
@@ -904,9 +909,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '3',
-    name: 'GrammarPaw',
-    description: 'AI writing assistant for Mac. GrammarPaw uses advanced machine learning algorithms to analyze your writing and suggest improvements to grammar, style, and clarity. It integrates seamlessly with all major writing applications on macOS.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/markdown/markdown.png',
+    name: 'Vercel',
+    tagline: 'The frontend cloud. Creators of Next.js.',
+    description: 'Vercel provides the developer tools and cloud infrastructure to build, scale, and secure a faster, more personalized web.',
+    imageUrl: 'https://ph-files.imgix.net/593ff5e2-9d11-491c-ab63-9e929e894214.jpeg',
     coverImage: 'https://picsum.photos/1920/400?random=3',
     screenshots: [
       'https://picsum.photos/800/450?random=31',
@@ -946,9 +952,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '4',
-    name: 'Interlify',
-    description: 'Connect your APIs to LLMs in minutes. Interlify provides a no-code platform to integrate your existing APIs with large language models, enabling advanced AI capabilities with minimal development effort.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/json/json.png',
+    name: 'Notion',
+    tagline: 'The all-in-one workspace',
+    description: 'Notion is an all-in-one workspace that combines note-taking, project management, and task organization. It allows users to create customized databases, documents, and calendars to streamline their personal and professional workflows.',
+    imageUrl: 'https://ph-files.imgix.net/ff3e2acf-884a-4f4c-a383-6edfe3de0d88.png',
     coverImage: 'https://picsum.photos/1920/400?random=4',
     screenshots: [
       'https://picsum.photos/800/450?random=41',
@@ -997,9 +1004,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '5',
-    name: 'Direct Sponsorships by beehiiv',
-    description: 'Selling ads any other way is selling yourself short. Direct Sponsorships provides newsletter creators with a streamlined platform to manage sponsorships, negotiate with advertisers, and maximize revenue from their audience.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/telegram/telegram.png',
+    name: 'Supabase',
+    tagline: 'The open source Firebase alternative',
+    description: 'Supabase is an open-source backend-as-a-service that provides real-time databases, authentication, and API services. It enables developers to build and scale applications quickly without managing server infrastructure.',
+    imageUrl: 'https://ph-files.imgix.net/8dff2ac5-c4f0-4b02-9055-a2a0019f139c.jpeg',
     coverImage: 'https://picsum.photos/1920/400?random=5',
     screenshots: [
       'https://picsum.photos/800/450?random=51',
@@ -1033,9 +1041,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '6',
-    name: 'DevFlow',
-    description: 'AI-powered development workflow assistant. DevFlow analyzes your coding patterns and automates repetitive tasks, helping you focus on what matters.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/visual-studio-code/visual-studio-code.png',
+    name: 'Slack',
+    tagline: 'Team communication and collaboration platform',
+    description: 'Slack is an application that helps teams communicate and work together by combining messaging, file sharing, and app integrations in one place. It makes it easy for teams to stay connected and work efficiently, whether they are in the office or working remotely.',
+    imageUrl: 'https://ph-files.imgix.net/2f06cf02-5fa1-4b17-8246-8b4499d50e33.jpeg',
     coverImage: 'https://picsum.photos/1920/400?random=6',
     screenshots: [
       'https://picsum.photos/800/450?random=61',
@@ -1071,9 +1080,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '7',
-    name: 'DesignVault',
-    description: 'Your personal design inspiration library. Save, organize, and share design inspiration from across the web.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/css/css.png',
+    name: 'Linear',
+    tagline: 'Purpose-built for planning and building products',
+    description: 'Linear is a system for modern software development. Streamline issues, projects, and product roadmaps. Linear is the tool of choice for tens of thousands of ambitious product teams, including companies such as Vercel, CashApp, and Perplexity.',
+    imageUrl: 'https://ph-files.imgix.net/9d9aa008-ca0e-4f10-84a1-211ae6875f45.png',
     coverImage: 'https://picsum.photos/1920/400?random=7',
     screenshots: [
       'https://picsum.photos/800/450?random=71',
@@ -1108,9 +1118,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '8',
-    name: 'TaskMaster Pro',
-    description: 'Advanced task management for power users. Features include natural language processing, AI task prioritization, and smart scheduling.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/nodejs/nodejs.png',
+    name: 'Cursor',
+    tagline: 'The AI Code Editor',
+    description: 'Built to make you extraordinarily productive, Cursor is the best way to code with AI.',
+    imageUrl: 'https://ph-files.imgix.net/ada2695b-e20b-4c1b-b04a-e0fbd9daf466.png',
     coverImage: 'https://picsum.photos/1920/400?random=8',
     screenshots: [
       'https://picsum.photos/800/450?random=81',
@@ -1148,9 +1159,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '9',
-    name: 'SocialBoost',
-    description: 'AI-powered social media management platform. Schedule posts, analyze engagement, and grow your audience with smart recommendations.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/twitter/twitter.png',
+    name: 'Stripe',
+    tagline: 'Financial infrastructure for the internet',
+    description: 'Accept payments, send payouts, automate financial processes, and ultimately grow revenue.',
+    imageUrl: 'https://ph-files.imgix.net/7a01a00b-d41d-4367-b44e-e1d0a672819b.jpeg',
     coverImage: 'https://picsum.photos/1920/400?random=9',
     screenshots: [
       'https://picsum.photos/800/450?random=91',
@@ -1184,9 +1196,10 @@ export const MOCK_APPS: App[] = [
   },
   {
     id: '10',
-    name: 'CodeBuddy',
-    description: 'Your AI pair programming companion. Get real-time code suggestions, refactoring tips, and bug detection as you code.',
-    imageUrl: 'https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/git/git.png',
+    name: 'Tailwind CSS',
+    tagline: 'A utility-first CSS framework for rapid UI development',
+    description: 'A highly customizable, low-level CSS framework that gives you all of the building blocks you need to build bespoke designs without any annoying opinionated styles you have to fight to override.',
+    imageUrl: 'https://ph-files.imgix.net/829bdf09-bf73-4976-ae80-8eb1ec6b455d.png',
     coverImage: 'https://picsum.photos/1920/400?random=10',
     screenshots: [
       'https://picsum.photos/800/450?random=101',
