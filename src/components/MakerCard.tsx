@@ -6,7 +6,9 @@ import Link from 'next/link'
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { BadgeCheck, Github, Globe, Linkedin, Tag, Twitter } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { LinkSocial } from '@/components/LinkSocial'
+import { BadgeCheck, Dribbble, Github, Globe, Linkedin, Tag, Twitter } from 'lucide-react'
 import { getAllApps } from '@/lib/data'
 
 interface MakerCardProps {
@@ -14,7 +16,7 @@ interface MakerCardProps {
 }
 
 export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
-  const { name, role, avatar, bio, twitter, github, linkedin, website, makerCategory, isVerified } = maker
+  const { name, role, avatar, bio, twitter, dribbble, github, linkedin, website, makerCategory, isVerified } = maker
 
   // Get featured app from this maker or use a placeholder
   const featuredApp = getAllApps()
@@ -28,8 +30,8 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
 
   return (
     <Card>
-      <CardHeader>
-        <div className="flex flex-col md:flex-row items-start gap-4 pb-4 relative">
+      <CardHeader className="gap-0 p-6">
+        <div className="flex flex-col md:flex-row items-start gap-4 relative">
           <Avatar className="h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
             <AvatarImage src={avatar} />
             <AvatarFallback className="text-xs bg-muted-foreground text-background">{name?.charAt(0)}</AvatarFallback>
@@ -43,16 +45,9 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
             </CardTitle>
             <CardDescription>
               <p className="line-clamp-1">{bio}</p>
-              {/* Maker Category Badge */}
-              <div className="flex flex-wrap gap-2 mt-3">
+              <div className="flex flex-wrap gap-1 mt-3">
                 {makerCategory && (
-                  <span className={`inline-block text-xs font-medium px-2 py-1 rounded-md ${makerCategory === 'Designer' ? 'bg-purple-100 text-purple-700' :
-                    makerCategory === 'Developer' ? 'bg-blue-100 text-blue-700' :
-                      makerCategory === 'Marketing' ? 'bg-green-100 text-green-700' :
-                        'bg-gray-100 text-gray-700'
-                    }`}>
-                    {makerCategory}
-                  </span>
+                  <Badge variant="secondary">{makerCategory}</Badge>
                 )}
               </div>
             </CardDescription>
@@ -61,7 +56,7 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link href={`/app/${featuredApp.id}`} className="group">
-                  <div className="h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border p-2 relative">
+                  <div className="h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border p-0 relative">
                     <img
                       src={placeholderImage}
                       alt="Featured App"
@@ -71,61 +66,52 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
-                Featured App
+                Producto destacado
               </TooltipContent>
             </Tooltip>
           </div>
         </div>
       </CardHeader>
-      <CardFooter className="flex items-center justify-between gap-6 border-t py-4 px-6">
+      <CardFooter className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-6 border-t py-4 px-6">
         <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground cursor-default">
           <Tag size={16} />
           <span>{role}</span>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6">
           {website && (
-            <a
+            <LinkSocial
               href={website}
-              className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-brand-blue"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Globe size={16} />
-              <span>Website</span>
-            </a>
-          )}
-          {twitter && (
-            <a
-              href={`https://twitter.com/${twitter}`}
-              className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-brand-blue"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Twitter size={16} />
-              <span>Twitter</span>
-            </a>
+              icon={<Globe size={16} />}
+              name="Website"
+            />
           )}
           {linkedin && (
-            <a
+            <LinkSocial
               href={`https://linkedin.com/in/${linkedin}`}
-              className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-brand-blue"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Linkedin size={16} />
-              <span>LinkedIn</span>
-            </a>
+              icon={<Linkedin size={16} />}
+              name="Linkedin"
+            />
+          )}
+          {twitter && (
+            <LinkSocial
+              href={`https://twitter.com/${twitter}`}
+              icon={<Twitter size={16} />}
+              name="Twitter"
+            />
+          )}
+          {dribbble && (
+            <LinkSocial
+              href={`https://dribbble.com/${dribbble}`}
+              icon={<Dribbble size={16} />}
+              name="Dribbble"
+            />
           )}
           {github && (
-            <a
+            <LinkSocial
               href={`https://github.com/${github}`}
-              className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-brand-blue"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Github size={16} />
-              <span>GitHub</span>
-            </a>
+              icon={<Github size={16} />}
+              name="Github"
+            />
           )}
         </div>
       </CardFooter>

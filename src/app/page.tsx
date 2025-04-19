@@ -1,5 +1,6 @@
 'use client'
 
+import Script from 'next/script'
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
 import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
@@ -8,9 +9,10 @@ import { Navbar } from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { AppList } from '@/components/AppList'
 import { WeeklyCountdown } from '@/components/WeeklyCountdown'
-import { Blocks, Flame, WandSparkles } from 'lucide-react'
-import Script from 'next/script'
+import { Flame } from 'lucide-react'
 import StreamCountdownBanner from '@/components/StreamCountdownBanner'
+import { getAllMakers, getAllApps } from '@/lib/data'
+import { PageHero } from '@/components/PageHero'
 
 export default function Home() {
   // JSON-LD structured data for better SEO
@@ -44,24 +46,10 @@ export default function Home() {
 
       <LayoutMain>
 
-        {/* Hero Section with semantic HTML5 elements */}
-        <LayoutSection className="border-b bg-background">
-          <LayoutContainer>
-            <h1 id="hero-heading" className="text-4xl md:text-6xl text-foreground text-balance text-center font-semibold inline-flex items-center justify-center flex-wrap gap-2 lg:gap-4">
-              <span>Descubre los</span>
-              <div className="w-14 h-14 bg-brand-blue rounded-md hidden lg:flex" />
-              <span>productos</span>
-              <span>creados por</span>
-              <div className="w-14 h-14 bg-brand-yellow rounded-md hidden lg:flex" />
-              <span>makers</span>
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground text-balance font-medium text-center">
-              La comunidad hispana de creadores de productos digitales.
-            </p>
-          </LayoutContainer>
-        </LayoutSection>
+        {/* Hero Section */}
+        <PageHero />
 
-        {/* Product List Section with semantic elements */}
+        {/* Product List Section */}
         <LayoutSection>
           <LayoutContainer>
             <div className="w-full flex flex-col items-center justify-center sm:flex-row sm:items-center sm:justify-between gap-4">

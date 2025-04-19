@@ -4,9 +4,16 @@ import { FC, useState, useEffect } from 'react'
 import { MakerCard } from './MakerCard'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationLink,
+} from '@/components/ui/pagination'
 import { getAllMakers } from '@/lib/data'
 import { Maker } from '@/lib/types'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const MAKERS_PER_PAGE = 12
 
@@ -93,39 +100,48 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-            disabled={currentPage === 1}
-          >
-            <ChevronLeft size={20} />
-          </Button>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setCurrentPage((p) => Math.max(1, p - 1))
+                }}
+                aria-disabled={currentPage === 1}
+                className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+              />
+            </PaginationItem>
 
-          <div className="flex items-center gap-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-              <Button
-                key={page}
-                variant={currentPage === page ? "default" : "outline"}
-                size="icon"
-                onClick={() => setCurrentPage(page)}
-                className={currentPage === page ? "bg-primary text-primary-foreground" : "hover:bg-muted"}
-              >
-                {page}
-              </Button>
+              <PaginationItem key={page}>
+                <PaginationLink
+                  href="#"
+                  isActive={currentPage === page}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setCurrentPage(page)
+                  }}
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
             ))}
-          </div>
 
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-            disabled={currentPage === totalPages}
-          >
-            <ChevronRight size={20} />
-          </Button>
-        </div>
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }}
+                aria-disabled={currentPage === totalPages}
+                className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       )}
     </div>
   )
