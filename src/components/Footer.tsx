@@ -6,10 +6,11 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 export default function Footer() {
   return (
     <footer className="w-full bg-background border-t">
-      <LayoutContainer className="w-full h-16 flex flex-shrink-0 flex-row items-center justify-between gap-6">
+      <LayoutContainer className="w-full py-4 md:py-0 md:h-16 flex flex-shrink-0 flex-col justify-center md:flex-row items-center md:justify-between gap-2 md:gap-6">
 
-        <p className="text-sm font-medium text-muted-foreground">
-          Product Makers © {new Date().getFullYear()}. Todos los derechos reservados.
+        <p className="text-sm font-medium text-muted-foreground flex flex-col md:flex-row text-center md:text-left gap-1">
+          <span>Product Makers © {new Date().getFullYear()}.</span>
+          <span>Todos los derechos reservados.</span>
         </p>
 
         <div className="flex items-center gap-2">

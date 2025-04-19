@@ -27,6 +27,7 @@ export type Maker = {
   github?: string
   website?: string
   linkedin?: string
+  dribbble?: string
   makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other'
 }
 
@@ -39,6 +40,7 @@ export interface Metrics {
 export interface App {
   id: string
   name: string
+  tagline: string
   description: string
   imageUrl: string
   coverImage?: string

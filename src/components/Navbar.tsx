@@ -3,6 +3,14 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Blocks, LogIn, Menu, MessageCircleHeart, WandSparkles } from 'lucide-react'
 
@@ -17,49 +25,48 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full bg-background border-b">
       <LayoutContainer className="w-full h-16 flex flex-shrink-0 flex-row items-center justify-between md:grid md:grid-cols-3 gap-6">
 
-        <Link href="/" className="flex items-center justify-center size-10 rounded-md bg-secondary border border-secondary overflow-hidden relative transition-colors">
-          <span className="w-[28px] h-1 bg-foreground absolute top-[7px] left-[5px]" />
-          <span className="font-extrabold text-xl text-foreground mt-2.5">PM</span>
-        </Link>
+        <div className="flex">
+          <Link href="/" className="flex items-start justify-start gap-2">
+            <div className="size-4 bg-brand-yellow mt-2"></div>
+            <div className="flex flex-col -space-y-2 font-bold text-xl mb-0.5 text-foreground">
+              <span>product</span>
+              <span>makers</span>
+            </div>
+          </Link>
+        </div>
 
-        {/* Previous version with full text, no hidden */}
         <Link href="/" className="hidden items-center justify-start gap-2 whitespace-nowrap">
-          <div className="w-4 h-4 bg-brand-yellow"></div>
+          <div className="size-4 bg-brand-yellow"></div>
           <span className="font-bold text-base md:text-xl text-foreground mb-0.5">product makers</span>
         </Link>
 
-        <nav className="hidden md:flex items-center justify-center gap-8">
-          <Link href="/products" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
-            Productos
-          </Link>
-          <Link href="/makers" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
-            Makers
-          </Link>
-          <Link href="/about" className="text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors">
-            Comunidad
-          </Link>
-        </nav>
+        <NavigationMenu className="hidden md:flex">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link href="/products" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Productos
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/makers" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Makers
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/about" legacyBehavior passHref>
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Comunidad
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
 
         <div className="flex items-center justify-end gap-2">
-
-          {/* Youtube button - visible only on desktop */}
-          <Button
-            variant="ghost"
-            size="default"
-            asChild
-            className="hidden"
-          >
-            <Link
-              href="https://youtube.com/@productmakers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-              </svg>
-              YouTube
-            </Link>
-          </Button>
 
           {/* Discord button - visible on both mobile and desktop */}
           <Button
@@ -82,18 +89,25 @@ export function Navbar() {
             </Link>
           </Button>
 
-          {/* Add Sign in button back for desktop */}
-          <Button
-            variant="secondary"
-            size="icon"
-            asChild
-            className="hidden md:flex"
-          >
-            <Link href="/login" className="flex items-center gap-2">
-              <LogIn size={20} />
-              <span className="hidden">Inicia sesión</span>
-            </Link>
-          </Button>
+          {/* Sign in button */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                size="icon"
+                asChild
+                className="hidden md:flex"
+              >
+                <Link href="/login" className="flex items-center gap-2">
+                  <LogIn size={20} />
+                  <span className="hidden">Inicia sesión</span>
+                </Link>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              Inicia sesión
+            </TooltipContent>
+          </Tooltip>
 
           {/* Mobile menu button */}
           <Button
@@ -108,7 +122,7 @@ export function Navbar() {
         </div>
       </LayoutContainer>
 
-      {/* Mobile menu ##### PENDING TO POLISH */}
+      {/* Mobile menu */}
       {showMobileMenu && (
         <div className="md:hidden bg-background border-y absolute w-full z-50 divide-y">
           <div className="flex flex-col gap-0.5 p-2">
