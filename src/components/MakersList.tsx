@@ -51,7 +51,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   const paginatedMakers = filteredMakers.slice(startIndex, startIndex + MAKERS_PER_PAGE)
 
   // Calculate category counts
-  const categories = ['All', 'Developer', 'Designer', 'Marketing', 'Other']
+  const categories = ['All', 'Developer', 'Designer', 'Product Manager', 'Marketing', 'Other']
   const categoryCounts = categories.map(category => ({
     name: category,
     count: category === 'All'

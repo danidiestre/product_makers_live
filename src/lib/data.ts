@@ -20,19 +20,19 @@ const makers: Maker[] = [
   },
   {
     id: '2',
-    name: 'Daniel Diestre',
+    name: 'Dani Diestre',
     role: 'Product Manager',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop',
     bio: 'Building scalable web applications with modern technologies.',
-    category: 'Developer',
-    makerCategory: 'Developer',
+    category: 'Product Manager',
+    makerCategory: 'Product Manager',
     isVerified: true,
     joinedDate: '2024-02-01',
     followers: 850,
     twitter: 'danieldiestre',
-    github: 'danieldiestre',
+    github: 'danidiestre',
     website: 'https://danieldiestre.dev',
-    linkedin: 'daniel-diestre'
+    linkedin: 'danidiestre'
   },
   {
     id: '3',

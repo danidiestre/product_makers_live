@@ -20,7 +20,7 @@ export type Maker = {
   role: string
   bio: string
   isVerified: boolean
-  category: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other'
+  category: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager'
   joinedDate: string
   followers: number
   twitter?: string
@@ -28,7 +28,7 @@ export type Maker = {
   website?: string
   linkedin?: string
   dribbble?: string
-  makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other'
+  makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager'
 }
 
 export interface Metrics {
@@ -57,4 +57,4 @@ export interface App {
   metrics?: Metrics
 }
 
-export type MakerCategory = 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' 
+export type MakerCategory = 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager' 
