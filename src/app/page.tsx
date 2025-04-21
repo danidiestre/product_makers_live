@@ -11,7 +11,6 @@ import { AppList } from '@/components/AppList'
 import { WeeklyCountdown } from '@/components/WeeklyCountdown'
 import { Flame } from 'lucide-react'
 import StreamCountdownBanner from '@/components/StreamCountdownBanner'
-import { getAllMakers, getAllApps } from '@/lib/data'
 import { PageHero } from '@/components/PageHero'
 
 export default function Home() {

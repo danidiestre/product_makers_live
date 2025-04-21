@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppCard } from '@/components/AppCard'
-import { SlidersHorizontal } from 'lucide-react'
+import { SlidersHorizontal, Telescope } from 'lucide-react'
 import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -142,19 +142,15 @@ export function AppList({ searchQuery, limit }: AppListProps) {
       </div>
 
       {limit && sortedApps.length > limit && (
-        <Link
-          href="/products"
-          className="group relative flex items-center rounded-lg border bg-background p-6 transition-all"
-        >
-          <div className="flex flex-col gap-1 text-center">
-            <h3 className="text-lg font-semibold text-foreground transition-colors">
-              See all products
-            </h3>
-            <p className="text-sm text-muted-foreground">
-              Discover more amazing products built by makers
-            </p>
-          </div>
-        </Link>
+        <Button asChild variant="outline" size="lg" className="rounded-xl">
+          <Link
+            href="/products"
+            className="gap-2"
+          >
+            <Telescope size={20} />
+            Ver todos los productos
+          </Link>
+        </Button>
       )}
 
       {!limit && totalPages > 1 && (
