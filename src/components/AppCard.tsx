@@ -81,11 +81,14 @@ export const AppCard: FC<AppCardProps> = ({
             <CardDescription>
               <p className="line-clamp-1">{description}</p>
               <div className="flex flex-wrap gap-1 mt-3.5">
+                {badges.includes('top') && (
+                  <Badge variant="top">Top</Badge>
+                )}
                 {badges.includes('trending') && (
-                  <Badge variant="trending" className="mr-2">Trending</Badge>
+                  <Badge variant="trending">Popular</Badge>
                 )}
                 {badges.includes('new') && (
-                  <Badge variant="new" className="mr-2">Novedad</Badge>
+                  <Badge variant="new">Novedad</Badge>
                 )}
                 {externalLinks?.website && (
                   <Badge variant="secondary">Web</Badge>

@@ -20,7 +20,7 @@ export type Maker = {
   role: string
   bio: string
   isVerified: boolean
-  category: 'Designer' | 'Developer' | 'Marketing' | 'Other'
+  category: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other'
   joinedDate: string
   followers: number
   twitter?: string

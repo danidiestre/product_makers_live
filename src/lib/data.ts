@@ -809,7 +809,7 @@ export const MOCK_APPS: App[] = [
     votes: 345,
     tags: ['SaaS', 'No-Code', 'Marketing automation'],
     commentsCount: 24,
-    badges: ['top', 'trending'],
+    badges: ['trending'],
     technologies: ['React', 'Node.js', 'WebAssembly', 'TensorFlow.js'],
     launchDate: '2023-10-15',
     updates: [
@@ -921,7 +921,7 @@ export const MOCK_APPS: App[] = [
     votes: 200,
     tags: ['Productivity', 'User Experience', 'Tech'],
     commentsCount: 9,
-    badges: ['top'],
+    badges: ['trending'],
     technologies: ['Swift', 'Core ML', 'Natural Language Processing'],
     launchDate: '2023-09-05',
     updates: [
@@ -1130,7 +1130,7 @@ export const MOCK_APPS: App[] = [
     votes: 198,
     tags: ['Productivity', 'AI', 'Task Management'],
     commentsCount: 15,
-    badges: ['top'],
+    badges: ['trending'],
     technologies: ['React Native', 'Node.js', 'MongoDB'],
     launchDate: '2024-01-15',
     externalLinks: {
@@ -1232,7 +1232,235 @@ export const MOCK_APPS: App[] = [
       activeUsers: 6800,
       avgRating: 4.9,
     }
-  }
+  },
+  {
+    id: '11',
+    name: 'Uopp',
+    tagline: 'Marketplace con microvideos',
+    description: 'Uopp es un marketplace basado en microvídeos para mejorar el engagement y la claridad al comprar y vender. Automatizamos muchos procesos y cuidamos mucho la experiencia de usuario.',
+    imageUrl: '/apps/app-uopp.png',
+    coverImage: 'https://picsum.photos/1920/400?random=1',
+    screenshots: [
+      'https://picsum.photos/800/450?random=11',
+      'https://picsum.photos/800/450?random=12',
+      'https://picsum.photos/800/450?random=13',
+    ],
+    votes: 1100,
+    tags: ['SaaS', 'No-Code', 'Marketing automation'],
+    commentsCount: 7,
+    badges: ['trending'],
+    technologies: ['React', 'Node.js', 'WebAssembly', 'TensorFlow.js'],
+    launchDate: '2023-10-15',
+    updates: [
+      { date: '2023-12-01', version: '1.1.0', description: 'Added support for custom agent workflows' },
+      { date: '2024-02-15', version: '1.2.0', description: 'Introduced template marketplace' },
+    ],
+    externalLinks: {
+      appStore: 'https://apps.apple.com/example',
+      playStore: 'https://play.google.com/store/example',
+      github: 'https://github.com/example/browseragent',
+    },
+    makers: [
+      {
+        id: 'javi-play',
+        name: 'Javi Play85',
+        role: 'Founder',
+        avatar: '/users/user-javi-play.png',
+        bio: 'Passionate about creating beautiful and functional user interfaces.',
+        category: 'Founder',
+        joinedDate: '2024-01-15',
+        followers: 1200,
+        isVerified: true
+      },
+    ],
+    metrics: {
+      downloads: 1000000,
+      activeUsers: 150000,
+      avgRating: 4.9,
+    }
+  },
+  {
+    id: '12',
+    name: 'Dr. Green',
+    tagline: 'Identifica y cuida tus plantas',
+    description: 'Dr. Green te permite identificar, cuidar y diagnosticar tus plantas de forma automática usando inteligencia artificial. Solo tienes que hacer una foto: la app detecta qué planta es, te cuenta su historia, sus cuidados y te crea un plan de riego personalizado y te avisa cuando algo va mal.',
+    imageUrl: '/apps/app-dr-green.png',
+    coverImage: 'https://picsum.photos/1920/400?random=1',
+    screenshots: [
+      'https://picsum.photos/800/450?random=11',
+      'https://picsum.photos/800/450?random=12',
+      'https://picsum.photos/800/450?random=13',
+    ],
+    votes: 1200,
+    tags: ['SaaS', 'No-Code', 'Marketing automation'],
+    commentsCount: 11,
+    badges: ['trending'],
+    technologies: ['React', 'Node.js', 'WebAssembly', 'TensorFlow.js'],
+    launchDate: '2023-10-15',
+    updates: [
+      { date: '2023-12-01', version: '1.1.0', description: 'Added support for custom agent workflows' },
+      { date: '2024-02-15', version: '1.2.0', description: 'Introduced template marketplace' },
+    ],
+    externalLinks: {
+      appStore: 'https://apps.apple.com/example',
+      playStore: 'https://play.google.com/store/example',
+      github: 'https://github.com/example/browseragent',
+    },
+    makers: [
+      {
+        id: 'david-zafra',
+        name: 'David Zafra',
+        role: 'Founder & Product Designer',
+        avatar: '/users/user-david-zafra.png',
+        bio: 'Passionate about creating beautiful and functional user interfaces.',
+        category: 'Designer',
+        joinedDate: '2024-01-15',
+        followers: 1200,
+        isVerified: true
+      },
+    ],
+    metrics: {
+      downloads: 1000000,
+      activeUsers: 150000,
+      avgRating: 4.9,
+    }
+  },
+  {
+    id: '13',
+    name: 'TuTube',
+    tagline: 'Por y para fans del podcast en España',
+    description: 'La solución ideal para quienes quieren disfrutar de sus podcasts favoritos sin tener que bucear entre miles de vídeos sin relación.',
+    imageUrl: '/apps/app-tutube.png',
+    coverImage: 'https://picsum.photos/1920/400?random=1',
+    screenshots: [
+      'https://picsum.photos/800/450?random=11',
+      'https://picsum.photos/800/450?random=12',
+      'https://picsum.photos/800/450?random=13',
+    ],
+    votes: 1300,
+    tags: ['SaaS', 'No-Code', 'Marketing automation'],
+    commentsCount: 15,
+    badges: ['trending'],
+    technologies: ['React', 'Node.js', 'WebAssembly', 'TensorFlow.js'],
+    launchDate: '2023-10-15',
+    updates: [
+      { date: '2023-12-01', version: '1.1.0', description: 'Added support for custom agent workflows' },
+      { date: '2024-02-15', version: '1.2.0', description: 'Introduced template marketplace' },
+    ],
+    externalLinks: {
+      website: 'https://tutube.vercel.app',
+    },
+    makers: [
+      {
+        id: 'saul-mases',
+        name: 'Saul Mases',
+        role: 'Founder & Product Designer',
+        avatar: '/users/user-saul-mases.png',
+        bio: 'Passionate about creating beautiful and functional user interfaces.',
+        category: 'Designer',
+        joinedDate: '2024-01-15',
+        followers: 1200,
+        isVerified: true
+      },
+    ],
+    metrics: {
+      downloads: 1000000,
+      activeUsers: 150000,
+      avgRating: 4.9,
+    }
+  },
+  {
+    id: '14',
+    name: 'NEU',
+    tagline: 'Mapas de Esquí 3D',
+    description: 'Descubre tu estación de esquí ideal. Planifica tu próxima aventura de esquí o snowboard en Andorra, España o Portugal con mapas en realidad aumentada.',
+    imageUrl: '/apps/app-neu.png',
+    coverImage: 'https://picsum.photos/1920/400?random=1',
+    screenshots: [
+      'https://picsum.photos/800/450?random=11',
+      'https://picsum.photos/800/450?random=12',
+      'https://picsum.photos/800/450?random=13',
+    ],
+    votes: 1400,
+    tags: ['SaaS', 'No-Code', 'Marketing automation'],
+    commentsCount: 8,
+    badges: ['trending'],
+    technologies: ['React', 'Node.js', 'WebAssembly', 'TensorFlow.js'],
+    launchDate: '2023-10-15',
+    updates: [
+      { date: '2023-12-01', version: '1.1.0', description: 'Added support for custom agent workflows' },
+      { date: '2024-02-15', version: '1.2.0', description: 'Introduced template marketplace' },
+    ],
+    externalLinks: {
+      appStore: 'https://apps.apple.com/example',
+      github: 'https://github.com/example/browseragent',
+    },
+    makers: [
+      {
+        id: 'guillem-buix',
+        name: 'Guillem Buix',
+        role: 'Founder & Product Designer',
+        avatar: '/users/user-guillem-buix.png',
+        bio: 'Passionate about creating beautiful and functional user interfaces.',
+        category: 'Designer',
+        joinedDate: '2024-01-15',
+        followers: 1200,
+        isVerified: true
+      },
+    ],
+    metrics: {
+      downloads: 12500,
+      activeUsers: 5300,
+      avgRating: 4.8,
+    }
+  },
+  {
+    id: '15',
+    name: 'Habitz',
+    tagline: 'Desarrolla mejores hábitos',
+    description: 'Habitz es la herramienta integral de seguimiento de hábitos, súper fácil de usar, diseñada para ayudarte a crear buenos hábitos, superar los malos y ser constante con tus objetivos. Con seguimiento de rachas, recordatorios de hábitos, análisis de progreso y gamificación, mantener el rumbo nunca ha sido tan fácil.',
+    imageUrl: '/apps/app-habitz.png',
+    coverImage: 'https://picsum.photos/1920/400?random=1',
+    screenshots: [
+      'https://picsum.photos/800/450?random=11',
+      'https://picsum.photos/800/450?random=12',
+      'https://picsum.photos/800/450?random=13',
+    ],
+    votes: 1500,
+    tags: ['SaaS', 'No-Code', 'Marketing automation'],
+    commentsCount: 17,
+    badges: ['top', 'trending'],
+    technologies: ['React', 'Node.js', 'WebAssembly', 'TensorFlow.js'],
+    launchDate: '2023-10-15',
+    updates: [
+      { date: '2023-12-01', version: '1.1.0', description: 'Added support for custom agent workflows' },
+      { date: '2024-02-15', version: '1.2.0', description: 'Introduced template marketplace' },
+    ],
+    externalLinks: {
+      appStore: 'https://apps.apple.com/example',
+      playStore: 'https://play.google.com/store/example',
+      github: 'https://github.com/example/browseragent',
+    },
+    makers: [
+      {
+        id: 'david-zafra',
+        name: 'David Zafra',
+        role: 'Founder & Product Designer',
+        avatar: '/users/user-david-zafra.png',
+        bio: 'Passionate about creating beautiful and functional user interfaces.',
+        category: 'Designer',
+        joinedDate: '2024-01-15',
+        followers: 1200,
+        isVerified: true
+      },
+    ],
+    metrics: {
+      downloads: 12500,
+      activeUsers: 5300,
+      avgRating: 4.8,
+    }
+  },
+
 ]
 
 // Helper functions
@@ -1258,4 +1486,9 @@ export function getTopApps(limit: number = 5): App[] {
   return [...MOCK_APPS]
     .sort((a, b) => b.votes - a.votes)
     .slice(0, limit)
-} 
+}
+
+export function getAppMakers(app: App): Maker[] {
+  const allMakers = getAllMakers()
+  return (app.makers as unknown as string[]).map(id => allMakers.find(m => m.id === id)).filter(Boolean) as Maker[]
+}

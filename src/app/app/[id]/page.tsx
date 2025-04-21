@@ -45,14 +45,18 @@ const AppProfilePage: FC = () => {
 
   if (!app) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-        <h1 className="text-2xl font-bold text-foreground">App not found</h1>
-        <p className="mt-4 text-muted-foreground">The app you're looking for doesn't exist or has been removed.</p>
-        <Link href="/" className="mt-6 inline-flex items-center text-brand-blue hover:text-brand-blue/80">
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to home
-        </Link>
-      </div>
+      <LayoutSection>
+        <LayoutContainer>
+          <h1 className="text-2xl font-bold text-foreground mb-2">Producto no encontrado</h1>
+          <p className="mt-4 text-muted-foreground mb-4">El producto que estás buscando no existe o ha sido eliminado.</p>
+          <Button asChild variant="secondary">
+            <Link href="/" className="gap-2">
+              <ArrowLeft size={16} />
+              Back to home
+            </Link>
+          </Button>
+        </LayoutContainer>
+      </LayoutSection>
     )
   }
 
@@ -92,7 +96,7 @@ const AppProfilePage: FC = () => {
               </BreadcrumbList>
             </Breadcrumb>
 
-            <div className="w-full flex items-start gap-6">
+            <div className="w-full flex flex-col md:flex-row items-start gap-6">
 
               <div className="size-28 rounded-xl overflow-hidden flex-shrink-0 bg-background border p-0 flex items-center justify-center">
                 <img src={app.imageUrl} alt={app.name} className="h-full w-full object-contain" />
@@ -119,13 +123,13 @@ const AppProfilePage: FC = () => {
                 {/* App type and description */}
                 <div className="flex flex-wrap gap-1 mb-4">
                   {app.badges?.includes('top') && (
-                    <Badge variant="top" className="mr-2">Top</Badge>
+                    <Badge variant="top">Top</Badge>
                   )}
                   {app.badges?.includes('trending') && (
-                    <Badge variant="trending" className="mr-2">Trending</Badge>
+                    <Badge variant="trending">Popular</Badge>
                   )}
                   {app.badges?.includes('new') && (
-                    <Badge variant="new" className="mr-2">Novedad</Badge>
+                    <Badge variant="new">Novedad</Badge>
                   )}
                   {app.externalLinks?.website && (
                     <Badge variant="secondary">Web</Badge>
@@ -138,9 +142,9 @@ const AppProfilePage: FC = () => {
                   )}
                 </div>
 
-                <p className="text-sm text-muted-foreground mb-6 line-clamp-2 text-balance">{app.description}</p>
+                <p className="text-sm text-muted-foreground mb-6">{app.description}</p>
 
-                <div className="flex flex-col">
+                <div className="flex flex-col md:flex-row">
 
                   {/* External links HIDDEN FOR NOW AS MAYBE THEY BELONG TO SOMEWHERE ELSE */}
                   <div className="hidden flex-wrap gap-3 mb-4">
@@ -161,7 +165,7 @@ const AppProfilePage: FC = () => {
                   </div>
 
                   {/* Main CTAs */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col items-start sm:flex-row sm:items-center gap-2">
                     {/* Visit project button */}
                     {app.externalLinks?.website && (
                       <Button asChild variant="default">
@@ -169,7 +173,7 @@ const AppProfilePage: FC = () => {
                           href={app.externalLinks.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="gap-2 pl-3"
+                          className="gap-2 pl-3 w-full sm:w-auto"
                         >
                           <SquareArrowOutUpRight size={16} />
                           <span>{app.externalLinks.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
@@ -177,50 +181,53 @@ const AppProfilePage: FC = () => {
                       </Button>
                     )}
 
-                    {/* Upvote button */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="secondary"
-                          onClick={handleUpvote}
-                          className={`gap-2 ${hasUpvoted
-                            ? 'bg-brand-blue/10 hover:bg-brand-blue/20 dark:bg-brand-blue dark:hover:bg-brand-blue/90 text-brand-blue dark:text-white'
-                            : ''
-                            }`}
-                        >
-                          <ThumbsUp size={16} />
-                          <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {hasUpvoted ? "Quitar el voto" : "Votar este producto"}
-                      </TooltipContent>
-                    </Tooltip>
-
-                    {/* Comments button */}
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button asChild variant="secondary">
-                          <Link
-                            href="#comments"
-                            className="gap-2"
+                    <div className="w-full sm:w-auto flex items-center gap-2">
+                      {/* Upvote button */}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="secondary"
+                            onClick={handleUpvote}
+                            className={`w-full sm:w-24 gap-2 ${hasUpvoted
+                              ? 'bg-brand-blue/10 hover:bg-brand-blue/20 dark:bg-brand-blue dark:hover:bg-brand-blue/90 text-brand-blue dark:text-white'
+                              : ''
+                              }`}
                           >
-                            <MessageCircle size={16} />
-                            <span>{app.commentsCount}</span>
-                          </Link>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        Ver comentarios
-                      </TooltipContent>
-                    </Tooltip>
+                            <ThumbsUp size={16} />
+                            <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {hasUpvoted ? "Quitar el voto" : "Votar este producto"}
+                        </TooltipContent>
+                      </Tooltip>
+
+                      {/* Comments button */}
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button asChild variant="secondary">
+                            <Link
+                              href="#comments"
+                              className="w-full sm:w-24 gap-2"
+                            >
+                              <MessageCircle size={16} />
+                              <span>{app.commentsCount}</span>
+                            </Link>
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          Ver comentarios
+                        </TooltipContent>
+                      </Tooltip>
+
+                    </div>
 
                     {/* Share button */}
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
                           variant="secondary"
-                          className="gap-2"
+                          className="w-full sm:w-auto gap-2"
                           onClick={() => {
                             if (navigator.share) {
                               navigator.share({
@@ -359,7 +366,7 @@ const AppProfilePage: FC = () => {
                     {app.makers?.map((maker, index) => (
                       <div key={index} className="p-6">
                         <div className="flex items-start gap-4">
-                          <Avatar className="size-12 rounded-full overflow-hidden border-2 border-background">
+                          <Avatar className="size-12 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
                             <AvatarImage src={maker.avatar} />
                             <AvatarFallback className="text-xl bg-muted-foreground text-background">{maker.name?.charAt(0)}</AvatarFallback>
                           </Avatar>

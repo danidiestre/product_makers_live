@@ -12,9 +12,11 @@ export function PageHero() {
   const totalApps = getAllApps().length
 
   const apps = getAllApps()
-  const makers = getAllMakers()
   const randomApp = apps[Math.floor(Math.random() * apps.length)]
-  const randomMaker = makers[Math.floor(Math.random() * makers.length)]
+
+  // Pick a random maker from the app's own makers
+  const appMakers = randomApp?.makers || []
+  const randomMaker = appMakers[Math.floor(Math.random() * appMakers.length)]
 
   return (
     <LayoutSection className="border-b bg-background">
@@ -27,7 +29,7 @@ export function PageHero() {
                 <HoverCardTrigger>
                   <Avatar className="size-14 rounded-lg bg-background ring-1 ring-border p-0 cursor-pointer">
                     <AvatarImage src={randomApp.imageUrl} />
-                    <AvatarFallback className="text-4xl bg-background text-muted-foreground rounded-md">P</AvatarFallback>
+                    <AvatarFallback className="text-4xl bg-background text-muted-foreground rounded-md">{randomApp.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </HoverCardTrigger>
                 <HoverCardContent side="right" sideOffset={-61} className="w-auto max-w-80 pr-4">
@@ -55,7 +57,7 @@ export function PageHero() {
                 <HoverCardTrigger>
                   <Avatar className="size-14 rounded-lg bg-background ring-1 ring-border p-0 cursor-pointer">
                     <AvatarImage src={randomMaker.avatar} />
-                    <AvatarFallback className="text-4xl bg-background text-muted-foreground rounded-md">M</AvatarFallback>
+                    <AvatarFallback className="text-4xl bg-background text-muted-foreground rounded-md">{randomMaker.name?.charAt(0)}</AvatarFallback>
                   </Avatar>
                 </HoverCardTrigger>
                 <HoverCardContent side="right" sideOffset={-61} className="w-auto max-w-64 pr-4">
