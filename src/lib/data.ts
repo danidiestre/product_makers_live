@@ -1489,6 +1489,5 @@ export function getTopApps(limit: number = 5): App[] {
 }
 
 export function getAppMakers(app: App): Maker[] {
-  const allMakers = getAllMakers()
-  return (app.makers as unknown as string[]).map(id => allMakers.find(m => m.id === id)).filter(Boolean) as Maker[]
+  return app.makers as Maker[];
 }
