@@ -1,0 +1,113 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Next.js 15 Migration Guide
+
+## Current Status
+- Current version: Next.js 14.1.3
+- Target version: Next.js 15.x
+
+## Breaking Changes & Required Actions
+
+### 1. Update Dependencies
+```bash
+npm install next@latest react@latest react-dom@latest
+```
+
+### 2. Fetch Requests Changes
+- Fetch requests are no longer cached by default
+- To opt specific requests into caching:
+```typescript
+// Not cached (default)
+const data = await fetch('https://api.example.com')
+
+// Cached
+const data = await fetch('https://api.example.com', { cache: 'force-cache' })
+```
+
+- To cache all fetch requests in a layout/page:
+```typescript
+export const fetchCache = 'default-cache'
+```
+
+### 3. Route Handler Changes
+- `GET` functions in Route Handlers are no longer cached by default
+- To opt into caching, add:
+```typescript
+export const dynamic = 'force-static'
+```
+
+### 4. Client-side Router Cache
+- Page segments are no longer reused from client-side router cache
+- Still reused during browser back/forward navigation
+- To opt into caching, add to `next.config.js`:
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+      static: 180,
+    },
+  },
+}
+```
+
+### 5. Font Package Changes
+Replace all `@next/font` imports with `next/font`:
+```typescript
+// Before
+import { Inter } from '@next/font/google'
+
+// After
+import { Inter } from 'next/font/google'
+```
+
+### 6. Config Renames
+Update `next.config.js` if using these options:
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Before
+  experimental: {
+    bundlePagesExternals: true,
+    serverComponentsExternalPackages: ['package-name'],
+  },
+
+  // After
+  bundlePagesRouterDependencies: true,
+  serverExternalPackages: ['package-name'],
+}
+```
+
+### 7. Speed Insights
+Auto instrumentation for Speed Insights was removed. Follow the [Vercel Speed Insights Quickstart guide](mdc:https:/vercel.com/docs/speed-insights) if needed.
+
+## Files to Review
+- [next.config.js](mdc:next.config.js) - Check configuration options
+- [package.json](mdc:package.json) - Update dependencies
+- Any files using fetch requests
+- Any Route Handler files
+- Any files using @next/font
+
+## Testing Steps
+1. Update dependencies
+2. Review and update fetch caching strategy
+3. Review Route Handlers
+4. Test navigation and page transitions
+5. Update font imports if needed
+6. Update configuration if using renamed options
+7. Test in development mode
+8. Test in production mode
+9. Test all critical user flows
+
+## Rollback Plan
+1. Keep a copy of `package.json` and `package-lock.json`
+2. Create a git branch before starting: `git checkout -b next15-upgrade`
+3. If issues occur:
+   ```bash
+   git checkout main
+   npm install
+   ```

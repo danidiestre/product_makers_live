@@ -12,7 +12,16 @@ import {
 } from "@/components/ui/navigation-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
-import { Blocks, LogIn, Menu, MessageCircleHeart, WandSparkles } from 'lucide-react'
+import { Blocks, LogIn, Menu, MessageCircleHeart, WandSparkles, User } from 'lucide-react'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 export function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
@@ -40,11 +49,12 @@ export function Navbar() {
           <span className="font-bold text-base md:text-xl text-foreground mb-0.5">product makers</span>
         </Link>
 
-        <NavigationMenu className="hidden md:flex">
+        <NavigationMenu className="hidden md:flex justify-center">
           <NavigationMenuList>
             <NavigationMenuItem>
               <Link href="/products" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <Blocks size={20} className="mr-2" />
                   Productos
                 </NavigationMenuLink>
               </Link>
@@ -52,6 +62,7 @@ export function Navbar() {
             <NavigationMenuItem>
               <Link href="/makers" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <WandSparkles size={20} className="mr-2" />
                   Makers
                 </NavigationMenuLink>
               </Link>
@@ -59,6 +70,7 @@ export function Navbar() {
             <NavigationMenuItem>
               <Link href="/about" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  <MessageCircleHeart size={20} className="mr-2" />
                   Comunidad
                 </NavigationMenuLink>
               </Link>
@@ -67,7 +79,6 @@ export function Navbar() {
         </NavigationMenu>
 
         <div className="flex items-center justify-end gap-2">
-
           {/* Discord button - visible on both mobile and desktop */}
           <Button
             variant="secondary"
@@ -89,25 +100,43 @@ export function Navbar() {
             </Link>
           </Button>
 
-          {/* Sign in button */}
-          <Tooltip>
-            <TooltipTrigger asChild>
+          {/* User dropdown menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
               <Button
                 variant="secondary"
                 size="icon"
-                asChild
                 className="hidden md:flex"
               >
-                <Link href="/login" className="flex items-center gap-2">
-                  <LogIn size={20} />
-                  <span className="hidden">Inicia sesión</span>
-                </Link>
+                <User size={20} />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              Inicia sesión
-            </TooltipContent>
-          </Tooltip>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="w-full cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Perfil</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/settings" className="w-full cursor-pointer">
+                    <WandSparkles className="mr-2 h-4 w-4" />
+                    <span>Ajustes</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link href="/login" className="w-full cursor-pointer">
+                  <LogIn className="mr-2 h-4 w-4" />
+                  <span>Iniciar sesión</span>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
           {/* Mobile menu button */}
           <Button
@@ -151,19 +180,8 @@ export function Navbar() {
               Comunidad
             </Link>
           </div>
+
           <div className="flex flex-col gap-0.5 p-2">
-            <Link
-              href="https://youtube.com/@productmakers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2.5 font-medium text-muted-foreground px-3 py-2 hover:bg-muted hover:text-foreground rounded-md"
-              onClick={() => setShowMobileMenu(false)}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"></path>
-              </svg>
-              YouTube
-            </Link>
             <Link
               href="https://discord.com/invite/PnBJNwDW77"
               target="_blank"
@@ -189,8 +207,7 @@ export function Navbar() {
             </Link>
           </div>
         </div>
-      )
-      }
-    </header >
+      )}
+    </header>
   )
 }     
