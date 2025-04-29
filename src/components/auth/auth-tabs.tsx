@@ -15,7 +15,7 @@ export function AuthTabs() {
         <TabsTrigger value="signup">Registrarse</TabsTrigger>
       </TabsList>
       <TabsContent value="signin" className="space-y-4">
-        <SignInForm />
+        <SignInForm onRegisterClick={() => setActiveTab("signup")} />
       </TabsContent>
       <TabsContent value="signup" className="space-y-4">
         <SignUpForm />

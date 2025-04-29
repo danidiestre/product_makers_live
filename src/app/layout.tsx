@@ -3,6 +3,7 @@ import { Manrope } from 'next/font/google'
 import '@/styles/globals.css'
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { Providers } from "./providers"
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -103,13 +104,15 @@ export default function RootLayout({
       <body className={manrope.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="light"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider delayDuration={10}>
-            {children}
-          </TooltipProvider>
+          <Providers>
+            <TooltipProvider delayDuration={10}>
+              {children}
+            </TooltipProvider>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>
