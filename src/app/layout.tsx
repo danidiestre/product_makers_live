@@ -18,6 +18,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: 'cover',
 }
 
 export const metadata: Metadata = {
@@ -95,11 +96,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" dir="ltr">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <link rel="canonical" href="https://productmakers.ai" />
-      </head>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <body className={manrope.className}>
         <ThemeProvider
           attribute="class"

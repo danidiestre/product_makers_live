@@ -35,7 +35,13 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('daily')
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
   const [currentPage, setCurrentPage] = useState(1)
-  const [apps] = useState<App[]>(getAllApps())
+  const [apps, setApps] = useState<App[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setApps(getAllApps())
+    setIsLoading(false)
+  }, [])
 
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
@@ -89,6 +95,10 @@ export function AppList({ searchQuery, limit }: AppListProps) {
 
   // Display limited apps on home page, or all apps with pagination on products page
   const displayApps = limit ? sortedApps.slice(0, limit) : paginatedApps;
+
+  if (isLoading) {
+    return <div className="w-full grid gap-6">Loading...</div>
+  }
 
   return (
     <div className="w-full grid gap-6">

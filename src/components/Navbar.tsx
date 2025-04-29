@@ -58,28 +58,28 @@ export function Navbar() {
           <span className="font-bold text-base md:text-xl text-foreground mb-0.5">product makers</span>
         </Link>
 
-        <NavigationMenu className="hidden md:flex">
+        <NavigationMenu className="hidden md:flex" viewport={false}>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <Link href="/products" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink asChild>
+                <Link href="/products" className={navigationMenuTriggerStyle()}>
                   Productos
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/makers" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink asChild>
+                <Link href="/makers" className={navigationMenuTriggerStyle()}>
                   Makers
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/about" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink asChild>
+                <Link href="/about" className={navigationMenuTriggerStyle()}>
                   Comunidad
-                </NavigationMenuLink>
-              </Link>
+                </Link>
+              </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>

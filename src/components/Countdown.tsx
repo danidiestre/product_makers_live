@@ -8,7 +8,13 @@ type Props = {
 };
 
 export default function Countdown({ seconds }: Props) {
-  const [timeLeft, setTimeLeft] = useState(seconds);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setTimeLeft(seconds);
+    setIsMounted(true);
+  }, [seconds]);
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -19,6 +25,10 @@ export default function Countdown({ seconds }: Props) {
 
     return () => clearInterval(interval);
   }, [timeLeft]);
+
+  if (!isMounted) {
+    return <span>--:--:--:--</span>;
+  }
 
   const dd = Math.floor(timeLeft / 86400);
   const hh = Math.floor((timeLeft % 86400) / 3600);
