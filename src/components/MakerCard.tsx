@@ -55,7 +55,7 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
           <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link href={`/app/${featuredApp.id}`} className="group">
+                <Link href={`/app/${featuredApp.id}`} className="group" legacyBehavior>
                   <div className="h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border p-0 relative">
                     <img
                       src={placeholderImage}
@@ -116,5 +116,5 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 } 

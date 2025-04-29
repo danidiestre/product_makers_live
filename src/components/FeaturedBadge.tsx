@@ -11,7 +11,8 @@ export const FeaturedBadge = ({ className = '' }: FeaturedBadgeProps) => {
       href="https://productmakers.com/featured"
       target="_blank"
       rel="noopener noreferrer"
-      className={`w-full flex flex-row items-center gap-3 p-3 px-4 bg-background border rounded-xl relative overflow-hidden ${className}`}>
+      className={`w-full flex flex-row items-center gap-3 p-3 px-4 bg-background border rounded-xl relative overflow-hidden ${className}`}
+      legacyBehavior>
       {/* Medal Icon */}
       <div className="size-8 bg-brand-yellow text-background flex items-center justify-center">
       </div>
@@ -27,5 +28,5 @@ export const FeaturedBadge = ({ className = '' }: FeaturedBadgeProps) => {
         </div>
       </div>
     </Link>
-  )
+  );
 } 

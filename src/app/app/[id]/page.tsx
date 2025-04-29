@@ -50,14 +50,14 @@ const AppProfilePage: FC = () => {
           <h1 className="text-2xl font-bold text-foreground mb-2">Producto no encontrado</h1>
           <p className="mt-4 text-muted-foreground mb-4">El producto que estás buscando no existe o ha sido eliminado.</p>
           <Button asChild variant="secondary">
-            <Link href="/" className="gap-2">
+            <Link href="/" className="gap-2" legacyBehavior>
               <ArrowLeft size={16} />
               Back to home
             </Link>
           </Button>
         </LayoutContainer>
       </LayoutSection>
-    )
+    );
   }
 
   const handleUpvote = () => {
@@ -67,9 +67,7 @@ const AppProfilePage: FC = () => {
 
   return (
     <LayoutWrapper>
-
       <Navbar />
-
       <LayoutMain>
         {/* App header - Hero section */}
         <LayoutSection className="border-b pt-6 pb-12 bg-background">
@@ -174,7 +172,7 @@ const AppProfilePage: FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="gap-2 pl-3 w-full sm:w-auto"
-                        >
+                          legacyBehavior>
                           <SquareArrowOutUpRight size={16} />
                           <span>{app.externalLinks.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
                         </Link>
@@ -206,10 +204,7 @@ const AppProfilePage: FC = () => {
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button asChild variant="secondary">
-                            <Link
-                              href="#comments"
-                              className="w-full sm:w-24 gap-2"
-                            >
+                            <Link href="#comments" className="w-full sm:w-24 gap-2" legacyBehavior>
                               <MessageCircle size={16} />
                               <span>{app.commentsCount}</span>
                             </Link>
@@ -345,7 +340,7 @@ const AppProfilePage: FC = () => {
                         variant="secondary"
                         asChild
                       >
-                        <Link href="/login" className="flex items-center gap-2">
+                        <Link href="/login" className="flex items-center gap-2" legacyBehavior>
                           <LogIn size={20} />
                           Inicia sesión
                         </Link>
@@ -535,11 +530,9 @@ const AppProfilePage: FC = () => {
         </LayoutSection>
 
       </LayoutMain>
-
       <Footer />
-
     </LayoutWrapper >
-  )
+  );
 }
 
 export default AppProfilePage 

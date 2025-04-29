@@ -15,9 +15,9 @@ export function LinkSocial({ href, icon, name }: LinkSocialProps) {
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}
-    >
+      legacyBehavior>
       {icon}
       <span>{name}</span>
     </Link>
-  )
+  );
 } 

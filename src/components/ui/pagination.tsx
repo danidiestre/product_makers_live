@@ -61,8 +61,8 @@ function PaginationLink({
         className
       )}
       {...props}
-    />
-  )
+      legacyBehavior />
+  );
 }
 
 function PaginationPrevious({

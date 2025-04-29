@@ -129,7 +129,6 @@ export function AppList({ searchQuery, limit }: AppListProps) {
           </Select>
         </div>
       )}
-
       <div className="grid grid-cols-1 gap-4">
         {displayApps.map((app, index) => (
           <AppCard
@@ -140,19 +139,14 @@ export function AppList({ searchQuery, limit }: AppListProps) {
           />
         ))}
       </div>
-
       {limit && sortedApps.length > limit && (
         <Button asChild variant="outline" size="lg" className="rounded-xl">
-          <Link
-            href="/products"
-            className="gap-2"
-          >
+          <Link href="/products" className="gap-2" legacyBehavior>
             <Telescope size={20} />
             Ver todos los productos
           </Link>
         </Button>
       )}
-
       {!limit && totalPages > 1 && (
         <Pagination>
           <PaginationContent>
@@ -198,5 +192,5 @@ export function AppList({ searchQuery, limit }: AppListProps) {
         </Pagination>
       )}
     </div>
-  )
+  );
 } 

@@ -71,7 +71,10 @@ export const AppCard: FC<AppCardProps> = ({
           </div>
           <div className="flex flex-col flex-1 gap-1.5">
             <CardTitle className="flex items-center gap-2 text-base">
-              <Link href={`/app/${id}`} className="block space-y-1 gap-0 lg:flex lg:gap-1 lg:space-y-0">
+              <Link
+                href={`/app/${id}`}
+                className="block space-y-1 gap-0 lg:flex lg:gap-1 lg:space-y-0"
+                legacyBehavior>
                 <span className="font-bold">{name}</span>
                 <span className="font-medium hidden lg:flex">—</span>
                 <span className="line-clamp-1 font-medium">{tagline}</span>
@@ -114,7 +117,10 @@ export const AppCard: FC<AppCardProps> = ({
                     Creado por {makers.map((m, i) => (
                       <HoverCard key={i} openDelay={0} closeDelay={0}>
                         <HoverCardTrigger>
-                          <Link href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-foreground transition-colors">
+                          <Link
+                            href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`}
+                            className="hover:text-foreground transition-colors"
+                            legacyBehavior>
                             {m.name}
                           </Link>
                           {i < makers.length - 1 ? ', ' : ''}
@@ -142,7 +148,7 @@ export const AppCard: FC<AppCardProps> = ({
           </div>
           <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
             <div className="flex gap-2">
-              <Link href={`/app/${id}#comments`}>
+              <Link href={`/app/${id}#comments`} legacyBehavior>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
@@ -197,7 +203,10 @@ export const AppCard: FC<AppCardProps> = ({
               By {makers.map((m, i) => (
                 <HoverCard key={i} openDelay={0} closeDelay={0}>
                   <HoverCardTrigger>
-                    <Link href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-foreground transition-colors">
+                    <Link
+                      href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="hover:text-foreground transition-colors"
+                      legacyBehavior>
                       {m.name}
                     </Link>
                     {i < makers.length - 1 ? ', ' : ''}
@@ -239,5 +248,5 @@ export const AppCard: FC<AppCardProps> = ({
         </div>
       </CardFooter>
     </Card >
-  )
+  );
 } 

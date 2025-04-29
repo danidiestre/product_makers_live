@@ -20,12 +20,9 @@ export default function Products() {
 
   return (
     <LayoutWrapper>
-
       {/* StreamCountdown banner */}
       <StreamCountdownBanner />
-
       <Navbar />
-
       <LayoutMain>
 
         {/* Header */}
@@ -49,7 +46,7 @@ export default function Products() {
                 </div>
                 {/* Add product button */}
                 <Button asChild variant="default" className="gap-2">
-                  <Link href="/products/new">
+                  <Link href="/products/new" legacyBehavior>
                     <Plus size={16} />
                     Añadir producto
                   </Link>
@@ -67,9 +64,7 @@ export default function Products() {
         </LayoutSection>
 
       </LayoutMain>
-
       <Footer />
-
     </LayoutWrapper>
-  )
+  );
 } 

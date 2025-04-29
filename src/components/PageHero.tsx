@@ -33,7 +33,7 @@ export function PageHero() {
                   </Avatar>
                 </HoverCardTrigger>
                 <HoverCardContent side="right" sideOffset={-61} className="w-auto max-w-80 pr-4">
-                  <Link href={`/app/${randomApp.id}`} className="flex gap-3">
+                  <Link href={`/app/${randomApp.id}`} className="flex gap-3" legacyBehavior>
                     <Avatar className="size-10 rounded-md bg-background ring-1 ring-border p-0 cursor-pointer">
                       <AvatarImage src={randomApp.imageUrl} />
                       <AvatarFallback>{randomApp.name?.charAt(0)}</AvatarFallback>
@@ -61,7 +61,10 @@ export function PageHero() {
                   </Avatar>
                 </HoverCardTrigger>
                 <HoverCardContent side="right" sideOffset={-61} className="w-auto max-w-64 pr-4">
-                  <Link href={`/maker/${randomMaker.name.toLowerCase().replace(/\s+/g, '-')}`} className="flex gap-3">
+                  <Link
+                    href={`/maker/${randomMaker.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="flex gap-3"
+                    legacyBehavior>
                     <Avatar className="size-10 rounded-md bg-background ring-1 ring-border p-0 cursor-pointer">
                       <AvatarImage src={randomMaker.avatar} />
                       <AvatarFallback>{randomMaker.name?.charAt(0)}</AvatarFallback>
@@ -84,5 +87,5 @@ export function PageHero() {
         </p>
       </LayoutContainer>
     </LayoutSection>
-  )
+  );
 } 
