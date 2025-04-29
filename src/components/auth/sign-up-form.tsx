@@ -22,25 +22,35 @@ export function SignUpForm() {
   return (
     <div className="grid gap-6">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Create your account</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Crea tu cuenta</h1>
       </div>
 
       <div className="grid gap-4">
-        <Button variant="outline" disabled={isLoading} onClick={() => {}} className="py-6">
+        <Button 
+          variant="outline" 
+          disabled={isLoading} 
+          onClick={() => {}} 
+          className="py-6 bg-[#5865F2] hover:bg-[#4752c4] text-white border-none"
+        >
           {isLoading ? (
             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            <Icons.github className="mr-2 h-5 w-5" />
+            <Icons.discord className="mr-2 h-5 w-5" />
           )}
-          Sign up with GitHub
+          Continuar con Discord
         </Button>
-        <Button variant="outline" disabled={isLoading} onClick={() => {}} className="py-6">
+        <Button 
+          variant="outline" 
+          disabled={isLoading} 
+          onClick={() => {}} 
+          className="py-6 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300"
+        >
           {isLoading ? (
             <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <Icons.google className="mr-2 h-5 w-5" />
           )}
-          Sign up with Google
+          Continuar con Google
         </Button>
       </div>
 
@@ -50,7 +60,7 @@ export function SignUpForm() {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">
-            OR
+            O
           </span>
         </div>
       </div>
@@ -58,10 +68,10 @@ export function SignUpForm() {
       <form onSubmit={onSubmit}>
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Correo electrónico</Label>
             <Input
               id="email"
-              placeholder="name@example.com"
+              placeholder="nombre@ejemplo.com"
               type="email"
               autoCapitalize="none"
               autoComplete="email"
@@ -71,7 +81,7 @@ export function SignUpForm() {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Contraseña</Label>
             <Input
               id="password"
               type="password"
@@ -85,7 +95,7 @@ export function SignUpForm() {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign up
+            Registrarse
           </Button>
         </div>
       </form>

@@ -11,8 +11,8 @@ export function AuthTabs() {
   return (
     <Tabs defaultValue="signin" value={activeTab} onValueChange={setActiveTab} className="w-full">
       <TabsList className="grid w-full grid-cols-2 mb-6">
-        <TabsTrigger value="signin">Sign In</TabsTrigger>
-        <TabsTrigger value="signup">Sign Up</TabsTrigger>
+        <TabsTrigger value="signin">Iniciar sesión</TabsTrigger>
+        <TabsTrigger value="signup">Registrarse</TabsTrigger>
       </TabsList>
       <TabsContent value="signin" className="space-y-4">
         <SignInForm />

@@ -29,21 +29,23 @@ export default function AuthenticationPage() {
           />
           <div className="absolute inset-0 bg-black/50" />
         </div>
-        <div className="relative z-20 p-10">
+        <div className="absolute top-10 left-10 z-20">
           <Image
             src="/assets/logo_productmakers.svg"
             alt="Product Makers Logo"
-            width={150}
-            height={40}
+            width={75}
+            height={20}
             className="mr-2"
           />
         </div>
-        <div className="relative z-20 flex flex-col items-center justify-center flex-1 px-10 text-center">
-          <blockquote>
-            <p className="text-2xl font-light">
-              &ldquo;Únete a nuestra comunidad de makers y da vida a tus ideas.&rdquo;
-            </p>
-          </blockquote>
+        <div className="absolute inset-0 z-20 flex items-center justify-center">
+          <div className="text-center max-w-2xl px-4">
+            <h2 className="text-4xl font-light leading-[1.2]">
+              Únete a nuestra comunidad de makers
+              <br />
+              y da vida a tus ideas
+            </h2>
+          </div>
         </div>
       </div>
     </div>
