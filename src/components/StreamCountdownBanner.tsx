@@ -12,13 +12,15 @@ export default function StreamCountdownBanner() {
 
   const [isVisible, setIsVisible] = useState(true)
   const [nextLive, setNextLive] = useState<number | null>(null)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
     const seconds = getNextTuesdayAt18CEST()
     setNextLive(seconds)
+    setIsMounted(true)
   }, [])
 
-  if (!isVisible || nextLive === null) return null
+  if (!isVisible || nextLive === null || !isMounted) return null
 
   return (
     <div className="w-full bg-foreground text-background py-4">

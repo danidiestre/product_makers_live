@@ -44,13 +44,13 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
               )}
             </CardTitle>
             <CardDescription>
-              <p className="line-clamp-1">{bio}</p>
-              <div className="flex flex-wrap gap-1 mt-3">
-                {makerCategory && (
-                  <Badge variant="secondary">{makerCategory}</Badge>
-                )}
-              </div>
+              {bio}
             </CardDescription>
+            {makerCategory && (
+              <div className="flex flex-wrap gap-1 mt-3">
+                <Badge variant="secondary">{makerCategory}</Badge>
+              </div>
+            )}
           </div>
           <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
             <Tooltip>

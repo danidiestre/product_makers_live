@@ -75,70 +75,69 @@ export const AppCard: FC<AppCardProps> = ({
                 <span className="font-bold">{name}</span>
                 <span className="font-medium hidden lg:flex">—</span>
                 <span className="line-clamp-1 font-medium">{tagline}</span>
-
               </Link>
             </CardTitle>
             <CardDescription>
-              <p className="line-clamp-1">{description}</p>
-              <div className="flex flex-wrap gap-1 mt-3.5">
-                {badges.includes('top') && (
-                  <Badge variant="top">Top</Badge>
-                )}
-                {badges.includes('trending') && (
-                  <Badge variant="trending">Popular</Badge>
-                )}
-                {badges.includes('new') && (
-                  <Badge variant="new">Novedad</Badge>
-                )}
-                {externalLinks?.website && (
-                  <Badge variant="secondary">Web</Badge>
-                )}
-                {externalLinks?.appStore && (
-                  <Badge variant="secondary">iOS</Badge>
-                )}
-                {externalLinks?.playStore && (
-                  <Badge variant="secondary">Android</Badge>
-                )}
-              </div>
-              {makers.length > 0 && (
-                <div className="flex items-center mt-4">
-                  <div className="flex -space-x-2 mr-2">
-                    {makers.slice(0, 3).map((m, i) => (
-                      <Avatar key={i} className="size-6 rounded-full overflow-hidden border-2 border-background">
-                        <AvatarImage src={m.avatar} />
-                        <AvatarFallback className="text-xs bg-muted-foreground text-background">{m.name?.charAt(0)}</AvatarFallback>
-                      </Avatar>
-                    ))}
-                  </div>
-                  <span className="text-xs font-medium text-muted-foreground">
-                    Creado por {makers.map((m, i) => (
-                      <HoverCard key={i} openDelay={0} closeDelay={0}>
-                        <HoverCardTrigger>
-                          <Link href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-foreground transition-colors">
-                            {m.name}
-                          </Link>
-                          {i < makers.length - 1 ? ', ' : ''}
-                        </HoverCardTrigger>
-                        <HoverCardContent sideOffset={8} className="w-auto max-w-80 pr-4">
-                          <div className="flex gap-3">
-                            <Avatar className="size-10 rounded-md">
-                              <AvatarImage src={m.avatar} />
-                              <AvatarFallback>{m.name?.charAt(0)}</AvatarFallback>
-                            </Avatar>
-                            <div className="space-y-1">
-                              <h4 className="text-sm font-semibold">{m.name}</h4>
-                              <p className="text-xs text-muted-foreground">
-                                {m.role}
-                              </p>
-                            </div>
-                          </div>
-                        </HoverCardContent>
-                      </HoverCard>
-                    ))}
-                  </span>
-                </div>
-              )}
+              {description}
             </CardDescription>
+            <div className="flex flex-wrap gap-1 mt-3.5">
+              {badges.includes('top') && (
+                <Badge variant="top">Top</Badge>
+              )}
+              {badges.includes('trending') && (
+                <Badge variant="trending">Popular</Badge>
+              )}
+              {badges.includes('new') && (
+                <Badge variant="new">Novedad</Badge>
+              )}
+              {externalLinks?.website && (
+                <Badge variant="secondary">Web</Badge>
+              )}
+              {externalLinks?.appStore && (
+                <Badge variant="secondary">iOS</Badge>
+              )}
+              {externalLinks?.playStore && (
+                <Badge variant="secondary">Android</Badge>
+              )}
+            </div>
+            {makers.length > 0 && (
+              <div className="flex items-center mt-4">
+                <div className="flex -space-x-2 mr-2">
+                  {makers.slice(0, 3).map((m, i) => (
+                    <Avatar key={i} className="size-6 rounded-full overflow-hidden border-2 border-background">
+                      <AvatarImage src={m.avatar} />
+                      <AvatarFallback className="text-xs bg-muted-foreground text-background">{m.name?.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                  ))}
+                </div>
+                <span className="text-xs font-medium text-muted-foreground">
+                  Creado por {makers.map((m, i) => (
+                    <HoverCard key={i} openDelay={0} closeDelay={0}>
+                      <HoverCardTrigger asChild>
+                        <Link href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-foreground transition-colors">
+                          {m.name}
+                          {i < makers.length - 1 ? ', ' : ''}
+                        </Link>
+                      </HoverCardTrigger>
+                      <HoverCardContent sideOffset={8} className="w-auto max-w-80 pr-4">
+                        <div className="flex gap-3">
+                          <Avatar className="size-10 rounded-md">
+                            <AvatarImage src={m.avatar} />
+                            <AvatarFallback>{m.name?.charAt(0)}</AvatarFallback>
+                          </Avatar>
+                          <div className="space-y-1">
+                            <h4 className="text-sm font-semibold">{m.name}</h4>
+                            <p className="text-xs text-muted-foreground">
+                              {m.role}
+                            </p>
+                          </div>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
+                  ))}
+                </span>
+              </div>
+            )}
           </div>
           <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
             <div className="flex gap-2">
@@ -196,11 +195,11 @@ export const AppCard: FC<AppCardProps> = ({
             <span className="text-xs font-medium text-muted-foreground">
               By {makers.map((m, i) => (
                 <HoverCard key={i} openDelay={0} closeDelay={0}>
-                  <HoverCardTrigger>
+                  <HoverCardTrigger asChild>
                     <Link href={`/maker/${m.name.toLowerCase().replace(/\s+/g, '-')}`} className="hover:text-foreground transition-colors">
                       {m.name}
+                      {i < makers.length - 1 ? ', ' : ''}
                     </Link>
-                    {i < makers.length - 1 ? ', ' : ''}
                   </HoverCardTrigger>
                   <HoverCardContent sideOffset={8} className="w-auto max-w-80 pr-4">
                     <div className="flex gap-3">

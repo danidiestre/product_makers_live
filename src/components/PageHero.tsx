@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { getAllMakers, getAllApps } from '@/lib/data'
 import { LayoutSection } from '@/components/layout/LayoutSection'
@@ -7,16 +7,22 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
 export function PageHero() {
+  const [randomApp, setRandomApp] = useState<any>(null)
+  const [randomMaker, setRandomMaker] = useState<any>(null)
 
   const totalMakers = getAllMakers().length
   const totalApps = getAllApps().length
 
-  const apps = getAllApps()
-  const randomApp = apps[Math.floor(Math.random() * apps.length)]
+  useEffect(() => {
+    const apps = getAllApps()
+    const selectedApp = apps[Math.floor(Math.random() * apps.length)]
+    setRandomApp(selectedApp)
 
-  // Pick a random maker from the app's own makers
-  const appMakers = randomApp?.makers || []
-  const randomMaker = appMakers[Math.floor(Math.random() * appMakers.length)]
+    if (selectedApp?.makers?.length > 0) {
+      const selectedMaker = selectedApp.makers[Math.floor(Math.random() * selectedApp.makers.length)]
+      setRandomMaker(selectedMaker)
+    }
+  }, [])
 
   return (
     <LayoutSection className="border-b bg-background">
