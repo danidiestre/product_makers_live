@@ -151,13 +151,13 @@ export function Navbar() {
               <TooltipTrigger asChild>
                 <Button
                   variant="secondary"
-                  size="icon"
+                  size="default"
                   asChild
                   className="hidden md:flex"
                 >
-                  <Link href="/login" className="flex items-center gap-2">
+                  <Link href="/auth" className="flex items-center gap-2">
                     <LogIn size={20} />
-                    <span className="hidden">Inicia sesión</span>
+                    <span>Inicia sesión</span>
                   </Link>
                 </Button>
               </TooltipTrigger>
@@ -238,7 +238,7 @@ export function Navbar() {
 
             {/* Sign in link added to mobile menu */}
             <Link
-              href="/login"
+              href="/auth"
               className="flex items-center gap-2.5 font-medium text-muted-foreground px-3 py-2 hover:bg-muted hover:text-foreground rounded-md"
               onClick={() => setShowMobileMenu(false)}
             >
