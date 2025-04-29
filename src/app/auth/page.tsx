@@ -15,17 +15,7 @@ export default function AuthenticationPage() {
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Welcome to Product Makers
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Sign in to your account or create a new one
-            </p>
-          </div>
-          <Card className="p-6">
-            <AuthTabs />
-          </Card>
+          <AuthTabs />
         </div>
       </div>
       <div className="relative hidden h-full flex-col bg-muted text-white lg:flex dark:border-l">

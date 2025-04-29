@@ -21,6 +21,40 @@ export function SignInForm() {
 
   return (
     <div className="grid gap-6">
+      <div className="space-y-2 text-center">
+        <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
+      </div>
+
+      <div className="grid gap-4">
+        <Button variant="outline" disabled={isLoading} onClick={() => {}} className="py-6">
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.discord className="mr-2 h-5 w-5" />
+          )}
+          Sign in with Discord
+        </Button>
+        <Button variant="outline" disabled={isLoading} onClick={() => {}} className="py-6">
+          {isLoading ? (
+            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <Icons.google className="mr-2 h-5 w-5" />
+          )}
+          Sign in with Google
+        </Button>
+      </div>
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            OR
+          </span>
+        </div>
+      </div>
+
       <form onSubmit={onSubmit}>
         <div className="grid gap-4">
           <div className="grid gap-2">
@@ -47,42 +81,14 @@ export function SignInForm() {
               required
             />
           </div>
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} className="w-full py-6">
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In
+            Sign in
           </Button>
         </div>
       </form>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <Button variant="outline" disabled={isLoading} onClick={() => {}}>
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.google className="mr-2 h-4 w-4" />
-          )}
-          Google
-        </Button>
-        <Button variant="outline" disabled={isLoading} onClick={() => {}}>
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.discord className="mr-2 h-4 w-4" />
-          )}
-          Discord
-        </Button>
-      </div>
     </div>
   )
 } 
