@@ -11,14 +11,32 @@ import {
   navigationMenuTriggerStyle
 } from "@/components/ui/navigation-menu"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
-import { Blocks, LogIn, Menu, MessageCircleHeart, WandSparkles } from 'lucide-react'
+import { Blocks, LogIn, Menu, MessageCircleHeart, WandSparkles, User, Settings, LogOut } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
+  // Temporarily set to true to see the user profile button
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
 
   function toggleMenu() {
     setShowMobileMenu(!showMobileMenu)
+  }
+
+  // TODO: Replace with actual user data
+  const user = {
+    name: "David Zafra",
+    email: "david@example.com",
+    image: "https://github.com/shadcn.png"
   }
 
   return (
@@ -89,25 +107,65 @@ export function Navbar() {
             </Link>
           </Button>
 
-          {/* Sign in button */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                asChild
-                className="hidden md:flex"
-              >
-                <Link href="/login" className="flex items-center gap-2">
-                  <LogIn size={20} />
-                  <span className="hidden">Inicia sesión</span>
-                </Link>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              Inicia sesión
-            </TooltipContent>
-          </Tooltip>
+          {/* User menu for logged in users */}
+          {isLoggedIn ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative size-8">
+                  <Avatar className="size-8">
+                    <AvatarImage src={user.image} alt={user.name} />
+                    <AvatarFallback>DZ</AvatarFallback>
+                  </Avatar>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56" align="end" forceMount>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="cursor-pointer flex items-center">
+                    <User className="mr-2 size-4" />
+                    <span>Mi perfil</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/settings" className="cursor-pointer flex items-center">
+                    <Settings className="mr-2 size-4" />
+                    <span>Ajustes</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600 flex items-center">
+                  <LogOut className="mr-2 size-4" />
+                  <span>Cerrar sesión</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            /* Sign in button */
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  asChild
+                  className="hidden md:flex"
+                >
+                  <Link href="/login" className="flex items-center gap-2">
+                    <LogIn size={20} />
+                    <span className="hidden">Inicia sesión</span>
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                Inicia sesión
+              </TooltipContent>
+            </Tooltip>
+          )}
 
           {/* Mobile menu button */}
           <Button
