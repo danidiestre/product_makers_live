@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",
@@ -36,10 +37,10 @@
     "react-icons": "^5.5.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-    "tw-animate-css": "^1.2.5"
+    "tw-animate-css": "^1.2.5",
+    "@prisma/client": "^6.7.0"
   },
   "devDependencies": {
-    "@prisma/client": "^6.7.0",
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20.11.30",
     "@types/react": "^18.2.69",
