@@ -13,93 +13,138 @@ pnpm add next-auth@4
 pnpm add @prisma/client
 ```
 
+## Current Setup
+
 ### Directory Structure
+- `/src/lib/auth.ts` - Auth hooks and helper functions
 - `/src/app/api/auth/[...nextauth]/route.ts` - NextAuth.js API route
-- `/src/lib/auth.ts` - Auth configuration and helper functions
-- `/src/types/auth.ts` - TypeScript declarations
-- `/src/middleware.ts` - Auth middleware for protected routes
+- `/src/components/auth/` - Auth-related components
+  - `auth-tabs.tsx`
+  - `sign-in-form.tsx`
+  - `sign-up-form.tsx`
 
 ## Core Configuration
 
-### Auth Configuration
-Create a reusable auth configuration in `/src/lib/auth.ts`:
+### Auth Hooks and Helpers
+The main auth functionality is in `/src/lib/auth.ts`:
 
 ```typescript
-import { NextAuthOptions } from "next-auth"
-import { getServerSession } from "next-auth/next"
-import DiscordProvider from "next-auth/providers/discord"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from "@/lib/prisma"
+import { signIn, signOut, useSession } from "next-auth/react"
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    DiscordProvider({
-      clientId: process.env.DISCORD_CLIENT_ID as string,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
-    }),
-  ],
-  secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: "/login",
-    error: "/error",
-  },
-}
+export const useAuth = () => {
+  const { data: session, status } = useSession()
 
-// Helper for use in RSC and API routes
-export const auth = async () => {
-  return await getServerSession(authOptions)
-}
-```
+  const handleDiscordLogin = async () => {
+    await signIn("discord", { callbackUrl: "/" })
+  }
 
-### API Route
-Set up the API route in `/src/app/api/auth/[...nextauth]/route.ts`:
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" })
+  }
 
-```typescript
-import NextAuth from "next-auth"
-import { authOptions } from "@/lib/auth"
-
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
-```
-
-## Usage Guidelines
-
-### In Server Components
-```typescript
-import { auth } from "@/lib/auth"
-
-export default async function Page() {
-  const session = await auth()
-  if (!session) {
-    // Handle unauthenticated state
+  return {
+    session,
+    status,
+    isAuthenticated: status === "authenticated",
+    isLoading: status === "loading",
+    signInWithDiscord: handleDiscordLogin,
+    signOut: handleSignOut,
   }
 }
 ```
 
-### In Client Components
-```typescript
-'use client'
-import { useSession } from "next-auth/react"
-
-export default function Component() {
-  const { data: session, status } = useSession()
-  // Use session data
-}
-```
-
-### Protected Routes
-Create `/src/middleware.ts` for route protection:
+### NextAuth Configuration
+The NextAuth.js configuration in `/src/app/api/auth/[...nextauth]/route.ts`:
 
 ```typescript
-export { default } from "next-auth/middleware"
+import NextAuth from "next-auth";
+import Discord from "next-auth/providers/discord";
 
-export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/api/:path*"
-  ]
+interface DiscordProfile {
+  id: string;
+  username: string;
+  discriminator: string;
+  email: string;
+  avatar: string | null;
+  banner: string | null;
+  accent_color: number | null;
 }
+
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user?: {
+      id: string;
+      image: string;
+      banner?: string;
+      accentColor?: number;
+    } & DefaultSession["user"];
+  }
+}
+
+const handler = NextAuth({
+  providers: [
+    Discord({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+      authorization: {
+        params: {
+          scope: "identify email guilds",
+        },
+      },
+      profile(profile: DiscordProfile) {
+        let image_url;
+        if (!profile.avatar) {
+          const defaultAvatarNumber = parseInt(profile.discriminator) % 5;
+          image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
+        } else {
+          const format = profile.avatar.startsWith("a_") ? "gif" : "png";
+          image_url = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${format}?size=128`;
+        }
+
+        let banner_url;
+        if (profile.banner) {
+          const format = profile.banner.startsWith("a_") ? "gif" : "png";
+          banner_url = `https://cdn.discordapp.com/banners/${profile.id}/${profile.banner}.${format}?size=600`;
+        }
+
+        return {
+          id: profile.id,
+          name: profile.username,
+          email: profile.email,
+          image: image_url,
+          banner: banner_url || null,
+          accentColor: profile.accent_color,
+        };
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/auth",
+  },
+  callbacks: {
+    async jwt({ token, profile, account, user }) {
+      if (account?.provider === "discord") {
+        token.id = user.id;
+        token.image = user.image;
+        token.banner = (user as any).banner;
+        token.accent_color = (user as any).accentColor;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id || token.sub;
+        session.user.image = token.picture || token.image;
+        session.user.banner = token.banner;
+        session.user.accentColor = token.accent_color;
+      }
+      return session;
+    },
+  },
+  debug: false,
+});
+
+export { handler as GET, handler as POST };
 ```
 
 ## Database Integration with Prisma
@@ -154,41 +199,54 @@ model VerificationToken {
 }
 ```
 
-### Environment Variables
+### Prisma Configuration Example
+```typescript
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@/lib/prisma"
+
+// In your NextAuth configuration:
+adapter: PrismaAdapter(prisma),
+```
+
+## Usage Guidelines
+
+### In Client Components
+```typescript
+'use client'
+import { useAuth } from "@/lib/auth"
+
+export default function Component() {
+  const { session, status, isAuthenticated, signInWithDiscord, signOut } = useAuth()
+  
+  // Use auth state and functions
+}
+```
+
+## Environment Variables
 Required environment variables:
 ```env
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your-secret-key
 DISCORD_CLIENT_ID=your-discord-client-id
 DISCORD_CLIENT_SECRET=your-discord-client-secret
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
 DATABASE_URL=your-database-url
 ```
 
+## Features
+- Discord OAuth provider with extended profile information
+- Custom avatar and banner URL handling
+- Extended session with Discord-specific fields
+- Type-safe session access
+- Custom sign-in page at `/auth`
+- Convenient `useAuth` hook for client components
+- Prisma adapter support for database persistence
+
 ## Best Practices
-
-### Security
-- Always use HTTPS in production
-- Keep `NEXTAUTH_SECRET` secure and unique per environment
-- Implement proper CSRF protection
-- Use secure session cookies
-
-### TypeScript Integration
-- Define proper session types in `/src/types/next-auth.d.ts`
-- Use type-safe session access
-- Leverage NextAuth.js built-in types
-
-### Error Handling
-- Implement proper error pages
-- Handle authentication errors gracefully
-- Provide user-friendly error messages
-
-### Performance
-- Use `getServerSession` in Server Components
-- Implement proper loading states
-- Cache session data where appropriate
-
-## Testing
-- Test authentication flows
-- Verify protected routes
-- Mock authentication in tests
-- Test error scenarios
+1. Always use environment variables for sensitive data
+2. Use the `useAuth` hook for consistent auth state management
+3. Handle loading and error states appropriately
+4. Type-check session data using the extended Session interface
+5. Use secure HTTPS in production
+6. Keep environment variables secure and unique per environment
+7. Use Prisma migrations to manage database schema changes
+8. Implement proper error handling for database operations

@@ -1,70 +1,78 @@
-export type BadgeType = 'new' | 'trending' | 'top'
+export type BadgeType = "new" | "trending" | "top";
 
 export interface Update {
-  date: string
-  version: string
-  description: string
+  date: string;
+  version: string;
+  description: string;
 }
 
 export interface ExternalLinks {
-  website?: string
-  appStore?: string
-  playStore?: string
-  github?: string
+  website?: string;
+  appStore?: string;
+  playStore?: string;
+  github?: string;
 }
 
 export type Maker = {
-  id: string
-  name: string
-  avatar: string
-  role: string
-  bio: string
-  isVerified: boolean
-  category: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager'
-  joinedDate: string
-  followers: number
-  twitter?: string
-  github?: string
-  website?: string
-  linkedin?: string
-  dribbble?: string
-  makerCategory?: 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager'
-}
+  id: string;
+  name: string;
+  avatar: string;
+  role: string;
+  bio: string;
+  isVerified: boolean;
+  category:
+    | "Designer"
+    | "Developer"
+    | "Marketing"
+    | "Founder"
+    | "Other"
+    | "Product Manager";
+  joinedDate: string;
+  followers: number;
+  twitter?: string;
+  github?: string;
+  website?: string;
+  linkedin?: string;
+  dribbble?: string;
+  makerCategory?:
+    | "Designer"
+    | "Developer"
+    | "Marketing"
+    | "Founder"
+    | "Other"
+    | "Product Manager";
+};
 
 export interface Metrics {
-  downloads?: number
-  activeUsers?: number
-  avgRating?: number
+  downloads?: number;
+  activeUsers?: number;
+  avgRating?: number;
 }
 
 export interface App {
-  id: string
-  name: string
-  tagline: string
-  description: string
-  imageUrl: string
-  coverImage?: string
-  screenshots?: string[]
-  votes: number
-  tags?: string[]
-  commentsCount: number
-  badges?: BadgeType[]
-  technologies?: string[]
-  launchDate: string
-  updates?: Update[]
-  externalLinks?: ExternalLinks
-  makers?: Maker[]
-  metrics?: Metrics
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  imageUrl: string;
+  coverImage?: string;
+  screenshots?: string[];
+  votes: number;
+  tags?: string[];
+  commentsCount: number;
+  badges?: BadgeType[];
+  technologies?: string[];
+  launchDate: string;
+  updates?: Update[];
+  externalLinks?: ExternalLinks;
+  makers?: Maker[];
+  metrics?: Metrics;
 }
 
-export type MakerCategory = 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager'
-
-// Extend next-auth types to include 'id' on user
-import { DefaultSession } from "next-auth"
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string
-    } & DefaultSession["user"]
-  }
-} 
+export type MakerCategory =
+  | "Designer"
+  | "Developer"
+  | "Marketing"
+  | "Founder"
+  | "Other"
+  | "Product Manager";

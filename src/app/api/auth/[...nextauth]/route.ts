@@ -1,6 +1,7 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession, Session } from "next-auth";
 import Discord from "next-auth/providers/discord";
-import { DefaultSession } from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/lib/prisma";
 
 // Interfaz para el perfil de Discord
 interface DiscordProfile {
@@ -14,18 +15,28 @@ interface DiscordProfile {
   image?: string;
 }
 
+// Extendemos los tipos de NextAuth para incluir nuestros campos personalizados
 declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user?: {
+  interface User {
+    banner?: string | null;
+    accentColor?: number | null;
+  }
+
+  interface Session {
+    user: {
       id: string;
-      image: string;
-      banner?: string;
-      accentColor?: number;
+      banner?: string | null;
+      accentColor?: number | null;
     } & DefaultSession["user"];
   }
 }
 
 const handler = NextAuth({
+  adapter: PrismaAdapter(prisma) as any, // Cast para resolver incompatibilidad de tipos
+  session: {
+    strategy: "database", // Configurar explícitamente el modo de base de datos
+    maxAge: 30 * 24 * 60 * 60, // 30 días
+  },
   providers: [
     Discord({
       clientId: process.env.DISCORD_CLIENT_ID as string,
@@ -36,8 +47,6 @@ const handler = NextAuth({
         },
       },
       profile(profile: DiscordProfile) {
-        // console.log("Discord Profile Raw:", profile);
-
         // Configurar imagen de avatar
         let image_url;
         if (!profile.avatar) {
@@ -55,7 +64,7 @@ const handler = NextAuth({
           banner_url = `https://cdn.discordapp.com/banners/${profile.id}/${profile.banner}.${format}?size=600`;
         }
 
-        const mappedProfile = {
+        return {
           id: profile.id,
           name: profile.username,
           email: profile.email,
@@ -63,9 +72,6 @@ const handler = NextAuth({
           banner: banner_url || null,
           accentColor: profile.accent_color,
         };
-
-        // console.log("Mapped Profile:", mappedProfile);
-        return mappedProfile;
       },
     }),
   ],
@@ -74,36 +80,39 @@ const handler = NextAuth({
   },
   callbacks: {
     async jwt({ token, profile, account, user }) {
-      // console.log("JWT Callback - Profile:", profile);
-      // console.log("JWT Callback - User:", user);
-      // console.log("JWT Callback - Current Token:", token);
-
-      if (account?.provider === "discord") {
+      if (account?.provider === "discord" && user) {
         token.id = user.id;
         token.image = user.image;
-        token.banner = (user as any).banner;
-        token.accent_color = (user as any).accentColor;
-      }
 
-      // console.log("JWT Callback - Updated Token:", token);
+        // Guardamos campos adicionales del perfil en el token
+        if (profile) {
+          token.banner = (profile as any).banner;
+          token.accent_color = (profile as any).accent_color;
+        }
+      }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      // console.log("Session Callback - Token:", token);
-      // console.log("Session Callback - Initial Session:", session);
-
-      if (session.user) {
-        session.user.id = token.id || token.sub;
-        session.user.image = token.picture || token.image; // Intentamos ambos campos
-        session.user.banner = token.banner;
-        session.user.accentColor = token.accent_color;
+    async session({
+      session,
+      token,
+      user,
+    }: {
+      session: any;
+      token: any;
+      user: any;
+    }) {
+      // Con strategy: "database", user contendrá el usuario de la base de datos
+      if (session?.user && user) {
+        session.user.id = user.id || "";
+        session.user.banner = user.banner || null;
+        session.user.accentColor = user.accentColor || null;
       }
 
-      // console.log("Session Callback - Final Session:", session);
       return session;
     },
   },
-  debug: false, // Habilitar logs de debug de NextAuth
+  // Cambiar a falso en producción
+  debug: false,
 });
 
 export { handler as GET, handler as POST };
