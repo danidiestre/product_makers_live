@@ -1,0 +1,68 @@
+---
+description: project guide
+globs: 
+alwaysApply: false
+---
+# Project Guide
+
+## Project Overview
+This is a Next.js 14 project using the App Router, with TypeScript, Tailwind CSS, and shadcn/ui components. The project follows modern Next.js conventions including React Server Components and Server Actions.
+
+## Technology Stack
+- Next.js 14 for the full-stack React framework
+- TypeScript for type safety
+- Tailwind CSS for styling
+- shadcn/ui for pre-built components
+- PNPM as the package manager
+
+## Project Structure
+- `/src/app` - Next.js 14 App Router pages and layouts
+- `/src/components` - React components (including shadcn/ui)
+- `/src/lib` - Utility functions and shared logic
+- `/src/types` - TypeScript type definitions
+- `/public` - Static assets
+
+## Key Configuration Files
+- [next.config.js](mdc:next.config.js) - Next.js configuration
+- [tailwind.config.js](mdc:tailwind.config.js) - Tailwind CSS configuration
+- [components.json](mdc:components.json) - shadcn/ui configuration
+- [tsconfig.json](mdc:tsconfig.json) - TypeScript configuration
+- [package.json](mdc:package.json) - Project dependencies and scripts
+
+## Coding Standards
+
+### TypeScript Guidelines
+- Use TypeScript for all new files
+- Define proper types and interfaces
+- Avoid using `any` type
+- Leverage type inference where it makes code clearer
+- Prefix interfaces with 'I' and types with 'T'
+
+### React & Next.js Patterns
+- Use Server Components by default
+- Add 'use client' directive only when necessary
+- Keep components focused and single-responsibility
+- Implement proper error boundaries and loading states
+- Use Server Actions for forms and mutations
+
+### Styling Conventions
+- Use Tailwind CSS utility classes
+- Follow utility-first approach
+- Leverage shadcn/ui components when available
+- Maintain consistent spacing and layout
+- Implement proper dark mode support
+
+### File & Naming Conventions
+- Use PascalCase for React components
+- Use camelCase for functions and variables
+- Use kebab-case for file names
+- Group related components in feature folders
+- Keep component files small and focused
+
+### Best Practices
+- Write self-documenting code
+- Implement proper error handling
+- Use appropriate TypeScript types
+- Follow accessibility guidelines
+- Add comments for complex logic only
+- Use proper Git commit messages

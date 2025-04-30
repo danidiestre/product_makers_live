@@ -1,0 +1,43 @@
+---
+description: styling components
+globs: 
+alwaysApply: false
+---
+# Styling and Components Guide
+
+## Tailwind CSS Usage
+- Tailwind v3
+- Use Tailwind's utility classes for styling
+- Follow mobile-first responsive design
+- Use custom theme values from [tailwind.config.js](mdc:tailwind.config.js)
+- Maintain consistent spacing using Tailwind's spacing scale
+- Use Tailwind's color palette for consistency
+
+## Component Organization
+- UI components go in `/src/components/ui`
+- Page-specific components in `/src/components/[feature]`
+- Maintain component composition pattern
+- Keep components small and focused
+
+## shadcn/ui Components
+- shadcn-ui@2.3.0 compatibility Tailwind v3
+- Install components using the CLI: `pnpm dlx shadcn-ui@2.3.0 add [component]`
+- Customize components in `/src/components/ui`
+- Use shadcn/ui's built-in dark mode support
+- Follow shadcn/ui's composition patterns
+- Available components:
+  - Button
+  - Card
+  - Dialog
+  - Form
+  - Input
+  - Select
+  - etc.
+
+## Best Practices
+- Use CSS variables for theme values
+- Implement proper dark mode support
+- Use cn() utility for conditional classes
+- Keep consistent component APIs
+- Use proper semantic HTML elements
+- Implement proper accessibility attributes

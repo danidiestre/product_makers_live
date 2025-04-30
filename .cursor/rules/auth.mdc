@@ -1,0 +1,194 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# NextAuth.js v4 Implementation Guide
+
+## Setup and Configuration
+
+### Installation
+```bash
+pnpm add next-auth@4
+pnpm add @prisma/client
+```
+
+### Directory Structure
+- `/src/app/api/auth/[...nextauth]/route.ts` - NextAuth.js API route
+- `/src/lib/auth.ts` - Auth configuration and helper functions
+- `/src/types/next-auth.d.ts` - TypeScript declarations
+- `/src/middleware.ts` - Auth middleware for protected routes
+
+## Core Configuration
+
+### Auth Configuration
+Create a reusable auth configuration in `/src/lib/auth.ts`:
+
+```typescript
+import { NextAuthOptions } from "next-auth"
+import { getServerSession } from "next-auth/next"
+import DiscordProvider from "next-auth/providers/discord"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@/lib/prisma"
+
+export const authOptions: NextAuthOptions = {
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+    }),
+  ],
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
+    error: "/error",
+  },
+}
+
+// Helper for use in RSC and API routes
+export const auth = async () => {
+  return await getServerSession(authOptions)
+}
+```
+
+### API Route
+Set up the API route in `/src/app/api/auth/[...nextauth]/route.ts`:
+
+```typescript
+import NextAuth from "next-auth"
+import { authOptions } from "@/lib/auth"
+
+const handler = NextAuth(authOptions)
+export { handler as GET, handler as POST }
+```
+
+## Usage Guidelines
+
+### In Server Components
+```typescript
+import { auth } from "@/lib/auth"
+
+export default async function Page() {
+  const session = await auth()
+  if (!session) {
+    // Handle unauthenticated state
+  }
+}
+```
+
+### In Client Components
+```typescript
+'use client'
+import { useSession } from "next-auth/react"
+
+export default function Component() {
+  const { data: session, status } = useSession()
+  // Use session data
+}
+```
+
+### Protected Routes
+Create `/src/middleware.ts` for route protection:
+
+```typescript
+export { default } from "next-auth/middleware"
+
+export const config = {
+  matcher: [
+    "/dashboard/:path*",
+    "/api/:path*"
+  ]
+}
+```
+
+## Database Integration with Prisma
+
+### Schema Updates
+Add to [prisma/schema.prisma](mdc:prisma/schema.prisma):
+
+```prisma
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+```
+
+### Environment Variables
+Required environment variables:
+```env
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
+DISCORD_CLIENT_ID=your-discord-client-id
+DISCORD_CLIENT_SECRET=your-discord-client-secret
+DATABASE_URL=your-database-url
+```
+
+## Best Practices
+
+### Security
+- Always use HTTPS in production
+- Keep `NEXTAUTH_SECRET` secure and unique per environment
+- Implement proper CSRF protection
+- Use secure session cookies
+
+### TypeScript Integration
+- Define proper session types in `/src/types/next-auth.d.ts`
+- Use type-safe session access
+- Leverage NextAuth.js built-in types
+
+### Error Handling
+- Implement proper error pages
+- Handle authentication errors gracefully
+- Provide user-friendly error messages
+
+### Performance
+- Use `getServerSession` in Server Components
+- Implement proper loading states
+- Cache session data where appropriate
+
+## Testing
+- Test authentication flows
+- Verify protected routes
+- Mock authentication in tests
+- Test error scenarios
