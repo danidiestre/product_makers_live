@@ -18,8 +18,8 @@ export function PageHero() {
     const selectedApp = apps[Math.floor(Math.random() * apps.length)]
     setRandomApp(selectedApp)
 
-    if (selectedApp?.makers?.length > 0) {
-      const selectedMaker = selectedApp.makers[Math.floor(Math.random() * selectedApp.makers.length)]
+    if ((selectedApp?.makers ?? []).length > 0) {
+      const selectedMaker = selectedApp.makers![Math.floor(Math.random() * selectedApp.makers!.length)]
       setRandomMaker(selectedMaker)
     }
   }, [])

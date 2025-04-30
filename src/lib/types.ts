@@ -57,4 +57,14 @@ export interface App {
   metrics?: Metrics
 }
 
-export type MakerCategory = 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager' 
+export type MakerCategory = 'Designer' | 'Developer' | 'Marketing' | 'Founder' | 'Other' | 'Product Manager'
+
+// Extend next-auth types to include 'id' on user
+import { DefaultSession } from "next-auth"
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+    } & DefaultSession["user"]
+  }
+} 
