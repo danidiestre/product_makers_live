@@ -16,7 +16,7 @@ pnpm add @prisma/client
 ### Directory Structure
 - `/src/app/api/auth/[...nextauth]/route.ts` - NextAuth.js API route
 - `/src/lib/auth.ts` - Auth configuration and helper functions
-- `/src/types/next-auth.d.ts` - TypeScript declarations
+- `/src/types/auth.ts` - TypeScript declarations
 - `/src/middleware.ts` - Auth middleware for protected routes
 
 ## Core Configuration
