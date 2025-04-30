@@ -22,21 +22,13 @@ import {
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Blocks, LogIn, Menu, MessageCircleHeart, WandSparkles, User, Settings, LogOut } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { UserMenu } from '@/components/UserMenu'
 
 export function Navbar() {
   const [showMobileMenu, setShowMobileMenu] = useState(false)
-  // Temporarily set to true to see the user profile button
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
 
   function toggleMenu() {
     setShowMobileMenu(!showMobileMenu)
-  }
-
-  // TODO: Replace with actual user data
-  const user = {
-    name: "David Zafra",
-    email: "david@example.com",
-    image: "https://github.com/shadcn.png"
   }
 
   return (
@@ -85,7 +77,6 @@ export function Navbar() {
         </NavigationMenu>
 
         <div className="flex items-center justify-end gap-2">
-
           {/* Discord button - visible on both mobile and desktop */}
           <Button
             variant="secondary"
@@ -107,65 +98,8 @@ export function Navbar() {
             </Link>
           </Button>
 
-          {/* User menu for logged in users */}
-          {isLoggedIn ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative size-8">
-                  <Avatar className="size-8">
-                    <AvatarImage src={user.image} alt={user.name} />
-                    <AvatarFallback>DZ</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56" align="end" forceMount>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user.name}</p>
-                    <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="cursor-pointer flex items-center">
-                    <User className="mr-2 size-4" />
-                    <span>Mi perfil</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/settings" className="cursor-pointer flex items-center">
-                    <Settings className="mr-2 size-4" />
-                    <span>Ajustes</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600 flex items-center">
-                  <LogOut className="mr-2 size-4" />
-                  <span>Cerrar sesión</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            /* Sign in button */
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="secondary"
-                  size="default"
-                  asChild
-                  className="hidden md:flex"
-                >
-                  <Link href="/auth" className="flex items-center gap-2">
-                    <LogIn size={20} />
-                    <span>Inicia sesión</span>
-                  </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">
-                Inicia sesión
-              </TooltipContent>
-            </Tooltip>
-          )}
+          {/* User Menu Component */}
+          <UserMenu />
 
           {/* Mobile menu button */}
           <Button
@@ -176,7 +110,6 @@ export function Navbar() {
           >
             <Menu size={24} />
           </Button>
-
         </div>
       </LayoutContainer>
 
@@ -236,7 +169,7 @@ export function Navbar() {
               <span className="md:hidden">Discord</span>
             </Link>
 
-            {/* Sign in link added to mobile menu */}
+            {/* Mobile sign in link */}
             <Link
               href="/auth"
               className="flex items-center gap-2.5 font-medium text-muted-foreground px-3 py-2 hover:bg-muted hover:text-foreground rounded-md"
@@ -247,8 +180,7 @@ export function Navbar() {
             </Link>
           </div>
         </div>
-      )
-      }
-    </header >
+      )}
+    </header>
   )
 }     

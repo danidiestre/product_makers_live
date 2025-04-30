@@ -1,0 +1,252 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# NextAuth.js v4 Implementation Guide
+
+## Setup and Configuration
+
+### Installation
+```bash
+pnpm add next-auth@4
+pnpm add @prisma/client
+```
+
+## Current Setup
+
+### Directory Structure
+- `/src/lib/auth.ts` - Auth hooks and helper functions
+- `/src/app/api/auth/[...nextauth]/route.ts` - NextAuth.js API route
+- `/src/components/auth/` - Auth-related components
+  - `auth-tabs.tsx`
+  - `sign-in-form.tsx`
+  - `sign-up-form.tsx`
+
+## Core Configuration
+
+### Auth Hooks and Helpers
+The main auth functionality is in `/src/lib/auth.ts`:
+
+```typescript
+import { signIn, signOut, useSession } from "next-auth/react"
+
+export const useAuth = () => {
+  const { data: session, status } = useSession()
+
+  const handleDiscordLogin = async () => {
+    await signIn("discord", { callbackUrl: "/" })
+  }
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: "/" })
+  }
+
+  return {
+    session,
+    status,
+    isAuthenticated: status === "authenticated",
+    isLoading: status === "loading",
+    signInWithDiscord: handleDiscordLogin,
+    signOut: handleSignOut,
+  }
+}
+```
+
+### NextAuth Configuration
+The NextAuth.js configuration in `/src/app/api/auth/[...nextauth]/route.ts`:
+
+```typescript
+import NextAuth from "next-auth";
+import Discord from "next-auth/providers/discord";
+
+interface DiscordProfile {
+  id: string;
+  username: string;
+  discriminator: string;
+  email: string;
+  avatar: string | null;
+  banner: string | null;
+  accent_color: number | null;
+}
+
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user?: {
+      id: string;
+      image: string;
+      banner?: string;
+      accentColor?: number;
+    } & DefaultSession["user"];
+  }
+}
+
+const handler = NextAuth({
+  providers: [
+    Discord({
+      clientId: process.env.DISCORD_CLIENT_ID as string,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET as string,
+      authorization: {
+        params: {
+          scope: "identify email guilds",
+        },
+      },
+      profile(profile: DiscordProfile) {
+        let image_url;
+        if (!profile.avatar) {
+          const defaultAvatarNumber = parseInt(profile.discriminator) % 5;
+          image_url = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
+        } else {
+          const format = profile.avatar.startsWith("a_") ? "gif" : "png";
+          image_url = `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.${format}?size=128`;
+        }
+
+        let banner_url;
+        if (profile.banner) {
+          const format = profile.banner.startsWith("a_") ? "gif" : "png";
+          banner_url = `https://cdn.discordapp.com/banners/${profile.id}/${profile.banner}.${format}?size=600`;
+        }
+
+        return {
+          id: profile.id,
+          name: profile.username,
+          email: profile.email,
+          image: image_url,
+          banner: banner_url || null,
+          accentColor: profile.accent_color,
+        };
+      },
+    }),
+  ],
+  pages: {
+    signIn: "/auth",
+  },
+  callbacks: {
+    async jwt({ token, profile, account, user }) {
+      if (account?.provider === "discord") {
+        token.id = user.id;
+        token.image = user.image;
+        token.banner = (user as any).banner;
+        token.accent_color = (user as any).accentColor;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.id = token.id || token.sub;
+        session.user.image = token.picture || token.image;
+        session.user.banner = token.banner;
+        session.user.accentColor = token.accent_color;
+      }
+      return session;
+    },
+  },
+  debug: false,
+});
+
+export { handler as GET, handler as POST };
+```
+
+## Database Integration with Prisma
+
+### Schema Updates
+Add to [prisma/schema.prisma](mdc:prisma/schema.prisma):
+
+```prisma
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+```
+
+### Prisma Configuration Example
+```typescript
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@/lib/prisma"
+
+// In your NextAuth configuration:
+adapter: PrismaAdapter(prisma),
+```
+
+## Usage Guidelines
+
+### In Client Components
+```typescript
+'use client'
+import { useAuth } from "@/lib/auth"
+
+export default function Component() {
+  const { session, status, isAuthenticated, signInWithDiscord, signOut } = useAuth()
+  
+  // Use auth state and functions
+}
+```
+
+## Environment Variables
+Required environment variables:
+```env
+DISCORD_CLIENT_ID=your-discord-client-id
+DISCORD_CLIENT_SECRET=your-discord-client-secret
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key
+DATABASE_URL=your-database-url
+```
+
+## Features
+- Discord OAuth provider with extended profile information
+- Custom avatar and banner URL handling
+- Extended session with Discord-specific fields
+- Type-safe session access
+- Custom sign-in page at `/auth`
+- Convenient `useAuth` hook for client components
+- Prisma adapter support for database persistence
+
+## Best Practices
+1. Always use environment variables for sensitive data
+2. Use the `useAuth` hook for consistent auth state management
+3. Handle loading and error states appropriately
+4. Type-check session data using the extended Session interface
+5. Use secure HTTPS in production
+6. Keep environment variables secure and unique per environment
+7. Use Prisma migrations to manage database schema changes
+8. Implement proper error handling for database operations

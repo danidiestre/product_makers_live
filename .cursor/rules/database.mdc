@@ -1,0 +1,31 @@
+---
+description: Database definition
+globs: 
+alwaysApply: false
+---
+# Database Guidelines
+
+## Prisma Usage
+- Database schema is defined in [prisma/schema.prisma](mdc:prisma/schema.prisma)
+- Always use Prisma Client for database operations
+- Keep the schema.prisma file up to date with migrations
+- Use meaningful model and field names
+
+## Database Operations
+- Use transactions for related operations
+- Implement proper error handling
+- Avoid N+1 queries by using proper includes
+- Use appropriate field types
+
+## Best Practices
+- Keep sensitive data encrypted
+- Use indexes for frequently queried fields
+- Implement soft deletes where appropriate
+- Use relations instead of denormalized data
+- Always validate input before database operations
+
+## Migrations
+- Generate migrations for all schema changes
+- Never edit migration files manually
+- Test migrations before deploying
+- Keep migration names descriptive
