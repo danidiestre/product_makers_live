@@ -1,104 +1,138 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Icons } from "@/components/ui/icons"
+import { useAuth } from "@/lib/auth"
+import { Card, CardContent } from "@/components/ui/card"
+import { DiscordLogoIcon } from "@radix-ui/react-icons"
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false)
+  const [hasJoinedDiscord, setHasJoinedDiscord] = useState(false)
+  const [hasIntroduced, setHasIntroduced] = useState(false)
+  const { signInWithDiscord } = useAuth()
+  const DISCORD_INVITE_LINK = "https://discord.com/invite/PnBJNwDW77"
+  const DISCORD_PRESENTATIONS_LINK = "https://discord.com/channels/1341520126901616682/1341521413886054430"
 
-  async function onSubmit(event: React.FormEvent) {
-    event.preventDefault()
-    setIsLoading(true)
+  // Load saved states from localStorage on component mount
+  useEffect(() => {
+    const savedJoinedState = localStorage.getItem('hasJoinedDiscord')
+    const savedIntroducedState = localStorage.getItem('hasIntroduced')
+    
+    if (savedJoinedState) setHasJoinedDiscord(true)
+    if (savedIntroducedState) setHasIntroduced(true)
+  }, [])
 
-    // TODO: Implement registration logic
-    setTimeout(() => {
+  const handleJoinDiscord = () => {
+    window.open(DISCORD_INVITE_LINK, '_blank')
+    setHasJoinedDiscord(true)
+    localStorage.setItem('hasJoinedDiscord', 'true')
+  }
+
+  const handleIntroduction = () => {
+    window.open(DISCORD_PRESENTATIONS_LINK, '_blank')
+    setHasIntroduced(true)
+    localStorage.setItem('hasIntroduced', 'true')
+  }
+
+  const handleDiscordLogin = async () => {
+    try {
+      setIsLoading(true)
+      await signInWithDiscord()
+    } catch (error) {
+      console.error("Error signing in with Discord:", error)
+    } finally {
       setIsLoading(false)
-    }, 3000)
+    }
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 max-w-2xl mx-auto w-full">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold tracking-tight">Crea tu cuenta</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Bienvenido maker</h1>
+        <h2 className="text-muted-foreground">Sigue estos pasos para crear tu perfil de maker</h2>
       </div>
 
-      <div className="grid gap-4">
-        <Button 
-          variant="outline" 
-          disabled={isLoading} 
-          onClick={() => {}} 
-          className="py-6 bg-[#5865F2] hover:bg-[#4752c4] text-white border-none"
-        >
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.discord className="mr-2 h-5 w-5" />
-          )}
-          Continuar con Discord
-        </Button>
-        <Button 
-          variant="outline" 
-          disabled={isLoading} 
-          onClick={() => {}} 
-          className="py-6 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300"
-        >
-          {isLoading ? (
-            <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Icons.google className="mr-2 h-5 w-5" />
-          )}
-          Continuar con Google
-        </Button>
-      </div>
+      <div className="grid gap-3">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium w-4 text-center text-muted-foreground">1</span>
+                  <div>
+                    <h3 className="font-semibold">Únete al Discord</h3>
+                    <p className="text-sm text-muted-foreground">Accede al Discord mediante este link</p>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="default"
+                onClick={handleJoinDiscord}
+                className="shrink-0"
+              >
+                Únete
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            O
-          </span>
-        </div>
-      </div>
+        <Card className={!hasJoinedDiscord ? "opacity-50" : ""}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium w-4 text-center text-muted-foreground">2</span>
+                  <div>
+                    <h3 className="font-semibold">Preséntate</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Dinos quien eres en <code className="text-xs bg-muted px-1 py-0.5 rounded">#presentaciones</code>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="default"
+                onClick={handleIntroduction}
+                className="shrink-0"
+                disabled={!hasJoinedDiscord}
+              >
+                Preséntate
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
-      <form onSubmit={onSubmit}>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Correo electrónico</Label>
-            <Input
-              id="email"
-              placeholder="nombre@ejemplo.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-              disabled={isLoading}
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Contraseña</Label>
-            <Input
-              id="password"
-              type="password"
-              autoCapitalize="none"
-              autoComplete="new-password"
-              disabled={isLoading}
-              required
-            />
-          </div>
-          <Button disabled={isLoading} className="w-full py-6">
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Registrarse
-          </Button>
-        </div>
-      </form>
+        <Card className={!hasJoinedDiscord || !hasIntroduced ? "opacity-50" : ""}>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
+                  <span className="text-sm font-medium w-4 text-center text-muted-foreground">3</span>
+                  <div>
+                    <h3 className="font-semibold">Accede al Dashboard</h3>
+                    <p className="text-sm text-muted-foreground">Inicia sesión</p>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="default"
+                disabled={!hasJoinedDiscord || !hasIntroduced || isLoading} 
+                onClick={handleDiscordLogin} 
+                className="bg-[#5865F2] hover:bg-[#4752c4] text-white shrink-0"
+              >
+                {isLoading ? (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Icons.discord className="mr-2 h-5 w-5" />
+                )}
+                Entra
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 } 
