@@ -1,9 +1,9 @@
 import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-
-import { AuthTabs } from "@/components/auth/auth-tabs"
-import { Card } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Icons } from "@/components/ui/icons"
+import DiscordLoginButton from "@/components/auth/discord-login-button"
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -15,7 +15,16 @@ export default function AuthenticationPage() {
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          <AuthTabs />
+          <div className="grid gap-6">
+            <div className="space-y-2 text-center">
+              <h1 className="text-3xl font-bold tracking-tight">Hola de nuevo maker</h1>
+              <h2 className="text-muted-foreground">Inicia sesión con tu cuenta de Discord para acceder a tu dashboard de maker</h2>
+            </div>
+
+            <div className="grid gap-4">
+              <DiscordLoginButton />
+            </div>
+          </div>
         </div>
       </div>
       <div className="relative hidden h-full flex-col bg-muted text-white lg:flex dark:border-l">

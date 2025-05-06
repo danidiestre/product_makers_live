@@ -133,27 +133,7 @@ export function UserMenu() {
 
   return (
     <>
-      {/* Desktop sign in button */}
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="secondary"
-            size="default"
-            asChild
-            className="hidden md:flex"
-          >
-            <Link href="/auth" className="flex items-center gap-2">
-              <LogIn size={20} />
-              <span>Inicia sesión</span>
-            </Link>
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent side="bottom">
-          Inicia sesión
-        </TooltipContent>
-      </Tooltip>
-
-      {/* Mobile sign in link is handled in the mobile menu */}
+      {/* We no longer show the sign in button */}
     </>
   )
 } 
