@@ -14,7 +14,7 @@ export default function DashboardPage() {
           Welcome, {session?.user?.name || 'Guest'}
         </h1>
         <Link href="/" className="text-blue-500 hover:text-blue-700 mt-4 block">
-          Back to Home
+          This is the main dashboard page
         </Link>
       </div>
     </div>
