@@ -1,6 +1,22 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/prisma'
+import { authOptions } from '@/lib/auth-options'
+import { Role } from '@prisma/client'
+
+// Define a custom type that includes all the user fields
+interface ExtendedUser {
+  id: string
+  name: string | null
+  email: string | null
+  image: string | null
+  role: Role | null
+  bio: string | null
+  twitter: string | null
+  github: string | null
+  linkedin: string | null
+  website: string | null
+}
 
 export async function PUT(request: Request) {
   try {
