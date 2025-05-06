@@ -1,10 +1,26 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/prisma'
+import { authOptions } from '@/lib/auth-options'
+import { Role } from '@prisma/client'
+
+// Define a custom type that includes all the user fields
+interface ExtendedUser {
+  id: string
+  name: string | null
+  email: string | null
+  image: string | null
+  role: Role | null
+  bio: string | null
+  twitter: string | null
+  github: string | null
+  linkedin: string | null
+  website: string | null
+}
 
 export async function PUT(request: Request) {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
     
     if (!session || !session.user) {
       return NextResponse.json(
@@ -23,26 +39,41 @@ export async function PUT(request: Request) {
       )
     }
     
+    // Define the update data with proper type casting
+    const updateData: any = {
+      name: data.name,
+      role: data.role as Role | undefined,
+      bio: data.bio,
+      twitter: data.twitter,
+      github: data.github,
+      linkedin: data.linkedin,
+      website: data.website,
+    }
+    
     // Update user profile in the database
     const updatedUser = await prisma.user.update({
       where: {
         id: session.user.id
       },
-      data: {
-        name: data.name,
-        role: data.role || undefined,
-        // Add any other fields from your schema that you want to update
-      }
+      data: updateData
     })
+    
+    // Cast the user to our extended type
+    const userWithExtendedFields = updatedUser as unknown as ExtendedUser
     
     return NextResponse.json({
       message: 'Profile updated successfully',
       user: {
-        id: updatedUser.id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        image: updatedUser.image,
-        role: updatedUser.role
+        id: userWithExtendedFields.id,
+        name: userWithExtendedFields.name,
+        email: userWithExtendedFields.email,
+        image: userWithExtendedFields.image,
+        role: userWithExtendedFields.role,
+        bio: userWithExtendedFields.bio,
+        twitter: userWithExtendedFields.twitter,
+        github: userWithExtendedFields.github,
+        linkedin: userWithExtendedFields.linkedin,
+        website: userWithExtendedFields.website,
       }
     })
   } catch (error) {

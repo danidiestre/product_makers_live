@@ -53,6 +53,11 @@ model User {
   banner        String?
   accentColor   Int?
   role          Role?     // Add role field
+  bio           String?   // Bio/about text
+  twitter       String?   // Twitter username
+  github        String?   // GitHub username
+  linkedin      String?   // LinkedIn username
+  website       String?   // Personal website URL
   accounts      Account[]
   sessions      Session[]
 }

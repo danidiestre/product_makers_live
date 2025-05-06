@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -21,13 +21,28 @@ export default function ProfilePage() {
   })
   const [formData, setFormData] = useState({
     name: session?.user?.name || '',
-    bio: '',
+    bio: (session?.user as any)?.bio || '',
     role: (session?.user as any)?.role || '',
-    twitter: '',
-    github: '',
-    linkedin: '',
-    website: ''
+    twitter: (session?.user as any)?.twitter || '',
+    github: (session?.user as any)?.github || '',
+    linkedin: (session?.user as any)?.linkedin || '',
+    website: (session?.user as any)?.website || ''
   })
+  
+  // Update form data when session changes
+  useEffect(() => {
+    if (session?.user) {
+      setFormData({
+        name: session.user.name || '',
+        bio: (session.user as any).bio || '',
+        role: (session.user as any).role || '',
+        twitter: (session.user as any).twitter || '',
+        github: (session.user as any).github || '',
+        linkedin: (session.user as any).linkedin || '',
+        website: (session.user as any).website || ''
+      });
+    }
+  }, [session]);
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -44,8 +59,6 @@ export default function ProfilePage() {
     setStatus({ message: '', type: null })
     
     try {
-      // Here you would send the data to your API
-      // This is a placeholder for the actual API call
       const response = await fetch('/api/user/profile', {
         method: 'PUT',
         headers: {
@@ -54,15 +67,26 @@ export default function ProfilePage() {
         body: JSON.stringify(formData)
       })
       
-      if (!response.ok) throw new Error('Failed to update profile')
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to update profile');
+      }
+      
+      const data = await response.json();
       
       // Update the session with new data
-      await update({ ...session, user: { ...session?.user, ...formData } })
+      await update({ 
+        ...session, 
+        user: { 
+          ...session?.user, 
+          ...data.user 
+        } 
+      })
       
       setStatus({ message: 'Profile updated successfully', type: 'success' })
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating profile:', error)
-      setStatus({ message: 'Failed to update profile', type: 'error' })
+      setStatus({ message: error.message || 'Failed to update profile', type: 'error' })
     } finally {
       setIsLoading(false)
     }
