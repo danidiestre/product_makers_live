@@ -34,7 +34,7 @@ declare module "next-auth" {
   interface JWT {
     id?: string;
     banner?: string | null;
-    accent_color?: number | null;
+    accentColor?: number | null;
     role?: Role | null;
   }
 }
@@ -108,8 +108,8 @@ export const authOptions: NextAuthOptions = {
 
         // Save additional profile fields to the token
         if (profile) {
-          token.banner = (profile as any).banner;
-          token.accent_color = (profile as any).accent_color;
+          token.banner = (profile as DiscordProfile).banner;
+          token.accentColor = (profile as DiscordProfile).accent_color;
         }
       }
       return token;
@@ -118,7 +118,7 @@ export const authOptions: NextAuthOptions = {
       if (session?.user) {
         session.user.id = token.id as string;
         session.user.banner = token.banner as string | null;
-        session.user.accentColor = token.accent_color as number | null;
+        session.user.accentColor = token.accentColor as number | null;
         session.user.role = token.role as Role | null;
       }
       return session;
