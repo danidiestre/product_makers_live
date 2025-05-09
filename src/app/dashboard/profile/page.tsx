@@ -21,11 +21,8 @@ export default async function ProfilePage() {
 
   return (
     <LayoutWrapper>
-
       <Navbar />
-
       <LayoutMain>
-
         <PageHeader title="Editar perfil">
           <Button asChild variant="outline">
             <Link href="/dashboard" className="flex gap-2">
@@ -34,17 +31,13 @@ export default async function ProfilePage() {
             </Link>
           </Button>
         </PageHeader>
-
         <LayoutSection>
           <LayoutContainer>
             <ProfileForm initialData={user} />
           </LayoutContainer>
         </LayoutSection>
-
       </LayoutMain>
-
       <Footer />
-
     </LayoutWrapper>
   )
-} 
+}
