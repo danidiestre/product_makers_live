@@ -27,6 +27,8 @@ alwaysApply: false
 - Implement soft deletes where appropriate
 - Use relations instead of denormalized data
 - Always validate input before database operations
+- Server actions should be typed and validated
+- Use 'use server' directive at the top of action files
 
 ## Migrations
 - Generate migrations for all schema changes

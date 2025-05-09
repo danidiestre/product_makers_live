@@ -8,7 +8,6 @@ const nextConfig = {
   },
   // Ensure experimental features don't cause issues
   experimental: {
-    appDir: true,
     serverComponentsExternalPackages: [],
   },
 }
