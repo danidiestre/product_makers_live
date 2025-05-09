@@ -1,20 +1,15 @@
-import { NextAuthOptions, DefaultSession } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import Discord from "next-auth/providers/discord";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
-import { Role } from "@prisma/client";
+import { DefaultSession } from "next-auth";
 
 // Extend NextAuth types to include our custom fields
 declare module "next-auth" {
   interface User {
     banner?: string | null;
     accentColor?: number | null;
-    role?: Role | null;
-    bio?: string | null;
-    twitter?: string | null;
-    github?: string | null;
-    linkedin?: string | null;
-    website?: string | null;
+    role?: string | null;
   }
 
   interface Session {
@@ -22,20 +17,15 @@ declare module "next-auth" {
       id: string;
       banner?: string | null;
       accentColor?: number | null;
-      role?: Role | null;
-      bio?: string | null;
-      twitter?: string | null;
-      github?: string | null;
-      linkedin?: string | null;
-      website?: string | null;
+      role?: string | null;
     } & DefaultSession["user"];
   }
 
   interface JWT {
     id?: string;
     banner?: string | null;
-    accentColor?: number | null;
-    role?: Role | null;
+    accent_color?: number | null;
+    role?: string | null;
   }
 }
 
@@ -55,7 +45,7 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as any,
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: "jwt", // Using JWT strategy for better compatibility
+    strategy: "jwt", // Change to JWT to fix session errors
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   providers: [
@@ -96,9 +86,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  pages: {
-    signIn: "/auth",
-  },
   callbacks: {
     async jwt({ token, profile, account, user }) {
       if (account?.provider === "discord" && user) {
@@ -108,8 +95,8 @@ export const authOptions: NextAuthOptions = {
 
         // Save additional profile fields to the token
         if (profile) {
-          token.banner = (profile as DiscordProfile).banner;
-          token.accentColor = (profile as DiscordProfile).accent_color;
+          token.banner = (profile as any).banner;
+          token.accent_color = (profile as any).accent_color;
         }
       }
       return token;
@@ -118,8 +105,8 @@ export const authOptions: NextAuthOptions = {
       if (session?.user) {
         session.user.id = token.id as string;
         session.user.banner = token.banner as string | null;
-        session.user.accentColor = token.accentColor as number | null;
-        session.user.role = token.role as Role | null;
+        session.user.accentColor = token.accent_color as number | null;
+        session.user.role = token.role as string | null;
       }
       return session;
     },

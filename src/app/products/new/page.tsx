@@ -11,6 +11,8 @@ import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { PageHeader } from '@/components/PageHeader'
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { Progress } from '@/components/ui/progress'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
 const MAX_CHARS = 300
 
@@ -96,85 +98,69 @@ export default function NewProduct() {
       <Navbar />
 
       <LayoutMain>
-        <LayoutSection className="border-b py-6 bg-background">
-          <LayoutContainer>
-            <PageHeader
-              title="Añadir producto"
-              description="Comparte tu producto con la comunidad paso a paso."
-            />
-          </LayoutContainer>
-        </LayoutSection>
+
+        <PageHeader title="Añadir producto" />
 
         <LayoutSection>
-          <LayoutContainer className="max-w-3xl">
-            {/* Progress bar */}
-            <div className="w-full h-2 bg-muted rounded-full mb-8">
-              <div
-                className="h-full bg-primary rounded-full transition-all duration-300"
-                style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
-              />
-            </div>
+          <LayoutContainer>
 
-            {/* Step content */}
-            <div className="space-y-4 mb-8">
-              <h2 className="text-2xl font-semibold tracking-tight">
-                {currentStepData.title}
-              </h2>
-              <p className="text-muted-foreground">
-                {currentStepData.description}
-              </p>
-              <div className="space-y-2">
-                <Textarea
-                  value={currentValue}
-                  onChange={(e) => handleChange(e.target.value)}
-                  placeholder={currentStepData.description}
-                  className="min-h-[200px]"
-                  maxLength={MAX_CHARS}
-                />
-                <div className="flex justify-end">
-                  <span className={`text-sm ${isOverLimit ? 'text-destructive' : 'text-muted-foreground'}`}>
-                    {charsRemaining} caracteres restantes
-                  </span>
+            <Card className="w-full h-full overflow-hidden">
+              <Progress className="rounded-none h-2 bg-foreground/10" value={((currentStep + 1) / steps.length) * 100} />
+              <CardHeader>
+                <CardTitle>{currentStepData.title}</CardTitle>
+                <CardDescription>{currentStepData.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="p-6">
+                <div className="flex flex-col gap-2">
+                  <Textarea
+                    rows={6}
+                    value={currentValue}
+                    onChange={(e) => handleChange(e.target.value)}
+                    placeholder=""
+                    maxLength={MAX_CHARS}
+                  />
+                  <div className="flex justify-end">
+                    <span className={`text-sm ${isOverLimit ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      {charsRemaining} caracteres restantes
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </CardContent>
+              <CardFooter className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 pb-6">
+                <Button
+                  variant="outline"
+                  onClick={handleBack}
+                  disabled={isFirstStep}
+                  className="w-auto gap-2 pl-3 justify-self-start"
+                >
+                  <ArrowLeft size={20} />
+                  Anterior
+                </Button>
 
-            {/* Navigation */}
-            <div className="flex justify-between items-center gap-8">
-              <Button
-                variant="outline"
-                onClick={handleBack}
-                disabled={isFirstStep}
-                className="gap-2 min-w-32"
-              >
-                <ArrowLeft size={16} />
-                Anterior
-              </Button>
-
-              <div className="flex-1 flex items-center justify-center">
-                <span className="text-sm font-medium bg-muted px-4 py-2 rounded-full">
+                <div className="w-full text-sm font-medium h-10 flex items-center justify-center text-muted-foreground cursor-default">
                   Paso {currentStep + 1} de {steps.length}
-                </span>
-              </div>
+                </div>
 
-              <Button
-                onClick={handleNext}
-                className="gap-2 min-w-32"
-                disabled={currentValue.length === 0 || isOverLimit}
-              >
-                {isLastStep ? (
-                  <>
-                    Finalizar
-                    <Check size={16} />
-                  </>
-                ) : (
-                  <>
-                    Siguiente
-                    <ArrowRight size={16} />
-                  </>
-                )}
-              </Button>
-            </div>
+                <Button
+                  onClick={handleNext}
+                  className="w-auto gap-2 pr-3 justify-self-end"
+                  disabled={currentValue.length === 0 || isOverLimit}
+                >
+                  {isLastStep ? (
+                    <>
+                      Finalizar
+                      <Check size={20} />
+                    </>
+                  ) : (
+                    <>
+                      Siguiente
+                      <ArrowRight size={20} />
+                    </>
+                  )}
+                </Button>
+              </CardFooter>
+            </Card>
+
           </LayoutContainer>
         </LayoutSection>
       </LayoutMain>

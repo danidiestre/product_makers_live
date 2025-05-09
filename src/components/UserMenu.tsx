@@ -4,19 +4,18 @@ import { useSession } from "next-auth/react"
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { LogIn, User, Settings, LogOut } from 'lucide-react'
+import { User, Settings, LogOut, Ellipsis, UserPen, UserCheck, FolderPlus } from 'lucide-react'
 import { signOut } from "next-auth/react"
 import Image from 'next/image'
+import DiscordLoginButton from '@/components/auth/discord-login-button'
 
 export function UserMenu() {
   const { data: session, status } = useSession()
@@ -57,10 +56,8 @@ export function UserMenu() {
 
   if (status === "loading") {
     return (
-      <Button variant="ghost" size="icon" className="relative size-8">
-        <Avatar className="size-8">
-          <AvatarFallback className="animate-pulse">...</AvatarFallback>
-        </Avatar>
+      <Button variant="ghost" size="icon">
+        <Ellipsis className="animate-pulse" />
       </Button>
     )
   }
@@ -71,8 +68,8 @@ export function UserMenu() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="relative size-8">
-            <Avatar className="size-8">
+          <Button variant="ghost" size="icon">
+            <Avatar className="size-10">
               {!imageError && avatarUrl ? (
                 <AvatarImage
                   src={avatarUrl}
@@ -84,9 +81,9 @@ export function UserMenu() {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
-          {/* Banner o Color de Acento */}
-          {!bannerError && (
+        <DropdownMenuContent className="w-44" align="end" forceMount>
+          {/* Banner o Color de Acento - No need for this */}
+          {/* {!bannerError && (
             session.user.banner ? (
               <div className="relative w-full h-24 rounded-t-md overflow-hidden">
                 <Image
@@ -104,26 +101,34 @@ export function UserMenu() {
                 style={getAccentColorStyle(session.user.accentColor)}
               />
             ) : null
-          )}
+          )} 
           <DropdownMenuSeparator />
+          */}
           <DropdownMenuItem asChild>
-            <Link href="/dashboard" className="cursor-pointer flex items-center">
-              <User className="mr-2 size-4" />
-              <span className="">{`${session.user.name ? session.user.name?.charAt(0).toUpperCase() + session.user.name?.slice(1) : 'User'} profile`}</span>
+            <Link href="/dashboard" className="cursor-pointer flex items-center gap-2">
+              <UserCheck className="size-5" />
+              <span>Mi cuenta</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href="/dashboard/settings" className="cursor-pointer flex items-center">
-              <Settings className="mr-2 size-4" />
-              <span>Ajustes</span>
+            <Link href="/dashboard/profile" className="cursor-pointer flex items-center gap-2">
+              <UserPen className="size-5" />
+              <span>Editar perfil</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Link href="/products/new" className="cursor-pointer flex items-center gap-2">
+              <FolderPlus className="size-5" />
+              <span>Añadir producto</span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={handleSignOut}
-            className="cursor-pointer text-red-600 focus:text-red-600 flex items-center"
+            className="cursor-pointer flex items-center gap-2"
           >
-            <LogOut className="mr-2 size-4" />
+            <LogOut className="size-5" />
             <span>Cerrar sesión</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -132,8 +137,8 @@ export function UserMenu() {
   }
 
   return (
-    <>
-      {/* We no longer show the sign in button */}
-    </>
+    <div className="hidden md:flex">
+      <DiscordLoginButton />
+    </div>
   )
 } 

@@ -86,7 +86,7 @@ export function PageHero() {
           <span>makers</span>
         </h1>
         <p className="text-base md:text-lg text-muted-foreground text-balance font-medium text-center">
-          La comunidad hispana de {totalMakers} makers creando {totalApps} productos digitales.
+          La comunidad hispana de {totalMakers} makers creando {totalApps} productos digitales
         </p>
       </LayoutContainer>
     </LayoutSection>

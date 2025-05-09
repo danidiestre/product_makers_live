@@ -3,6 +3,7 @@ import { Manrope } from 'next/font/google'
 import '@/styles/globals.css'
 import { ThemeProvider } from "@/components/ThemeProvider"
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { Toaster } from '@/components/ui/sonner'
 import { Providers } from "./providers"
 
 const manrope = Manrope({
@@ -108,6 +109,7 @@ export default function RootLayout({
           <Providers>
             <TooltipProvider delayDuration={10}>
               {children}
+              <Toaster position="bottom-center" />
             </TooltipProvider>
           </Providers>
         </ThemeProvider>

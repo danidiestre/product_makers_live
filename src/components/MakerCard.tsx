@@ -23,7 +23,7 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
     .filter(app => app.makers?.some(m => m.name === name))
     .sort((a, b) => (b.votes || 0) - (a.votes || 0))[0] || {
     id: 'placeholder',
-    name: 'Featured App'
+    name: 'Product destacado'
   }
 
   const placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIGZpbGw9IiNFNUU3RUIiLz48L3N2Zz4='
@@ -34,7 +34,7 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
         <div className="flex flex-col md:flex-row items-start gap-4 relative">
           <Avatar className="h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
             <AvatarImage src={avatar} />
-            <AvatarFallback className="text-xs bg-muted-foreground text-background">{name?.charAt(0)}</AvatarFallback>
+            <AvatarFallback className="text-xl bg-muted-foreground text-background">{name?.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col flex-1 gap-1">
             <CardTitle className="flex items-center gap-2 text-xl">
@@ -47,29 +47,31 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
               {bio}
             </CardDescription>
             {makerCategory && (
-              <div className="flex flex-wrap gap-1 mt-3">
+              <div className="flex flex-wrap gap-1 mt-2.5">
                 <Badge variant="secondary">{makerCategory}</Badge>
               </div>
             )}
           </div>
-          <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Link href={`/app/${featuredApp.id}`} className="group">
-                  <div className="h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border p-0 relative">
-                    <img
-                      src={placeholderImage}
-                      alt="Featured App"
-                      className="h-full w-full object-contain"
-                    />
-                  </div>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                Producto destacado
-              </TooltipContent>
-            </Tooltip>
-          </div>
+          {featuredApp && (
+            <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link href={`/app/${featuredApp.id}`} className="group outline-none">
+                    <div className="h-14 w-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border p-0 relative">
+                      <img
+                        src={placeholderImage}
+                        alt="Featured App"
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  Producto destacado
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardFooter className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-6 border-t py-4 px-6">

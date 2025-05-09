@@ -1,21 +1,21 @@
 import React from "react"
+import { LayoutSection } from '@/components/layout/LayoutSection'
+import { LayoutContainer } from '@/components/layout/LayoutContainer'
 
 interface PageHeaderProps {
   children?: any;
   title: string;
-  description: string;
 }
 
-export function PageHeader({ children, title, description }: PageHeaderProps) {
+export function PageHeader({ children, title }: PageHeaderProps) {
   return (
-    <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold text-foreground">{title}</h1>
-        <p className="text-sm text-muted-foreground">
-          {description}
-        </p>
-      </div>
-      {children}
-    </div>
+    <LayoutSection className="border-b py-0 bg-background">
+      <LayoutContainer>
+        <div className="w-full h-24 sm:h-20 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-6">
+          <h1 className="text-2xl font-bold text-foreground">{title}</h1>
+          {children}
+        </div>
+      </LayoutContainer>
+    </LayoutSection>
   )
 } 

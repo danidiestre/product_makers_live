@@ -18,6 +18,8 @@ alwaysApply: false
 - Implement proper error handling
 - Avoid N+1 queries by using proper includes
 - Use appropriate field types
+- Server actions should be typed and validated
+- Use 'use server' directive at the top of action files
 
 ## Best Practices
 - Keep sensitive data encrypted

@@ -11,7 +11,7 @@ export function LinkSocial({ href, icon, name }: LinkSocialProps) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground"
+      className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground hover:text-foreground outline-none focus-visible:text-foreground"
       target="_blank"
       rel="noopener noreferrer"
       onClick={(e) => e.stopPropagation()}

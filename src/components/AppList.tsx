@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppCard } from '@/components/AppCard'
-import { SlidersHorizontal, Telescope } from 'lucide-react'
+import { Loader, SlidersHorizontal, Telescope } from 'lucide-react'
 import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -97,7 +97,9 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   const displayApps = limit ? sortedApps.slice(0, limit) : paginatedApps;
 
   if (isLoading) {
-    return <div className="w-full grid gap-6">Loading...</div>
+    return <div className="w-full flex items-center justify-center">
+      <Loader className="size-10 text-muted-foreground animate-spin" />
+    </div>
   }
 
   return (
