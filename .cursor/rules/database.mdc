@@ -12,10 +12,14 @@ alwaysApply: false
 - Use meaningful model and field names
 
 ## Database Operations
+- Use Server Actions for all CRUD operations instead of App Router API endpoints
+- Implement server actions in the corresponding component's `actions.ts` file
 - Use transactions for related operations
 - Implement proper error handling
 - Avoid N+1 queries by using proper includes
 - Use appropriate field types
+- Server actions should be typed and validated
+- Use 'use server' directive at the top of action files
 
 ## Best Practices
 - Keep sensitive data encrypted
@@ -29,3 +33,24 @@ alwaysApply: false
 - Never edit migration files manually
 - Test migrations before deploying
 - Keep migration names descriptive
+
+## Server Actions Example
+```typescript
+// actions.ts
+'use server'
+
+import { prisma } from '@/lib/prisma'
+import { revalidatePath } from 'next/cache'
+
+export async function createItem(data: CreateItemInput) {
+  try {
+    const item = await prisma.item.create({
+      data
+    })
+    revalidatePath('/items')
+    return { success: true, data: item }
+  } catch (error) {
+    return { success: false, error: 'Failed to create item' }
+  }
+}
+```

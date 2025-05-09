@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Custom html selection */
+  ::-moz-selection {
+    @apply bg-primary text-background;
+  }
+
+  ::selection {
+    @apply bg-primary text-background;
+  }
+
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -54,7 +70,12 @@
     @apply border-border;
   }
 
+  html {
+    @apply scroll-smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    overscroll-behavior: none;
   }
 }

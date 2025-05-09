@@ -25,15 +25,7 @@ export default function AboutPage() {
 
       <LayoutMain>
 
-        {/* Header */}
-        <LayoutSection className="border-b py-6 bg-background">
-          <LayoutContainer>
-            <PageHeader
-              title="Comunidad"
-              description="El lugar de los creadores de productos digitales."
-            />
-          </LayoutContainer>
-        </LayoutSection>
+        <PageHeader title="Comunidad" />
 
         <LayoutSection>
           <LayoutContainer className="grid grid-cols-1 gap-6">

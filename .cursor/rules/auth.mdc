@@ -19,9 +19,6 @@ pnpm add @prisma/client
 - `/src/lib/auth.ts` - Auth hooks and helper functions
 - `/src/app/api/auth/[...nextauth]/route.ts` - NextAuth.js API route
 - `/src/components/auth/` - Auth-related components
-  - `auth-tabs.tsx`
-  - `sign-in-form.tsx`
-  - `sign-up-form.tsx`
 
 ## Core Configuration
 
@@ -118,9 +115,6 @@ const handler = NextAuth({
       },
     }),
   ],
-  pages: {
-    signIn: "/auth",
-  },
   callbacks: {
     async jwt({ token, profile, account, user }) {
       if (account?.provider === "discord") {
@@ -237,7 +231,6 @@ DATABASE_URL=your-database-url
 - Custom avatar and banner URL handling
 - Extended session with Discord-specific fields
 - Type-safe session access
-- Custom sign-in page at `/auth`
 - Convenient `useAuth` hook for client components
 - Prisma adapter support for database persistence
 

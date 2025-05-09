@@ -26,27 +26,19 @@ export default function MakersPage() {
 
       <LayoutMain>
 
-        {/* Header */}
-        <LayoutSection className="border-b py-6 bg-background">
-          <LayoutContainer>
-            <PageHeader
-              title="Makers"
-              description="Descubre los makers que están construyendo el futuro."
-            >
-              {/* Search bar */}
-              <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder="Busca a makers..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full sm:w-[240px] pl-10"
-                />
-              </div>
-            </PageHeader>
-          </LayoutContainer>
-        </LayoutSection>
+        <PageHeader title="Makers">
+          {/* Search bar */}
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Busca a makers..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full sm:w-[240px] pl-10"
+            />
+          </div>
+        </PageHeader>
 
         {/* Makers List */}
         <LayoutSection>

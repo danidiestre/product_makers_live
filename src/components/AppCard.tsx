@@ -77,10 +77,10 @@ export const AppCard: FC<AppCardProps> = ({
                 <span className="line-clamp-1 font-medium">{tagline}</span>
               </Link>
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="line-clamp-1">
               {description}
             </CardDescription>
-            <div className="flex flex-wrap gap-1 mt-3.5">
+            <div className="flex flex-wrap gap-1 mt-2">
               {badges.includes('top') && (
                 <Badge variant="top">Top</Badge>
               )}
@@ -101,7 +101,7 @@ export const AppCard: FC<AppCardProps> = ({
               )}
             </div>
             {makers.length > 0 && (
-              <div className="flex items-center mt-4">
+              <div className="flex items-center mt-2.5">
                 <div className="flex -space-x-2 mr-2">
                   {makers.slice(0, 3).map((m, i) => (
                     <Avatar key={i} className="size-6 rounded-full overflow-hidden border-2 border-background">
@@ -146,7 +146,7 @@ export const AppCard: FC<AppCardProps> = ({
                   <TooltipTrigger asChild>
                     <Button
                       variant="secondary"
-                      className="size-14 flex-col gap-1 text-xs"
+                      className="size-14 flex-col gap-1 text-xs flex-shrink-0 p-0"
                     >
                       <MessageCircle size={20} />
                       <span>{commentsCount}</span>

@@ -1,8 +1,11 @@
--- CreateEnum
-CREATE TYPE "Role" AS ENUM ('Developer', 'Designer', 'ProductManager', 'Marketer', 'Founder', 'Other');
+DO $$ BEGIN
+    CREATE TYPE "Role" AS ENUM ('Developer', 'Designer', 'ProductManager', 'Marketer', 'Founder', 'Other');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- CreateTable
-CREATE TABLE "Account" (
+CREATE TABLE IF NOT EXISTS "Account" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "type" TEXT NOT NULL,
@@ -20,7 +23,7 @@ CREATE TABLE "Account" (
 );
 
 -- CreateTable
-CREATE TABLE "Session" (
+CREATE TABLE IF NOT EXISTS "Session" (
     "id" TEXT NOT NULL,
     "sessionToken" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
@@ -30,7 +33,7 @@ CREATE TABLE "Session" (
 );
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE IF NOT EXISTS "User" (
     "id" TEXT NOT NULL,
     "name" TEXT,
     "email" TEXT,
@@ -44,26 +47,26 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "VerificationToken" (
+CREATE TABLE IF NOT EXISTS "VerificationToken" (
     "identifier" TEXT NOT NULL,
     "token" TEXT NOT NULL,
     "expires" TIMESTAMP(3) NOT NULL
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
+CREATE UNIQUE INDEX IF NOT EXISTS "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Session_sessionToken_key" ON "Session"("sessionToken");
+CREATE UNIQUE INDEX IF NOT EXISTS "Session_sessionToken_key" ON "Session"("sessionToken");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE UNIQUE INDEX IF NOT EXISTS "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token");
+CREATE UNIQUE INDEX IF NOT EXISTS "VerificationToken_token_key" ON "VerificationToken"("token");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
+CREATE UNIQUE INDEX IF NOT EXISTS "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
