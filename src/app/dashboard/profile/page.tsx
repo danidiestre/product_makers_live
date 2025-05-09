@@ -11,8 +11,6 @@ import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { UserCheck } from 'lucide-react'
-import { getCurrentUser } from '@/app/dashboard/profile/actions'
-import ProfileForm from '@/app/dashboard/profile/profile-form'
 
 export default async function ProfilePage() {
   const user = await getCurrentUser()
@@ -49,5 +47,4 @@ export default async function ProfilePage() {
 
     </LayoutWrapper>
   )
-  return <ProfileForm initialData={user} />
 } 
