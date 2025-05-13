@@ -60,7 +60,10 @@ export async function updateProfile(data: UpdateProfileData) {
       },
     });
 
+    // Revalidate both profile and dashboard pages
     revalidatePath("/dashboard/profile");
+    revalidatePath("/dashboard");
+    
     return { success: true, user };
   } catch (error: any) {
     console.error("Error updating profile:", error);

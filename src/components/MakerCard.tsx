@@ -18,6 +18,33 @@ interface MakerCardProps {
 export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
   const { name, role, avatar, bio, twitter, dribbble, github, linkedin, website, makerCategory, isVerified } = maker
 
+  // Helper function to handle social URLs
+  const getSocialUrl = (type: 'linkedin' | 'twitter' | 'github' | 'dribbble', value?: string): string => {
+    if (!value) return '#'
+    
+    // If it's already a URL, return it as is
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value
+    }
+
+    // Remove @ if present
+    const username = value.startsWith('@') ? value.slice(1) : value
+
+    // Return the appropriate URL based on type
+    switch (type) {
+      case 'linkedin':
+        return `https://linkedin.com/in/${username}`
+      case 'twitter':
+        return `https://x.com/${username}`
+      case 'github':
+        return `https://github.com/${username}`
+      case 'dribbble':
+        return `https://dribbble.com/${username}`
+      default:
+        return value
+    }
+  }
+
   // Get featured app from this maker or use a placeholder
   const featuredApp = getAllApps()
     .filter(app => app.makers?.some(m => m.name === name))
@@ -79,38 +106,38 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
           <Tag size={16} />
           <span>{role}</span>
         </div>
-        <div className="hidden md:flex items-center gap-6">
+        <div className="flex items-center gap-6">
           {website && (
             <LinkSocial
-              href={website}
+              href={website.startsWith('http') ? website : `https://${website}`}
               icon={<Globe size={16} />}
               name="Website"
             />
           )}
           {linkedin && (
             <LinkSocial
-              href={`https://linkedin.com/in/${linkedin}`}
+              href={getSocialUrl('linkedin', linkedin)}
               icon={<Linkedin size={16} />}
               name="Linkedin"
             />
           )}
           {twitter && (
             <LinkSocial
-              href={`https://twitter.com/${twitter}`}
+              href={getSocialUrl('twitter', twitter)}
               icon={<Twitter size={16} />}
               name="Twitter"
             />
           )}
           {dribbble && (
             <LinkSocial
-              href={`https://dribbble.com/${dribbble}`}
+              href={getSocialUrl('dribbble', dribbble)}
               icon={<Dribbble size={16} />}
               name="Dribbble"
             />
           )}
           {github && (
             <LinkSocial
-              href={`https://github.com/${github}`}
+              href={getSocialUrl('github', github)}
               icon={<Github size={16} />}
               name="Github"
             />
