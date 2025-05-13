@@ -13,6 +13,8 @@ import { PageHeader } from '@/components/PageHeader'
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 const MAX_CHARS = 300
 
@@ -59,6 +61,8 @@ export default function NewProduct() {
     roadmap: '',
     technology: ''
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
 
   const currentStepData = steps[currentStep]
   const isLastStep = currentStep === steps.length - 1
@@ -79,9 +83,36 @@ export default function NewProduct() {
     setCurrentStep(prev => prev - 1)
   }
 
-  const handleSubmit = () => {
-    // TODO: Handle form submission
-    console.log(formData)
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    try {
+      console.log('Enviando datos del formulario:', formData);
+      
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const responseData = await response.json();
+      console.log('Respuesta del servidor:', responseData);
+
+      if (!response.ok) {
+        throw new Error(responseData.error || 'Error al crear el producto')
+      }
+
+      toast.success('¡Producto creado correctamente!')
+      
+      // Redirigir a la página de productos
+      router.push('/products')
+    } catch (error) {
+      console.error('Error al crear el producto:', error)
+      toast.error(error instanceof Error ? error.message : 'Error al crear el producto')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleChange = (value: string) => {
@@ -130,7 +161,7 @@ export default function NewProduct() {
                 <Button
                   variant="outline"
                   onClick={handleBack}
-                  disabled={isFirstStep}
+                  disabled={isFirstStep || isSubmitting}
                   className="w-auto gap-2 pl-3 justify-self-start"
                 >
                   <ArrowLeft size={20} />
@@ -144,13 +175,17 @@ export default function NewProduct() {
                 <Button
                   onClick={handleNext}
                   className="w-auto gap-2 pr-3 justify-self-end"
-                  disabled={currentValue.length === 0 || isOverLimit}
+                  disabled={(currentValue.length === 0 || isOverLimit) || isSubmitting}
                 >
                   {isLastStep ? (
-                    <>
-                      Finalizar
-                      <Check size={20} />
-                    </>
+                    isSubmitting ? (
+                      'Guardando...'
+                    ) : (
+                      <>
+                        Finalizar
+                        <Check size={20} />
+                      </>
+                    )
                   ) : (
                     <>
                       Siguiente

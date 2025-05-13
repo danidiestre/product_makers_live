@@ -98,6 +98,9 @@ export const authOptions: NextAuthOptions = {
           token.banner = (profile as any).banner;
           token.accent_color = (profile as any).accent_color;
         }
+        
+        console.log('JWT callback - token:', token);
+        console.log('JWT callback - user:', user);
       }
       return token;
     },
@@ -107,6 +110,9 @@ export const authOptions: NextAuthOptions = {
         session.user.banner = token.banner as string | null;
         session.user.accentColor = token.accent_color as number | null;
         session.user.role = token.role as string | null;
+        
+        console.log('Session callback - session:', session);
+        console.log('Session callback - token:', token);
       }
       return session;
     },

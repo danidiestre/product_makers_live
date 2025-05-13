@@ -12,8 +12,8 @@ import {
   PaginationNext,
   PaginationLink,
 } from '@/components/ui/pagination'
-import { getAllMakers } from '@/lib/data'
-import { Maker } from '@/lib/types'
+import { Role, User } from '@prisma/client'
+import { getUsers, getUsersByRole } from '@/app/makers/actions'
 
 const MAKERS_PER_PAGE = 12
 
@@ -23,21 +23,41 @@ type MakersListProps = {
 
 export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [makers] = useState<Maker[]>(getAllMakers())
+  const [selectedCategory, setSelectedCategory] = useState<Role | 'All'>('All')
+  const [makers, setMakers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Filter makers based on category and search query
+  // Fetch makers based on selected category
+  useEffect(() => {
+    const fetchMakers = async () => {
+      setLoading(true)
+      try {
+        const result = await getUsersByRole(selectedCategory)
+        if (result.success) {
+          setMakers(result.data || [])
+          setError(null)
+        } else {
+          setError(result.error || 'Failed to fetch makers')
+          setMakers([])
+        }
+      } catch (err) {
+        setError('Failed to fetch makers')
+        setMakers([])
+      }
+      setLoading(false)
+    }
+
+    fetchMakers()
+  }, [selectedCategory])
+
+  // Filter makers based on search query
   const filteredMakers = makers.filter(maker => {
-    const matchesCategory = selectedCategory === 'All' || maker.category === selectedCategory
-
     const searchTerm = searchQuery.toLowerCase()
-    const matchesSearch = searchQuery === '' ? true
-      : maker.name.toLowerCase().includes(searchTerm) ||
-      maker.role.toLowerCase().includes(searchTerm) ||
-      maker.bio.toLowerCase().includes(searchTerm) ||
-      maker.category.toLowerCase().includes(searchTerm)
-
-    return matchesCategory && matchesSearch
+    return searchQuery === '' ? true
+      : (maker.name?.toLowerCase().includes(searchTerm) ||
+         maker.role?.toLowerCase().includes(searchTerm) ||
+         maker.bio?.toLowerCase().includes(searchTerm))
   })
 
   // Reset to first page when search query or category changes
@@ -51,13 +71,38 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   const paginatedMakers = filteredMakers.slice(startIndex, startIndex + MAKERS_PER_PAGE)
 
   // Calculate category counts
-  const categories = ['All', 'Developer', 'Designer', 'Product Manager', 'Marketing', 'Other']
+  const categories: (Role | 'All')[] = ['All', 'Developer', 'Designer', 'ProductManager', 'Marketer', 'Founder', 'Other']
   const categoryCounts = categories.map(category => ({
     name: category,
     count: category === 'All'
       ? makers.length
-      : makers.filter(maker => maker.category === category).length
+      : makers.filter(maker => maker.role === category).length
   }))
+
+  if (loading) {
+    return (
+      <div className="w-full text-center py-12">
+        <p className="text-muted-foreground">Loading makers...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="w-full text-center py-12">
+        <p className="text-destructive">{error}</p>
+        <Button 
+          variant="secondary"
+          onClick={() => {
+            setSelectedCategory('All')
+          }}
+          className="mt-4"
+        >
+          Try again
+        </Button>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full grid gap-6">
@@ -71,7 +116,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
               onClick={() => setSelectedCategory(name)}
               className="flex items-center gap-2 pr-2 rounded-lg"
             >
-              {name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="w-8">{count}</Badge>
+              {name === 'ProductManager' ? 'Product Manager' : name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="w-8">{count}</Badge>
             </Button>
           ))}
         </div>
