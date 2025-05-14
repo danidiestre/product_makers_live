@@ -22,15 +22,18 @@ export default function DashboardContent({ user }: DashboardContentProps) {
   // Transform user data into Maker type
   const maker = {
     id: user.id,
-    name: user.name || 'Nombre',
-    role: user.role || 'Other',
-    avatar: user.image || '/users/user-default.png',
-    bio: user.bio || '...',
-    twitter: user.twitter || undefined,
-    github: user.github || undefined,
-    linkedin: user.linkedin || undefined,
-    website: user.website || undefined,
-    isVerified: false,
+    name: user.name,
+    email: user.email,
+    emailVerified: user.emailVerified,
+    image: user.image,
+    banner: user.banner,
+    accentColor: user.accentColor,
+    role: user.role,
+    bio: user.bio,
+    twitter: user.twitter,
+    github: user.github,
+    linkedin: user.linkedin,
+    website: user.website,
   }
 
   return (
