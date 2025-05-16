@@ -9,9 +9,9 @@ interface PageHeaderProps {
 
 export function PageHeader({ children, title }: PageHeaderProps) {
   return (
-    <LayoutSection className="border-b py-0 bg-background">
+    <LayoutSection className="border-b py-6 sm:py-0 bg-background">
       <LayoutContainer>
-        <div className="w-full h-24 sm:h-20 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-6">
+        <div className="w-full h-auto sm:h-20 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 sm:gap-6">
           <h1 className="text-2xl font-bold text-foreground">{title}</h1>
           {children}
         </div>

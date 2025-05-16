@@ -69,8 +69,8 @@ export const AppCard: FC<AppCardProps> = ({
               <Badge variant="primary">#{ranking}</Badge>
             )}
           </div>
-          <div className="flex flex-col flex-1 gap-1.5">
-            <CardTitle className="flex items-center gap-2 text-base">
+          <div className="flex flex-col flex-1 gap-1">
+            <CardTitle className="flex items-center gap-2 text-lg">
               <Link href={`/app/${id}`} className="block space-y-1 gap-0 lg:flex lg:gap-1 lg:space-y-0">
                 <span className="font-bold">{name}</span>
                 <span className="font-medium hidden lg:flex">—</span>

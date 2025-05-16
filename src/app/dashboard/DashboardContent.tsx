@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { UserPen, FolderOpen } from 'lucide-react'
+import { UserPen, FolderOpen, FolderPlus } from 'lucide-react'
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
 import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
@@ -42,12 +42,20 @@ export default function DashboardContent({ user }: DashboardContentProps) {
 
       <LayoutMain>
         <PageHeader title="Mi cuenta">
-          <Button asChild variant="outline">
-            <Link href="/dashboard/profile" className="flex gap-2">
-              <UserPen className="size-5" />
-              Editar perfil
-            </Link>
-          </Button>
+          <div className="flex gap-2">
+            <Button asChild variant="outline">
+              <Link href="/dashboard/profile" className="flex gap-2">
+                <UserPen className="size-5" />
+                Editar perfil
+              </Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/products/new" className="flex gap-2">
+                <FolderPlus className="size-5" />
+                Añadir producto
+              </Link>
+            </Button>
+          </div>
         </PageHeader>
 
         <LayoutSection>

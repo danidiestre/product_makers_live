@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useState, useEffect } from 'react'
-import { ArrowLeft, Share2, ThumbsUp, MessageCircle, Calendar, Github, Globe, LogIn, SquareArrowOutUpRight } from 'lucide-react'
+import { ArrowLeft, Share2, ThumbsUp, MessageCircle, Github, Globe, LogIn, SquareArrowOutUpRight, Car } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { getAppById } from '@/lib/data'
@@ -15,8 +15,14 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage
 } from "@/components/ui/breadcrumb"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { FeaturedBadge } from '@/components/FeaturedBadge'
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
 import { Navbar } from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -24,7 +30,6 @@ import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Badge } from '@/components/ui/badge'
-import { LinkSocial } from '@/components/LinkSocial'
 
 const AppProfilePage: FC = () => {
   const { id } = useParams<{ id: string }>()
@@ -63,6 +68,13 @@ const AppProfilePage: FC = () => {
   const handleUpvote = () => {
     setHasUpvoted(!hasUpvoted)
     // In a real app, you would call an API to update the vote count
+  }
+
+  const styles = {
+    card: "w-full bg-transparent border-none rounded-none gap-4",
+    cardHeader: "p-0",
+    cardTitle: "text-2xl font-semibold text-foreground",
+    cardContent: "p-0 text-base font-medium text-muted-foreground",
   }
 
   return (
@@ -145,24 +157,6 @@ const AppProfilePage: FC = () => {
                 <p className="text-sm text-muted-foreground mb-6">{app.description}</p>
 
                 <div className="flex flex-col md:flex-row">
-
-                  {/* External links HIDDEN FOR NOW AS MAYBE THEY BELONG TO SOMEWHERE ELSE */}
-                  <div className="hidden flex-wrap gap-3 mb-4">
-                    {app.externalLinks?.website && (
-                      <LinkSocial
-                        href={app.externalLinks.website}
-                        icon={<Globe size={16} />}
-                        name="Website"
-                      />
-                    )}
-                    {app.externalLinks?.github && (
-                      <LinkSocial
-                        href={app.externalLinks.github}
-                        icon={<Github size={16} />}
-                        name="GitHub"
-                      />
-                    )}
-                  </div>
 
                   {/* Main CTAs */}
                   <div className="flex flex-col items-start sm:flex-row sm:items-center gap-2">
@@ -258,279 +252,166 @@ const AppProfilePage: FC = () => {
         {/* Main content */}
         <LayoutSection>
           <LayoutContainer>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Left column */}
-              <div className="md:col-span-2">
-                {/* Description */}
-                <section className="mb-8">
-                  <h2 className="text-xl font-semibold text-foreground mb-4">Sobre {app.name}</h2>
-                  <div className="space-y-6">
-                    <div className="bg-muted/40 rounded-lg border p-4">
-                      <div className="flex gap-4">
-                        <div>
-                          <h4 className="font-medium text-foreground mb-2">Problema</h4>
-                          <p className="text-sm text-muted-foreground">Los usuarios luchan con [problema específico] que conduce a [resultado negativo].</p>
-                        </div>
-                        <div className="border-l"></div>
-                        <div>
-                          <h4 className="font-medium text-foreground mb-2">Solución</h4>
-                          <p className="text-sm text-muted-foreground">Ofrecemos [solución clave] que ayuda a los usuarios a [alcanzar el resultado deseado].</p>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-muted-foreground leading-relaxed">{app.description}</p>
-                  </div>
-                </section>
 
-                {/* Screenshots */}
-                <section className="mb-8">
-                  <h2 className="text-xl font-semibold text-foreground mb-4">Capturas de pantalla</h2>
-                  <div className="grid grid-cols-1 gap-4">
+            <div className="w-full flex flex-col gap-12">
+
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Makers</CardTitle>
+                  <CardDescription>Creadores de {app.name}</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  ### Añadir el componente de MakerCard.tsx ###
+                </CardContent>
+              </Card>
+
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Producto</CardTitle>
+                  <CardDescription>Imágenes y capturas de {app.name}</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  <div className="grid grid-cols-1 gap-4 mt-2">
                     {app.screenshots?.map((screenshot, index) => (
-                      <div key={index} className="rounded-lg overflow-hidden border shadow-sm">
+                      <div key={index} className="rounded-lg overflow-hidden ring-4 ring-border/50">
                         <img
                           src={screenshot}
-                          alt={`${app.name} screenshot ${index + 1}`}
+                          alt={`${app.name} - Imagen ${index + 1}`}
                           className="w-full h-auto"
                         />
                       </div>
                     ))}
                   </div>
-                </section>
+                </CardContent>
+              </Card>
 
-                {/* Comments section */}
-                <section className="mt-12 border-t pt-8" id="comments">
-                  <h2 className="text-xl font-semibold text-foreground mb-6">Comentarios ({app.commentsCount})</h2>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Problema</CardTitle>
+                  <CardDescription>Que pretende resolver el producto</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  ### Añadir Problema aquí ###
+                </CardContent>
+              </Card>
 
-                  {/* Example Comments */}
-                  <div className="space-y-6 mb-8">
-                    <div className="flex gap-4">
-                      <div className="flex-shrink-0">
-                        <div className="h-10 w-10 rounded-full bg-muted overflow-hidden">
-                          <img src="https://avatars.githubusercontent.com/u/1234567" alt="User avatar" className="h-full w-full object-cover" />
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium text-foreground">Sarah Chen</span>
-                          <span className="text-sm text-muted-foreground">hace 2 días</span>
-                        </div>
-                        <p className="text-muted-foreground">¡Este es exactamente lo que estaba buscando! El diseño es tan limpio y fácil de usar. ¿Has considerado agregar atajos de teclado para usuarios avanzados?</p>
-                      </div>
-                    </div>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Solución</CardTitle>
+                  <CardDescription>Que aporta tu producto</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  ### Añadir Solución aquí ###
+                </CardContent>
+              </Card>
 
-                    <div className="flex gap-4">
-                      <div className="flex-shrink-0">
-                        <div className="h-10 w-10 rounded-full bg-muted overflow-hidden">
-                          <img src="https://avatars.githubusercontent.com/u/7654321" alt="User avatar" className="h-full w-full object-cover" />
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium text-foreground">Alex Rivera</span>
-                          <span className="text-sm text-muted-foreground">hace 1 día</span>
-                        </div>
-                        <p className="text-muted-foreground">¡Gran trabajo en esto! Estoy curioso por el stack tecnológico que usaste. ¿Alguna idea de hacerlo de código abierto?</p>
-                      </div>
-                    </div>
-                  </div>
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Funcionalidades</CardTitle>
+                  <CardDescription>Funcionalidades principales del producto</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  ### Añadir Funcionalidades aquí ###
+                </CardContent>
+              </Card>
 
-                  {/* Sign in to comment prompt */}
-                  <div className="border rounded-lg p-12">
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Monetización</CardTitle>
+                  <CardDescription>Cómo monetiza el producto</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  ### Añadir Monetización aquí ###
+                </CardContent>
+              </Card>
+
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Roadmap</CardTitle>
+                  <CardDescription>Que plan hay para el producto</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  ### Añadir Roadmap aquí ###
+                </CardContent>
+              </Card>
+
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Tecnología</CardTitle>
+                  <CardDescription>Herramientas usadas en el producto</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  ### Añadir Tecnología aquí ###
+                </CardContent>
+              </Card>
+
+              {/* Comments section */}
+              <hr className="border-t" />
+              <Card className={styles.card}>
+                <CardHeader className={styles.cardHeader}>
+                  <CardTitle className={styles.cardTitle}>Comentarios ({app.commentsCount})</CardTitle>
+                  <CardDescription>Opiniones de los miembros de la comunidad</CardDescription>
+                </CardHeader>
+                <CardContent className={styles.cardContent}>
+                  {/* Go to Discord to comment */}
+                  <div className="bg-border rounded-xl p-12">
                     <div className="text-center">
-                      <MessageCircle size={48} className="stroke-[1.5px] text-muted-foreground mx-auto mb-3" />
-                      <h3 className="text-muted-foreground text-xl font-medium mb-1">Únete a la conversación</h3>
-                      <p className="text-muted-foreground font-medium text-sm mb-6">Inicia sesión para dejar un comentario</p>
+                      <MessageCircle size={48} className="stroke-[1.5px] text-foreground mx-auto mb-3" />
+                      <h3 className="text-foreground text-xl font-medium mb-1">Únete a la conversación</h3>
+                      <p className="text-foreground/60 font-medium text-sm mb-6">Entra en Discord para dejar un comentario</p>
                       <Button
-                        variant="secondary"
+                        variant="default"
                         asChild
                       >
                         <Link href="/login" className="flex items-center gap-2">
-                          <LogIn size={20} />
-                          Inicia sesión
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                            <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z" />
+                          </svg>
+                          Accede a Discord
                         </Link>
                       </Button>
                     </div>
                   </div>
-                </section>
-              </div>
+                </CardContent>
+              </Card>
 
-              {/* Right column */}
-              <div>
-                {/* App makers */}
-                <section className="mb-6 bg-background rounded-lg border overflow-hidden">
-                  <div className="px-6 py-4 border-b">
-                    <h3 className="font-semibold text-foreground">Conoce a los makers</h3>
-                  </div>
-                  <div className="divide-y divide-border">
-                    {app.makers?.map((maker, index) => (
-                      <div key={index} className="p-6">
-                        <div className="flex items-start gap-4">
-                          <Avatar className="size-12 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
-                            <AvatarImage src={maker.avatar} />
-                            <AvatarFallback className="text-xl bg-muted-foreground text-background">{maker.name?.charAt(0)}</AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <h4 className="font-medium text-foreground">{maker.name}</h4>
-                                <p className="text-sm text-muted-foreground">{maker.role}</p>
-                              </div>
-                              <div className="flex items-center gap-2">
-                                {maker.twitter && (
-                                  <a
-                                    href={`https://twitter.com/${maker.twitter}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-muted-foreground hover:text-brand-blue transition-colors"
-                                  >
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                                    </svg>
-                                  </a>
-                                )}
-                                {maker.github && (
-                                  <a
-                                    href={`https://github.com/${maker.github}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-muted-foreground hover:text-brand-blue transition-colors"
-                                  >
-                                    <Github className="w-5 h-5" />
-                                  </a>
-                                )}
-                                {maker.website && (
-                                  <a
-                                    href={maker.website}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-muted-foreground hover:text-brand-blue transition-colors"
-                                  >
-                                    <Globe className="w-5 h-5" />
-                                  </a>
-                                )}
-                              </div>
-                            </div>
-                            {maker.bio && (
-                              <p className="mt-2 text-sm text-muted-foreground">{maker.bio}</p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </section>
 
-                {/* Featured Badge */}
-                <section className="mb-6 bg-background rounded-lg border overflow-hidden">
-                  <div className="px-6 py-4 border-b">
-                    <h3 className="font-semibold text-foreground">Badge Destacado</h3>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex justify-center">
-                      <FeaturedBadge />
-                    </div>
-                  </div>
-                </section>
-
-                {/* Release Information */}
-                <section className="mb-6 bg-background rounded-lg border overflow-hidden">
-                  <div className="px-6 py-4 border-b">
-                    <h3 className="font-semibold text-foreground">Información de lanzamiento</h3>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-4">
-                      <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-brand-blue/10">
-                        <Calendar className="h-5 w-5 text-brand-blue" />
-                      </div>
-                      <div>
-                        <p className="text-sm text-muted-foreground">Lanzamiento inicial</p>
-                        <p className="text-base font-medium text-foreground">
-                          {new Date(app.launchDate).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                          })}
-                        </p>
+              {/* <section className="border-t pt-8" id="comments">
+                <h2 className="text-xl font-semibold text-foreground mb-6">Comentarios ({app.commentsCount})</h2>
+                <div className="space-y-6 mb-8">
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="h-10 w-10 rounded-full bg-muted overflow-hidden">
+                        <img src="https://avatars.githubusercontent.com/u/1234567" alt="User avatar" className="h-full w-full object-cover" />
                       </div>
                     </div>
-                  </div>
-                </section>
-
-                {/* Metrics */}
-                {app.metrics && (
-                  <section className="mb-6 bg-background rounded-lg border overflow-hidden">
-                    <div className="px-6 py-4 border-b">
-                      <h3 className="font-semibold text-foreground">Métricas</h3>
-                    </div>
-                    <div className="flex flex-col p-6 gap-6">
-                      {/* Launch date */}
-                      <div className="flex items-center gap-4">
-                        <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-brand-blue/10">
-                          <Calendar className="h-5 w-5 text-brand-blue" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">Fecha de lanzamiento</p>
-                          <p className="text-base font-medium text-foreground">
-                            {new Date(app.launchDate).toLocaleDateString('en-US', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric'
-                            })}
-                          </p>
-                        </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium text-foreground">Sarah Chen</span>
+                        <span className="text-sm text-muted-foreground">hace 2 días</span>
                       </div>
-
-                      {/* Downloads */}
-                      {app.metrics.downloads && (
-                        <div className="flex items-center gap-4">
-                          <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-brand-blue/10">
-                            <ArrowLeft className="h-5 w-5 text-brand-blue" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-muted-foreground">Descargas</p>
-                            <p className="text-base font-medium text-foreground">
-                              {app.metrics.downloads.toLocaleString()}
-                            </p>
-                          </div>
-                        </div>
-
-                      )}
-
-                      {/* Active Users */}
-                      {app.metrics.activeUsers && (
-                        <div className="flex items-center gap-4">
-                          <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-brand-blue/10">
-                            <MessageCircle className="h-5 w-5 text-brand-blue" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-muted-foreground">Usuarios activos</p>
-                            <p className="text-base font-medium text-foreground">
-                              {app.metrics.activeUsers.toLocaleString()}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Average Rating */}
-                      {app.metrics.avgRating && (
-                        <div className="flex items-center gap-4">
-                          <div className="h-10 w-10 flex items-center justify-center rounded-lg bg-brand-blue/10">
-                            <ThumbsUp className="h-5 w-5 text-brand-blue" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-muted-foreground">Puntuación promedio</p>
-                            <p className="text-base font-medium text-foreground">
-                              {app.metrics.avgRating}
-                            </p>
-                          </div>
-                        </div>
-                      )}
+                      <p className="text-muted-foreground">¡Este es exactamente lo que estaba buscando! El diseño es tan limpio y fácil de usar. ¿Has considerado agregar atajos de teclado para usuarios avanzados?</p>
                     </div>
-                  </section>
-                )}
-              </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="h-10 w-10 rounded-full bg-muted overflow-hidden">
+                        <img src="https://avatars.githubusercontent.com/u/7654321" alt="User avatar" className="h-full w-full object-cover" />
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium text-foreground">Alex Rivera</span>
+                        <span className="text-sm text-muted-foreground">hace 1 día</span>
+                      </div>
+                      <p className="text-muted-foreground">¡Gran trabajo en esto! Estoy curioso por el stack tecnológico que usaste. ¿Alguna idea de hacerlo de código abierto?</p>
+                    </div>
+                  </div>
+                </div>
+              </section> */}
+
             </div>
+
           </LayoutContainer>
         </LayoutSection>
 

@@ -1,26 +1,25 @@
 'use client'
 
 import { FC } from 'react'
-import Link from 'next/link'
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from '@/components/ui/badge'
 import { LinkSocial } from '@/components/LinkSocial'
-import { BadgeCheck, Dribbble, Github, Globe, Linkedin, Tag, Twitter } from 'lucide-react'
+import { Github, Globe, Linkedin, Tag, Twitter } from 'lucide-react'
 import { User } from '@prisma/client'
+import Link from 'next/link'
 
 interface MakerCardProps {
   maker: User
 }
 
 export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
-  const { name, role, image, bio, twitter, github, linkedin, website } = maker
+  const { id, name, role, image, bio, twitter, github, linkedin, website } = maker
 
   // Helper function to handle social URLs
   const getSocialUrl = (type: 'linkedin' | 'twitter' | 'github', value?: string | null): string => {
     if (!value) return '#'
-    
+
     // If it's already a URL, return it as is
     if (value.startsWith('http://') || value.startsWith('https://')) {
       return value
@@ -43,77 +42,58 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
   }
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="space-y-4">
-        <div className="flex items-start gap-4">
-          <Avatar className="size-12 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
+    <Card>
+      <CardHeader className="gap-0 p-6">
+        <div className="flex flex-col md:flex-row items-start gap-4 relative">
+          <Avatar className="size-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
             <AvatarImage src={image || undefined} />
             <AvatarFallback className="text-xl bg-muted-foreground text-background">{name?.charAt(0)}</AvatarFallback>
           </Avatar>
-          <div className="space-y-1.5">
-            <CardTitle className="text-base">
-              {name}
+          <div className="flex flex-col flex-1 gap-1">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Link href={`/maker/${id}`}>
+                {name}
+              </Link>
             </CardTitle>
-            {bio && (
-              <CardDescription className="pb-2">
-                {bio}
-              </CardDescription>
-            )}
+            <CardDescription className="line-clamp-1">
+              {bio ? bio : '...'}
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
-      <CardFooter className="flex items-center justify-between border-t py-4">
-        <Badge variant="secondary" className="font-normal">
-          {role}
-        </Badge>
-        <div className="flex flex-wrap gap-2">
-          {twitter && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <LinkSocial
-                  href={getSocialUrl('twitter', twitter)}
-                  icon={<Twitter size={16} />}
-                  name="Twitter"
-                />
-              </TooltipTrigger>
-              <TooltipContent>Twitter</TooltipContent>
-            </Tooltip>
-          )}
-          {github && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <LinkSocial
-                  href={getSocialUrl('github', github)}
-                  icon={<Github size={16} />}
-                  name="GitHub"
-                />
-              </TooltipTrigger>
-              <TooltipContent>GitHub</TooltipContent>
-            </Tooltip>
+      <CardFooter className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-6 border-t py-4 px-6">
+        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground cursor-default">
+          <Tag size={16} />
+          <span>{role ? role : '?'}</span>
+        </div>
+        <div className="hidden md:flex items-center gap-6">
+          {website && (
+            <LinkSocial
+              href={website}
+              icon={<Globe size={16} />}
+              name="Website"
+            />
           )}
           {linkedin && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <LinkSocial
-                  href={getSocialUrl('linkedin', linkedin)}
-                  icon={<Linkedin size={16} />}
-                  name="LinkedIn"
-                />
-              </TooltipTrigger>
-              <TooltipContent>LinkedIn</TooltipContent>
-            </Tooltip>
+            <LinkSocial
+              href={getSocialUrl('linkedin', linkedin)}
+              icon={<Linkedin size={16} />}
+              name="LinkedIn"
+            />
           )}
-          {website && (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <LinkSocial
-                  href={website}
-                  icon={<Globe size={16} />}
-                  name="Website"
-                />
-              </TooltipTrigger>
-              <TooltipContent>Website</TooltipContent>
-            </Tooltip>
+          {twitter && (
+            <LinkSocial
+              href={getSocialUrl('twitter', twitter)}
+              icon={<Twitter size={16} />}
+              name="Twitter"
+            />
+          )}
+          {github && (
+            <LinkSocial
+              href={getSocialUrl('github', github)}
+              icon={<Github size={16} />}
+              name="GitHub"
+            />
           )}
         </div>
       </CardFooter>

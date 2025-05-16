@@ -42,7 +42,7 @@ export default function Products() {
               />
             </div>
             {/* Add product button */}
-            <Button asChild variant="default" className="gap-2">
+            <Button asChild variant="default" className="gap-2 hidden sm:flex">
               <Link href="/products/new">
                 <Plus size={16} />
                 Añadir producto

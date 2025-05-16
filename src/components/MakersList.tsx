@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useState, useEffect } from 'react'
-import { MakerCard } from './MakerCard'
+import { MakerCard } from '@/components/MakerCard'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -14,6 +14,9 @@ import {
 } from '@/components/ui/pagination'
 import { Role, User } from '@prisma/client'
 import { getUsers, getUsersByRole } from '@/app/makers/actions'
+import { LoadState } from '@/components/LoadState'
+import { EmptyState } from '@/components/EmptyState'
+import { ServerCrash, WandSparkles } from 'lucide-react'
 
 const MAKERS_PER_PAGE = 12
 
@@ -56,8 +59,8 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
     const searchTerm = searchQuery.toLowerCase()
     return searchQuery === '' ? true
       : (maker.name?.toLowerCase().includes(searchTerm) ||
-         maker.role?.toLowerCase().includes(searchTerm) ||
-         maker.bio?.toLowerCase().includes(searchTerm))
+        maker.role?.toLowerCase().includes(searchTerm) ||
+        maker.bio?.toLowerCase().includes(searchTerm))
   })
 
   // Reset to first page when search query or category changes
@@ -80,18 +83,13 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   }))
 
   if (loading) {
-    return (
-      <div className="w-full text-center py-12">
-        <p className="text-muted-foreground">Loading makers...</p>
-      </div>
-    )
+    return <LoadState message="Cargando makers..." />
   }
 
   if (error) {
     return (
-      <div className="w-full text-center py-12">
-        <p className="text-destructive">{error}</p>
-        <Button 
+      <EmptyState icon={<ServerCrash className="size-20 stroke-1" />} message={error}>
+        <Button
           variant="secondary"
           onClick={() => {
             setSelectedCategory('All')
@@ -100,7 +98,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
         >
           Try again
         </Button>
-      </div>
+      </EmptyState>
     )
   }
 
@@ -131,16 +129,15 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
 
       {/* Show message if no makers found */}
       {paginatedMakers.length === 0 && (
-        <div className="text-center py-12 bg-background rounded-lg">
-          <p className="text-muted-foreground">No makers found for the current filters.</p>
+        <EmptyState icon={<WandSparkles className="size-20 stroke-1" />} message="No hay makers que coincidan con tu búsqueda.">
           <Button variant="secondary"
             onClick={() => {
               setSelectedCategory('All')
             }}
           >
-            Reset filters
+            Ver todos los makers
           </Button>
-        </div>
+        </EmptyState>
       )}
 
       {/* Pagination */}

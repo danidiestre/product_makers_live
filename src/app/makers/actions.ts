@@ -22,7 +22,7 @@ export async function getUsersByRole(role: Role | 'All') {
     if (role === 'All') {
       return getUsers()
     }
-    
+
     const users = await prisma.user.findMany({
       where: {
         role
@@ -36,4 +36,21 @@ export async function getUsersByRole(role: Role | 'All') {
     console.error('Failed to fetch users by role:', error)
     return { success: false, error: 'Failed to fetch users by role' }
   }
-} 
+}
+
+export async function getMakerById(id: string) {
+  try {
+    const maker = await prisma.user.findUnique({
+      where: { id }
+    })
+
+    if (!maker) {
+      return { success: false, error: 'Maker not found' }
+    }
+
+    return { success: true, data: maker }
+  } catch (error) {
+    console.error('Error fetching maker:', error)
+    return { success: false, error: 'Failed to fetch maker' }
+  }
+}
