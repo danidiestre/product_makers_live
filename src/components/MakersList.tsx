@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useState, useEffect } from 'react'
-import { MakerCard } from './MakerCard'
+import { MakerCard } from '@/components/MakerCard'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -12,8 +12,11 @@ import {
   PaginationNext,
   PaginationLink,
 } from '@/components/ui/pagination'
-import { getAllMakers } from '@/lib/data'
-import { Maker } from '@/lib/types'
+import { Role, User } from '@prisma/client'
+import { getUsers, getUsersByRole } from '@/app/makers/actions'
+import { LoadState } from '@/components/LoadState'
+import { EmptyState } from '@/components/EmptyState'
+import { ServerCrash, WandSparkles } from 'lucide-react'
 
 const MAKERS_PER_PAGE = 12
 
@@ -23,21 +26,41 @@ type MakersListProps = {
 
 export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   const [currentPage, setCurrentPage] = useState(1)
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [makers] = useState<Maker[]>(getAllMakers())
+  const [selectedCategory, setSelectedCategory] = useState<Role | 'All'>('All')
+  const [makers, setMakers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Filter makers based on category and search query
+  // Fetch makers based on selected category
+  useEffect(() => {
+    const fetchMakers = async () => {
+      setLoading(true)
+      try {
+        const result = await getUsersByRole(selectedCategory)
+        if (result.success) {
+          setMakers(result.data || [])
+          setError(null)
+        } else {
+          setError(result.error || 'Failed to fetch makers')
+          setMakers([])
+        }
+      } catch (err) {
+        setError('Failed to fetch makers')
+        setMakers([])
+      }
+      setLoading(false)
+    }
+
+    fetchMakers()
+  }, [selectedCategory])
+
+  // Filter makers based on search query
   const filteredMakers = makers.filter(maker => {
-    const matchesCategory = selectedCategory === 'All' || maker.category === selectedCategory
-
     const searchTerm = searchQuery.toLowerCase()
-    const matchesSearch = searchQuery === '' ? true
-      : maker.name.toLowerCase().includes(searchTerm) ||
-      maker.role.toLowerCase().includes(searchTerm) ||
-      maker.bio.toLowerCase().includes(searchTerm) ||
-      maker.category.toLowerCase().includes(searchTerm)
-
-    return matchesCategory && matchesSearch
+    return searchQuery === '' ? true
+      : (maker.name?.toLowerCase().includes(searchTerm) ||
+        maker.role?.toLowerCase().includes(searchTerm) ||
+        maker.bio?.toLowerCase().includes(searchTerm))
   })
 
   // Reset to first page when search query or category changes
@@ -51,13 +74,33 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   const paginatedMakers = filteredMakers.slice(startIndex, startIndex + MAKERS_PER_PAGE)
 
   // Calculate category counts
-  const categories = ['All', 'Developer', 'Designer', 'Product Manager', 'Marketing', 'Other']
+  const categories: (Role | 'All')[] = ['All', 'Developer', 'Designer', 'ProductManager', 'Marketer', 'Founder', 'Other']
   const categoryCounts = categories.map(category => ({
     name: category,
     count: category === 'All'
       ? makers.length
-      : makers.filter(maker => maker.category === category).length
+      : makers.filter(maker => maker.role === category).length
   }))
+
+  if (loading) {
+    return <LoadState message="Cargando makers..." />
+  }
+
+  if (error) {
+    return (
+      <EmptyState icon={<ServerCrash className="size-20 stroke-1" />} message={error}>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            setSelectedCategory('All')
+          }}
+          className="mt-4"
+        >
+          Try again
+        </Button>
+      </EmptyState>
+    )
+  }
 
   return (
     <div className="w-full grid gap-6">
@@ -71,7 +114,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
               onClick={() => setSelectedCategory(name)}
               className="flex items-center gap-2 pr-2 rounded-lg"
             >
-              {name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="w-8">{count}</Badge>
+              {name === 'ProductManager' ? 'Product Manager' : name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="w-8">{count}</Badge>
             </Button>
           ))}
         </div>
@@ -86,16 +129,15 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
 
       {/* Show message if no makers found */}
       {paginatedMakers.length === 0 && (
-        <div className="text-center py-12 bg-background rounded-lg">
-          <p className="text-muted-foreground">No makers found for the current filters.</p>
+        <EmptyState icon={<WandSparkles className="size-20 stroke-1" />} message="No hay makers que coincidan con tu búsqueda.">
           <Button variant="secondary"
             onClick={() => {
               setSelectedCategory('All')
             }}
           >
-            Reset filters
+            Ver todos los makers
           </Button>
-        </div>
+        </EmptyState>
       )}
 
       {/* Pagination */}

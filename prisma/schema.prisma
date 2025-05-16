@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./node_modules/.prisma/client"
 }
 
 datasource db {
@@ -60,6 +61,7 @@ model User {
   website       String?   // Personal website URL
   accounts      Account[]
   sessions      Session[]
+  products      Product[] // Relación con los productos creados por el usuario
 }
 
 model VerificationToken {
@@ -68,4 +70,18 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Product {
+  id             String   @id @default(cuid())
+  problema       String
+  solucion       String
+  funcionalidades String
+  monetizacion   String
+  roadmap        String
+  tecnologia     String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
 }

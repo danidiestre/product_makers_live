@@ -3,11 +3,10 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppCard } from '@/components/AppCard'
-import { Loader, SlidersHorizontal, Telescope } from 'lucide-react'
+import { Telescope } from 'lucide-react'
 import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
 import {
   Pagination,
@@ -17,9 +16,9 @@ import {
   PaginationNext,
   PaginationLink,
 } from '@/components/ui/pagination'
+import { LoadState } from '@/components/LoadState'
 
 type SortKey = 'votes' | 'name'
-type ViewMode = 'daily' | 'weekly' | 'all time'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
 
 const PRODUCTS_PER_PAGE = 8
@@ -32,7 +31,6 @@ interface AppListProps {
 export function AppList({ searchQuery, limit }: AppListProps) {
   const [sortKey, setSortKey] = useState<SortKey>('votes')
   const [sortAsc, setSortAsc] = useState(false)
-  const [viewMode, setViewMode] = useState<ViewMode>('daily')
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [apps, setApps] = useState<App[]>([])
@@ -97,9 +95,7 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   const displayApps = limit ? sortedApps.slice(0, limit) : paginatedApps;
 
   if (isLoading) {
-    return <div className="w-full flex items-center justify-center">
-      <Loader className="size-10 text-muted-foreground animate-spin" />
-    </div>
+    return <LoadState message="Cargando productos..." />
   }
 
   return (
@@ -123,22 +119,6 @@ export function AppList({ searchQuery, limit }: AppListProps) {
               </Button>
             ))}
           </div>
-
-          {/* Sort Dropdown */}
-          <Select value={viewMode} onValueChange={(value: ViewMode) => {
-            setViewMode(value)
-            setCurrentPage(1) // Reset to first page when sort changes
-          }}>
-            <SelectTrigger className="w-auto gap-2">
-              <SlidersHorizontal size={16} />
-              <SelectValue placeholder="Most Popular" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="daily">Most Popular Today</SelectItem>
-              <SelectItem value="weekly">Most Popular This Week</SelectItem>
-              <SelectItem value="all time">Most Popular All Time</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
       )}
 
