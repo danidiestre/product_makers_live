@@ -17,4 +17,10 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: '🚀 Nuevo código en main!\n\n\n📝 Commit: ${{ github.event.head_commit.message }}\n\n👩‍💻 Autor: ${{ github.event.head_commit.author.name }}\n\n🔗 Ver cambios: ${{ github.event.head_commit.url }}\n\n\n⏳ El deploy en Vercel comenzará automáticamente...\n\n---\n\n🌟 ¡Pronto estará disponible en producción!' 
+          args: '🚀 Nuevo commit pusheado a main!
+          
+          📝 Commit: ${{ github.event.head_commit.message }}
+          👩‍💻 Autor: ${{ github.event.head_commit.author.name }}
+          🔗 Ver cambios: ${{ github.event.head_commit.url }}
+          ⏳ El deploy en Vercel comenzará automáticamente...🌟
+          ¡Pronto estará disponible en producción!' 
