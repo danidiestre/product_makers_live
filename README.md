@@ -79,4 +79,17 @@ npm start
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Deployment & Notifications
+
+### GitHub Notifications
+Cada vez que alguien hace push a la rama `main`, se enviará una notificación al canal de Discord `#deploys-site` con información sobre el commit.
+
+### Deploy Hooks
+Para iniciar un deploy manualmente, puedes hacer una petición POST a:
+```bash
+curl -X POST https://api.vercel.com/v1/integrations/deploy/prj_M9hHlo0DXn7JdodKhAZoWrUy9B94/yFjoq75xI3
+```
+
+También puedes visitar la URL en el navegador para iniciar un deploy. 
