@@ -32,12 +32,13 @@ import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Badge } from '@/components/ui/badge'
 
 const AppProfilePage: FC = () => {
-  const { id } = useParams<{ id: string }>()
+  const params = useParams()
+  const id = params?.id as string
   const [hasUpvoted, setHasUpvoted] = useState(false)
   const [headerFixed, setHeaderFixed] = useState(false)
 
   // Find the app from data service
-  const app = getAppById(id as string)
+  const app = getAppById(id)
 
   useEffect(() => {
     const handleScroll = () => {
