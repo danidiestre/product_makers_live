@@ -1,25 +1,41 @@
-name: Discord Push Notification
+name: Discord Push & Deploy Notification
 
 on:
   push:
     branches:
       - main
+  deployment_status:
 
 jobs:
-  notify-discord:
+  notify-push:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Discord Notification
+      - name: Discord Push Notification
         uses: Ilshidur/action-discord@master
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          args: '🚀 Nuevo commit pusheado a main!
-          
-          📝 **Commit:** ${{ github.event.head_commit.message }}
-          👩‍💻 **Autor:** ${{ github.event.head_commit.author.name }}
-          🔗 **Ver cambios:** ${{ github.event.head_commit.url }}
-          ⏳ El deploy en Vercel comenzará automáticamente y pronto estará en Producción...' 
+          args: '🚀 **Nuevo commit pusheado a main!**
+
+           📝 Commit: **${{ github.event.head_commit.message }}**
+           👩‍💻 Autor: **${{ github.event.head_commit.author.name }}**
+           🔗 Ver cambios: ${{ github.event.head_commit.url }}
+           ⏳ El deploy en Vercel comenzará automáticamente...'
+
+  notify-deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'deployment_status'
+    steps:
+      - name: Discord Deploy Notification
+        uses: Ilshidur/action-discord@master
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        with:
+          args: |
+            ${{ github.event.deployment_status.state == 'success' 
+              && '🎉 **¡Deploy completado con éxito!**\n\n🌐 URL: ' + github.event.deployment_status.environment_url + '\n⏱️ Ambiente: ' + github.event.deployment_status.environment
+              || '❌ **El deploy ha fallado**\n\n🔍 Estado: ' + github.event.deployment_status.description }} 
