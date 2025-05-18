@@ -58,7 +58,7 @@ export default function AboutPage() {
                 <ul className="text-sm font-medium text-muted-foreground text-balance list-none grid grid-cols-1 lg:grid-cols-2 gap-3">
                   <li className="bg-muted rounded-lg p-6 flex flex-col gap-3">
                     <ShieldCheck size={48} strokeWidth={1} />
-                    Imaginamos un mundo donde cualquier persona con una gran idea de producto tenga los recursos, el apoyo y la plataforma necesarios para hacerla realidad.
+                    Imaginamos un mundo donde cualquier persona apasionada por crear productos digitales tenga los recursos, el apoyo y la plataforma necesarios para convertir sus ideas en realidad.
                   </li>
                   <li className="bg-muted rounded-lg p-6 flex flex-col gap-3">
                     <ShieldPlus size={48} strokeWidth={1} />
