@@ -10,6 +10,21 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: [],
   },
-}
+  // Configuración para imágenes
+  images: {
+    domains: [
+      // Dominio de Vercel Blob
+      "public.blob.vercel-storage.com",
+    ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+};
 
-module.exports = nextConfig 
+module.exports = nextConfig;

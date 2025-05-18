@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./node_modules/.prisma/client"
 }
 
 datasource db {
@@ -74,6 +73,12 @@ model VerificationToken {
 
 model Product {
   id             String   @id @default(cuid())
+  name           String
+  tagline        String
+  description    String
+  link           String
+  iconUrl        String
+  screenshotUrls String[]
   problema       String
   solucion       String
   funcionalidades String
