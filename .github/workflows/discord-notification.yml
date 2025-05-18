@@ -21,7 +21,7 @@ jobs:
             
             📝 Commit: ${{ github.event.head_commit.message }}
             👩‍💻 Autor: ${{ github.event.head_commit.author.name }}
-            🔗 Ver cambios: ${{ github.event.head_commit.url }}
+            🔗 Ver cambios: <${{ github.event.head_commit.url }}>
             
             ⏳ El deploy en Vercel comenzará automáticamente...
 
@@ -37,5 +37,5 @@ jobs:
           args: |
             ${{ github.event.deployment_status.state == 'success' && '✅ **¡Deploy completado con éxito!**' || '❌ **El deploy ha fallado**' }}
             
-            🌐 Ver en producción: https://productmakers.ai
+            🌐 Ver en producción: <https://productmakers.ai>
             ⏱️ Estado: ${{ github.event.deployment_status.description }} 
