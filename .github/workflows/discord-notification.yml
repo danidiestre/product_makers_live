@@ -37,5 +37,5 @@ jobs:
           args: |
             ${{ github.event.deployment_status.state == 'success' && '✅ **¡Deploy completado con éxito!**' || '❌ **El deploy ha fallado**' }}
             
-            🌐 URL: ${{ github.event.deployment_status.environment_url }}
+            🌐 Ver en producción: https://product-makers-live.vercel.app
             ⏱️ Estado: ${{ github.event.deployment_status.description }} 
