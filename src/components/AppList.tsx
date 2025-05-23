@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppCard } from '@/components/AppCard'
 import { Telescope } from 'lucide-react'
-import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -36,10 +35,26 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   const [apps, setApps] = useState<App[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
+  // Cargar apps desde la API en lugar de usar datos simulados
   useEffect(() => {
-    setApps(getAllApps())
-    setIsLoading(false)
-  }, [])
+    async function fetchApps() {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/products');
+        if (!response.ok) {
+          throw new Error('Error al cargar los productos');
+        }
+        const data = await response.json();
+        setApps(data);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchApps();
+  }, []);
 
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
@@ -68,7 +83,7 @@ export function AppList({ searchQuery, limit }: AppListProps) {
     const modifier = sortAsc ? 1 : -1
     return sortKey === 'votes'
       ? (a.votes - b.votes) * modifier
-      : a.id.localeCompare(b.id) * modifier
+      : a.name.localeCompare(b.name) * modifier
   })
 
   // Calculate pagination
