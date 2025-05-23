@@ -38,25 +38,32 @@ export default function AboutPage() {
 
   const visualAssets = [
     {
-      id: 'banner',
-      title: 'Banner Horizontal',
+      id: 'linkedin',
+      title: 'Banner LinkedIn',
       description: 'Para LinkedIn, Twitter, Facebook',
       dimensions: '1200x630px',
-      src: '/assets/share/banner-horizontal.png'
-    },
-    {
-      id: 'square',
-      title: 'Post Cuadrado',
-      description: 'Para Instagram, redes sociales',
-      dimensions: '1080x1080px',
-      src: '/assets/share/post-square.png'
+      src: '/assets/social_assets/linkedin.png'
     },
     {
       id: 'story',
       title: 'Story Vertical',
       description: 'Para Instagram Stories, TikTok',
       dimensions: '1080x1920px',
-      src: '/assets/share/story-vertical.png'
+      src: '/assets/social_assets/story.png'
+    },
+    {
+      id: 'logo_big',
+      title: 'Logo Grande',
+      description: 'Para posts, presentaciones',
+      dimensions: 'Alta resolución',
+      src: '/assets/social_assets/logo_big.png'
+    },
+    {
+      id: 'logo_blue',
+      title: 'Logo Azul',
+      description: 'Para firmas, avatares',
+      dimensions: 'Versión compacta',
+      src: '/assets/social_assets/logo_blue.png'
     }
   ]
 
@@ -203,14 +210,17 @@ export default function AboutPage() {
                 {/* Assets Visuales */}
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Assets Visuales</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {visualAssets.map((asset) => (
                       <div key={asset.id} className="border rounded-lg p-4 space-y-3">
-                        <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                          <div className="text-center space-y-2">
-                            <Package size={32} className="mx-auto text-muted-foreground" />
-                            <p className="text-xs text-muted-foreground">Preview disponible próximamente</p>
-                          </div>
+                        <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                          <Image
+                            src={asset.src}
+                            alt={asset.title}
+                            width={300}
+                            height={200}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
                         <div className="space-y-2">
                           <h4 className="font-medium">{asset.title}</h4>
