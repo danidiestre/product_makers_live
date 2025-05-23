@@ -16,6 +16,7 @@ import {
   PaginationLink,
 } from '@/components/ui/pagination'
 import { LoadState } from '@/components/LoadState'
+import { getProducts } from '@/app/products/actions'
 
 type SortKey = 'votes' | 'name'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
@@ -35,17 +36,17 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   const [apps, setApps] = useState<App[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  // Cargar apps desde la API en lugar de usar datos simulados
+  // Cargar apps usando server actions en lugar de fetch
   useEffect(() => {
     async function fetchApps() {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/products');
-        if (!response.ok) {
-          throw new Error('Error al cargar los productos');
+        const result = await getProducts();
+        if (result.success && result.data) {
+          setApps(result.data);
+        } else {
+          console.error('Error al cargar los productos:', result.error);
         }
-        const data = await response.json();
-        setApps(data);
       } catch (error) {
         console.error('Error fetching products:', error);
       } finally {
