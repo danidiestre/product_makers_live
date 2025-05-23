@@ -11,9 +11,73 @@ import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { PageHeader } from '@/components/PageHeader'
 import Faqs from '@/components/Faqs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck, Copy, Download, Share, Check } from 'lucide-react'
+import { useState } from 'react'
 
 export default function AboutPage() {
+  const [copiedText, setCopiedText] = useState<string | null>(null)
+
+  const shareTexts = [
+    {
+      id: 'short',
+      title: 'Para Twitter/X',
+      text: '🚀 Acabo de unirme a Product Makers, la comunidad de makers independientes que están construyendo el futuro digital. ¡Únete y muestra tus productos! 💪 #ProductMakers #Makers'
+    },
+    {
+      id: 'medium',
+      title: 'Para LinkedIn',
+      text: '¿Eres maker independiente, diseñador o emprendedor? Product Makers es la comunidad perfecta para ti. Aquí puedes mostrar tus productos, compartir conocimiento y conectar con otros makers que, como tú, están construyendo productos digitales innovadores. ¡Únete a nosotros!'
+    },
+    {
+      id: 'long',
+      title: 'Para Blog/Newsletter',
+      text: 'He descubierto Product Makers, una comunidad increíble donde makers independientes, diseñadores y emprendedores se reúnen para mostrar sus productos digitales y apoyarse mutuamente. Es el lugar perfecto para encontrar inspiración, compartir tu trabajo y conectar con personas que comparten tu pasión por crear. Si estás construyendo algo, definitivamente deberías echarle un vistazo.'
+    }
+  ]
+
+  const visualAssets = [
+    {
+      id: 'banner',
+      title: 'Banner Horizontal',
+      description: 'Para LinkedIn, Twitter, Facebook',
+      dimensions: '1200x630px',
+      src: '/assets/share/banner-horizontal.png'
+    },
+    {
+      id: 'square',
+      title: 'Post Cuadrado',
+      description: 'Para Instagram, redes sociales',
+      dimensions: '1080x1080px',
+      src: '/assets/share/post-square.png'
+    },
+    {
+      id: 'story',
+      title: 'Story Vertical',
+      description: 'Para Instagram Stories, TikTok',
+      dimensions: '1080x1920px',
+      src: '/assets/share/story-vertical.png'
+    }
+  ]
+
+  const copyToClipboard = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopiedText(id)
+      setTimeout(() => setCopiedText(null), 2000)
+    } catch (err) {
+      console.error('Error copying to clipboard:', err)
+    }
+  }
+
+  const downloadAsset = (src: string, filename: string) => {
+    const link = document.createElement('a')
+    link.href = src
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   return (
     <LayoutWrapper>
@@ -93,6 +157,86 @@ export default function AboutPage() {
                     Recursos y herramientas que ayuden a los makers a tener éxito.
                   </li>
                 </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl flex items-center gap-2">
+                  <Share size={24} strokeWidth={1.5} />
+                  Comparte la Comunidad
+                </CardTitle>
+                <CardDescription>
+                  Product Makers crece cuando más makers se unen. Ayúdanos a expandir la comunidad compartiendo estos recursos.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-1 pb-6 space-y-6">
+                
+                {/* Textos para Compartir */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Textos para Compartir</h3>
+                  <div className="grid grid-cols-1 gap-4">
+                    {shareTexts.map((item) => (
+                      <div key={item.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-medium">{item.title}</h4>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => copyToClipboard(item.text, item.id)}
+                            className="flex items-center gap-2"
+                          >
+                            {copiedText === item.id ? (
+                              <>
+                                <Check size={16} />
+                                Copiado
+                              </>
+                            ) : (
+                              <>
+                                <Copy size={16} />
+                                Copiar
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                        <p className="text-sm text-muted-foreground bg-muted rounded p-3">
+                          {item.text}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Assets Visuales */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Assets Visuales</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {visualAssets.map((asset) => (
+                      <div key={asset.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
+                          <div className="text-center space-y-2">
+                            <Package size={32} className="mx-auto text-muted-foreground" />
+                            <p className="text-xs text-muted-foreground">Preview disponible próximamente</p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          <h4 className="font-medium">{asset.title}</h4>
+                          <p className="text-xs text-muted-foreground">{asset.description}</p>
+                          <p className="text-xs font-mono text-muted-foreground">{asset.dimensions}</p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => downloadAsset(asset.src, `product-makers-${asset.id}.png`)}
+                            className="w-full flex items-center gap-2"
+                          >
+                            <Download size={16} />
+                            Descargar
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
               </CardContent>
             </Card>
             <Card>
