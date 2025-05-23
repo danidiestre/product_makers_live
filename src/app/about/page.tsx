@@ -18,6 +18,7 @@ import { useState } from 'react'
 export default function AboutPage() {
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const [currentMakerImage, setCurrentMakerImage] = useState(0)
+  const [hoveredAsset, setHoveredAsset] = useState<string | null>(null)
 
   const makerImages = [
     {
@@ -277,14 +278,19 @@ export default function AboutPage() {
                   <h3 className="text-lg font-semibold">Assets Visuales</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {visualAssets.map((asset) => (
-                      <div key={asset.id} className="border rounded-lg p-4 space-y-3">
-                        <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+                      <div 
+                        key={asset.id} 
+                        className="border rounded-lg p-4 space-y-3 relative"
+                        onMouseEnter={() => setHoveredAsset(asset.id)}
+                        onMouseLeave={() => setHoveredAsset(null)}
+                      >
+                        <div className="aspect-video bg-muted rounded-lg overflow-hidden cursor-pointer">
                           <Image
                             src={asset.src}
                             alt={asset.title}
                             width={300}
                             height={200}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover transition-transform hover:scale-105"
                           />
                         </div>
                         <div className="space-y-2">
@@ -305,6 +311,34 @@ export default function AboutPage() {
                     ))}
                   </div>
                 </div>
+
+                {/* Floating Preview Overlay */}
+                {hoveredAsset && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+                    <div className="relative max-w-2xl max-h-[80vh] p-4">
+                      <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
+                        <div className="p-4 border-b">
+                          <h4 className="font-medium">
+                            {visualAssets.find(asset => asset.id === hoveredAsset)?.title}
+                          </h4>
+                          <p className="text-sm text-muted-foreground">
+                            {visualAssets.find(asset => asset.id === hoveredAsset)?.description}
+                          </p>
+                        </div>
+                        <div className="p-4">
+                          <Image
+                            src={visualAssets.find(asset => asset.id === hoveredAsset)?.src || ''}
+                            alt={visualAssets.find(asset => asset.id === hoveredAsset)?.title || ''}
+                            width={600}
+                            height={400}
+                            className="w-full h-auto rounded-lg"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
               </CardContent>
             </Card>
