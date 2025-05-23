@@ -27,6 +27,14 @@ export default function AboutPage() {
     {
       src: '/assets/maker2.png',
       alt: 'Product Maker Illustration 2'
+    },
+    {
+      src: '/assets/maker3.png',
+      alt: 'Product Maker Illustration 3'
+    },
+    {
+      src: '/assets/maker4.png',
+      alt: 'Product Maker Illustration 4'
     }
   ]
 
