@@ -9,8 +9,13 @@ import { AppList } from '@/components/AppList'
 import { PageHeader } from '@/components/PageHeader'
 import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
+import { App } from '@/lib/types'
 
-export function ProductsPageContent() {
+interface ProductsPageContentProps {
+  initialProducts: App[]
+}
+
+export function ProductsPageContent({ initialProducts }: ProductsPageContentProps) {
   const [searchQuery, setSearchQuery] = useState('')
 
   return (
@@ -41,7 +46,7 @@ export function ProductsPageContent() {
       {/* Product List */}
       <LayoutSection>
         <LayoutContainer>
-          <AppList searchQuery={searchQuery} />
+          <AppList searchQuery={searchQuery} initialProducts={initialProducts} />
         </LayoutContainer>
       </LayoutSection>
     </>
