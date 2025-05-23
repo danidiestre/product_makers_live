@@ -1,7 +1,7 @@
 'use client'
 
 import { FC, useState, useEffect } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { MessageCircle, Globe, Github, ThumbsUp } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -41,6 +41,7 @@ export const AppCard: FC<AppCardProps> = ({
   onUpvote,
   ranking,
 }) => {
+  const router = useRouter()
   const [votes, setVotes] = useState(initialVotes)
   const [hasVoted, setHasVoted] = useState(false)
 
@@ -56,8 +57,12 @@ export const AppCard: FC<AppCardProps> = ({
     onUpvote?.()
   }
 
+  const handleCardClick = () => {
+    router.push(`/app/${id}`)
+  }
+
   return (
-    <Link href={`/app/${id}`}>
+    <div onClick={handleCardClick}>
       <Card data-testid={`app-card-${id}`}
         className="cursor-pointer hover:bg-muted/50 transition-colors"
       >
@@ -278,6 +283,6 @@ export const AppCard: FC<AppCardProps> = ({
           </div>
         </CardFooter>
       </Card>
-    </Link>
+    </div>
   )
 } 
