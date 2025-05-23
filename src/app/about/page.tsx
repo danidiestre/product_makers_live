@@ -18,7 +18,6 @@ import { useState } from 'react'
 export default function AboutPage() {
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const [currentMakerImage, setCurrentMakerImage] = useState(0)
-  const [hoveredAsset, setHoveredAsset] = useState<string | null>(null)
 
   const makerImages = [
     {
@@ -278,19 +277,14 @@ export default function AboutPage() {
                   <h3 className="text-lg font-semibold">Assets Visuales</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {visualAssets.map((asset) => (
-                      <div 
-                        key={asset.id} 
-                        className="border rounded-lg p-4 space-y-3 relative group"
-                        onMouseEnter={() => setHoveredAsset(asset.id)}
-                        onMouseLeave={() => setHoveredAsset(null)}
-                      >
-                        <div className="aspect-video bg-muted rounded-lg overflow-hidden cursor-pointer">
+                      <div key={asset.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="aspect-video bg-muted rounded-lg overflow-hidden">
                           <Image
                             src={asset.src}
                             alt={asset.title}
                             width={300}
                             height={200}
-                            className="w-full h-full object-cover transition-transform hover:scale-105"
+                            className="w-full h-full object-cover"
                           />
                         </div>
                         <div className="space-y-2">
@@ -307,27 +301,6 @@ export default function AboutPage() {
                             Descargar
                           </Button>
                         </div>
-
-                        {/* Tooltip Preview */}
-                        {hoveredAsset === asset.id && (
-                          <div className="absolute z-10 -top-2 -right-2 translate-x-full">
-                            <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-2 max-w-xs">
-                              <Image
-                                src={asset.src}
-                                alt={asset.title}
-                                width={200}
-                                height={150}
-                                className="w-full h-auto rounded"
-                              />
-                              <div className="mt-2 text-xs">
-                                <p className="font-medium">{asset.title}</p>
-                                <p className="text-muted-foreground">{asset.dimensions}</p>
-                              </div>
-                            </div>
-                            {/* Arrow pointing to the asset */}
-                            <div className="absolute top-4 -left-2 w-4 h-4 bg-white border-l border-b border-gray-200 transform rotate-45"></div>
-                          </div>
-                        )}
                       </div>
                     ))}
                   </div>
