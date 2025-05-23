@@ -4,7 +4,6 @@ import { FC, useState, useEffect } from 'react'
 import { ArrowLeft, Share2, ThumbsUp, MessageCircle, Github, Globe, LogIn, SquareArrowOutUpRight, Car } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { getAppById } from '@/lib/data'
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from '@/components/ui/button'
 import {
@@ -30,15 +29,42 @@ import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Badge } from '@/components/ui/badge'
+import { getProductById } from '@/app/products/actions'
+import { App } from '@/lib/types'
+import { LoadState } from '@/components/LoadState'
 
 const AppProfilePage: FC = () => {
   const params = useParams()
   const id = params?.id as string
   const [hasUpvoted, setHasUpvoted] = useState(false)
   const [headerFixed, setHeaderFixed] = useState(false)
+  const [app, setApp] = useState<App | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // Find the app from data service
-  const app = getAppById(id)
+  useEffect(() => {
+    const fetchProductData = async () => {
+      try {
+        setLoading(true)
+        const result = await getProductById(id)
+        
+        if (!result.success || !result.data) {
+          setError(result.error || 'Failed to load product')
+          setApp(null)
+        } else {
+          setApp(result.data)
+          setError(null)
+        }
+      } catch (err) {
+        setError('An unexpected error occurred')
+        setApp(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProductData()
+  }, [id])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,7 +75,17 @@ const AppProfilePage: FC = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  if (!app) {
+  if (loading) {
+    return (
+      <LayoutSection>
+        <LayoutContainer>
+          <LoadState message="Cargando producto..." />
+        </LayoutContainer>
+      </LayoutSection>
+    )
+  }
+
+  if (error || !app) {
     return (
       <LayoutSection>
         <LayoutContainer>
