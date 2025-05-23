@@ -100,7 +100,7 @@ export default function AboutPage() {
               </CardHeader>
               <CardContent className="pt-1 pb-6 space-y-2">
                 <p className="text-muted-foreground text-balance">
-                  Product Makers es la comunidad donde makers independientes, diseñadores y emprendedores se reúnen para mostrar sus productos, compartir conocimiento y apoyarse mutuamente en el camino de construir productos digitales exitosos.
+                  Product Makers es el punto de encuentro para profesionales de producto —makers independientes, diseñadores, desarrolladores y emprendedores— que quieren llevar sus ideas de principio a fin. Aquí mostramos lo que construimos, compartimos conocimiento y nos apoyamos mutuamente para convertir cada proyecto en un producto digital de éxito.
                 </p>
               </CardContent>
               <Image
