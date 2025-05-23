@@ -179,16 +179,13 @@ export default function AboutPage() {
                 <div className="grid grid-cols-1 gap-4">
                   {shareTexts.map((item) => (
                     <div key={item.id} className="border rounded-lg p-4 space-y-3">
-                      <h4 className="font-medium">{item.title}</h4>
-                      <div className="relative bg-muted rounded p-3">
-                        <p className="text-sm text-muted-foreground pr-20">
-                          {item.text}
-                        </p>
+                      <div className="flex items-start justify-between gap-3">
+                        <h4 className="font-medium">{item.title}</h4>
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={() => copyToClipboard(item.text, item.id)}
-                          className="absolute top-2 right-2 flex items-center gap-2"
+                          className="flex items-center gap-2 shrink-0"
                         >
                           {copiedText === item.id ? (
                             <>
@@ -202,6 +199,11 @@ export default function AboutPage() {
                             </>
                           )}
                         </Button>
+                      </div>
+                      <div className="bg-muted rounded p-3">
+                        <p className="text-sm text-muted-foreground">
+                          {item.text}
+                        </p>
                       </div>
                     </div>
                   ))}
