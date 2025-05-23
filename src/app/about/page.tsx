@@ -133,28 +133,28 @@ export default function AboutPage() {
                 
                 {/* Navigation arrows */}
                 <Button
-                  variant="secondary"
+                  variant="ghost"
                   size="icon"
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all"
                   onClick={() => setCurrentMakerImage(currentMakerImage === 0 ? makerImages.length - 1 : currentMakerImage - 1)}
                 >
-                  <ChevronLeft size={20} />
+                  <ChevronLeft size={20} className="text-white" />
                 </Button>
                 
                 <Button
-                  variant="secondary"
+                  variant="ghost"
                   size="icon"
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all"
                   onClick={() => setCurrentMakerImage(currentMakerImage === makerImages.length - 1 ? 0 : currentMakerImage + 1)}
                 >
-                  <ChevronRight size={20} />
+                  <ChevronRight size={20} className="text-white" />
                 </Button>
 
                 {/* Download button */}
                 <Button
-                  variant="secondary"
+                  variant="ghost"
                   size="sm"
-                  className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2"
+                  className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 text-white flex items-center gap-2"
                   onClick={() => downloadAsset(makerImages[currentMakerImage].src, `maker-illustration-${currentMakerImage + 1}.png`)}
                 >
                   <Download size={16} />
