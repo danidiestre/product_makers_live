@@ -280,7 +280,7 @@ export default function AboutPage() {
                     {visualAssets.map((asset) => (
                       <div 
                         key={asset.id} 
-                        className="border rounded-lg p-4 space-y-3 relative"
+                        className="border rounded-lg p-4 space-y-3 relative group"
                         onMouseEnter={() => setHoveredAsset(asset.id)}
                         onMouseLeave={() => setHoveredAsset(null)}
                       >
@@ -307,38 +307,31 @@ export default function AboutPage() {
                             Descargar
                           </Button>
                         </div>
+
+                        {/* Tooltip Preview */}
+                        {hoveredAsset === asset.id && (
+                          <div className="absolute z-10 -top-2 -right-2 translate-x-full">
+                            <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-2 max-w-xs">
+                              <Image
+                                src={asset.src}
+                                alt={asset.title}
+                                width={200}
+                                height={150}
+                                className="w-full h-auto rounded"
+                              />
+                              <div className="mt-2 text-xs">
+                                <p className="font-medium">{asset.title}</p>
+                                <p className="text-muted-foreground">{asset.dimensions}</p>
+                              </div>
+                            </div>
+                            {/* Arrow pointing to the asset */}
+                            <div className="absolute top-4 -left-2 w-4 h-4 bg-white border-l border-b border-gray-200 transform rotate-45"></div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
                 </div>
-
-                {/* Floating Preview Overlay */}
-                {hoveredAsset && (
-                  <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-                    <div className="relative max-w-2xl max-h-[80vh] p-4">
-                      <div className="bg-white rounded-lg shadow-2xl overflow-hidden">
-                        <div className="p-4 border-b">
-                          <h4 className="font-medium">
-                            {visualAssets.find(asset => asset.id === hoveredAsset)?.title}
-                          </h4>
-                          <p className="text-sm text-muted-foreground">
-                            {visualAssets.find(asset => asset.id === hoveredAsset)?.description}
-                          </p>
-                        </div>
-                        <div className="p-4">
-                          <Image
-                            src={visualAssets.find(asset => asset.id === hoveredAsset)?.src || ''}
-                            alt={visualAssets.find(asset => asset.id === hoveredAsset)?.title || ''}
-                            width={600}
-                            height={400}
-                            className="w-full h-auto rounded-lg"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
               </CardContent>
             </Card>
