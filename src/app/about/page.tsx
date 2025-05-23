@@ -22,7 +22,7 @@ export default function AboutPage() {
     {
       id: 'short',
       title: 'Para Twitter/X',
-      text: '🚀 Acabo de unirme a Product Makers, la comunidad de makers independientes que están construyendo el futuro digital. ¡Únete y muestra tus productos! 💪 #ProductMakers #Makers\n\nÚnete en https://www.productmakers.ai/ y Discord: https://discord.com/invite/PnBJNwDW77'
+      text: 'Únete a #ProductMakers: comunidad en español donde pros de producto de todas las áreas llevamos ideas a lanzamientos reales. ¿Te apuntas? 💡🤝 #Makers\n\nÚnete en https://www.productmakers.ai/ y Discord: https://discord.com/invite/PnBJNwDW77'
     },
     {
       id: 'medium',
