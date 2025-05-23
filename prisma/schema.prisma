@@ -3,18 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-}
-
-// Add Role enum before the User model
-enum Role {
-  Developer
-  Designer
-  ProductManager
-  Marketer
-  Founder
-  Other
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -51,15 +41,15 @@ model User {
   image         String?
   banner        String?
   accentColor   Int?
-  role          Role?     // Add role field
-  bio           String?   // Bio/about text
-  twitter       String?   // Twitter username
-  github        String?   // GitHub username
-  linkedin      String?   // LinkedIn username
-  website       String?   // Personal website URL
+  role          Role?
+  bio           String?
+  twitter       String?
+  github        String?
+  linkedin      String?
+  website       String?
   accounts      Account[]
+  products      Product[]
   sessions      Session[]
-  products      Product[] // Relación con los productos creados por el usuario
 }
 
 model VerificationToken {
@@ -71,21 +61,30 @@ model VerificationToken {
 }
 
 model Product {
-  id             String   @id @default(cuid())
-  name           String
-  tagline        String
-  description    String
-  link           String
-  iconUrl        String
-  screenshotUrls String[]
-  problema       String
-  solucion       String
+  id              String   @id @default(cuid())
+  name            String
+  tagline         String
+  description     String
+  link            String
+  iconUrl         String
+  screenshotUrls  String[]
+  problema        String
+  solucion        String
   funcionalidades String
-  monetizacion   String
-  roadmap        String
-  tecnologia     String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  userId         String
-  user           User     @relation(fields: [userId], references: [id])
+  monetizacion    String
+  roadmap         String
+  tecnologia      String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  userId          String
+  user            User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  Developer
+  Designer
+  ProductManager
+  Marketer
+  Founder
+  Other
 }
