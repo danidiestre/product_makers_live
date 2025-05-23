@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState, useEffect } from 'react'
+import { FC } from 'react'
 import { useRouter } from 'next/navigation'
 import { MessageCircle, Globe, Github, ThumbsUp } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
@@ -11,7 +11,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Button } from '@/components/ui/button'
 import { LinkSocial } from '@/components/LinkSocial'
 import { App, ExternalLinks } from '@/lib/types'
-import { hasVotedToday, toggleVote } from '@/lib/utils'
+import { useVotes } from '@/hooks/useVotes'
 
 // Extended App Card Props to include the additional fields from App profile
 interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
@@ -22,8 +22,8 @@ interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
     avatar: string
     joinedDate: string
   }>
-  onUpvote?: () => void
   ranking?: number
+  initialHasVoted?: boolean // New prop for server-side vote status
 }
 
 export const AppCard: FC<AppCardProps> = ({
@@ -38,23 +38,19 @@ export const AppCard: FC<AppCardProps> = ({
   commentsCount = 0,
   externalLinks,
   makers = [],
-  onUpvote,
   ranking,
+  initialHasVoted = false,
 }) => {
   const router = useRouter()
-  const [votes, setVotes] = useState(initialVotes)
-  const [hasVoted, setHasVoted] = useState(false)
+  const { votes, hasVoted, isLoading, toggleVote, error } = useVotes({
+    productId: id,
+    initialVotes,
+    initialHasVoted
+  })
 
-  useEffect(() => {
-    setHasVoted(hasVotedToday(id))
-  }, [id])
-
-  const handleUpvote = (e: React.MouseEvent) => {
+  const handleUpvote = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    const newVoteState = toggleVote(id)
-    setHasVoted(newVoteState)
-    setVotes(prev => newVoteState ? prev + 1 : prev - 1)
-    onUpvote?.()
+    await toggleVote()
   }
 
   const handleCardClick = () => {
@@ -121,7 +117,7 @@ export const AppCard: FC<AppCardProps> = ({
                     Creado por {makers.map((m, i) => (
                       <HoverCard key={i} openDelay={0} closeDelay={0}>
                         <HoverCardTrigger asChild>
-                          <span 
+                          <span
                             className="hover:text-foreground transition-colors"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -154,7 +150,7 @@ export const AppCard: FC<AppCardProps> = ({
             </div>
             <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
               <div className="flex gap-2">
-                <div 
+                <div
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -175,7 +171,7 @@ export const AppCard: FC<AppCardProps> = ({
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <div 
+                <div
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -187,18 +183,19 @@ export const AppCard: FC<AppCardProps> = ({
                         variant="secondary"
                         size="icon"
                         onClick={handleUpvote}
+                        disabled={isLoading}
                         aria-label={hasVoted ? "Quitar el voto" : "Votar"}
                         className={`size-14 flex-col gap-1 text-xs ${hasVoted
                           ? 'bg-brand-blue/10 hover:bg-brand-blue/20 dark:bg-brand-blue dark:hover:bg-brand-blue/90 text-brand-blue dark:text-white'
                           : ''
-                          }`}
+                          } ${isLoading ? 'opacity-50' : ''}`}
                       >
                         <ThumbsUp size={20} />
                         <span>{votes}</span>
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
-                      {hasVoted ? "Quitar el voto" : "Votar este producto"}
+                      {error ? error : hasVoted ? "Quitar el voto" : "Votar este producto"}
                     </TooltipContent>
                   </Tooltip>
                 </div>
@@ -221,7 +218,7 @@ export const AppCard: FC<AppCardProps> = ({
                 By {makers.map((m, i) => (
                   <HoverCard key={i} openDelay={0} closeDelay={0}>
                     <HoverCardTrigger asChild>
-                      <span 
+                      <span
                         className="hover:text-foreground transition-colors"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -253,7 +250,7 @@ export const AppCard: FC<AppCardProps> = ({
           )}
           <div className="hidden md:flex items-center gap-6">
             {externalLinks?.website && (
-              <div 
+              <div
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
@@ -267,7 +264,7 @@ export const AppCard: FC<AppCardProps> = ({
               </div>
             )}
             {externalLinks?.github && (
-              <div 
+              <div
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();

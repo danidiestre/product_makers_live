@@ -73,6 +73,7 @@ export interface App {
   monetization?: string;
   roadmap?: string;
   technology?: string;
+  initialHasVoted?: boolean;
 }
 
 export type MakerCategory =

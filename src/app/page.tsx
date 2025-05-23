@@ -1,5 +1,3 @@
-'use client'
-
 import Script from 'next/script'
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
 import { LayoutMain } from '@/components/layout/LayoutMain'
@@ -12,8 +10,13 @@ import { WeeklyCountdown } from '@/components/WeeklyCountdown'
 import { Flame } from 'lucide-react'
 import StreamCountdownBanner from '@/components/StreamCountdownBanner'
 import { PageHero } from '@/components/PageHero'
+import { getTopProducts } from '@/app/products/actions'
 
-export default function Home() {
+export default async function Home() {
+  // Cargar productos top para la página principal
+  const result = await getTopProducts(10)
+  const initialProducts = result.success ? result.data || [] : []
+
   // JSON-LD structured data for better SEO
   const jsonLd = {
     "@context": "https://schema.org",
@@ -58,7 +61,7 @@ export default function Home() {
               </h2>
               <WeeklyCountdown />
             </div>
-            <AppList searchQuery="" limit={10} />
+            <AppList searchQuery="" limit={10} initialProducts={initialProducts} />
           </LayoutContainer>
         </LayoutSection>
 
