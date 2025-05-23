@@ -5,11 +5,10 @@ import { getTopProducts } from '@/lib/products';
  * GET /api/top-products
  * Devuelve los productos más populares basado en votos
  */
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    // Obtener el límite desde los parámetros de consulta, por defecto 5
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get('limit') || '5', 10);
+    // Use a static limit value instead of parsing from URL to allow static optimization
+    const limit = 5;
     
     const products = await getTopProducts(limit);
     return NextResponse.json(products);
