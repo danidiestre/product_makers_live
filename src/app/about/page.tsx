@@ -32,7 +32,7 @@ export default function AboutPage() {
     {
       id: 'long',
       title: 'Para Blog/Newsletter',
-      text: 'He descubierto Product Makers, una comunidad increíble donde makers independientes, diseñadores y emprendedores se reúnen para mostrar sus productos digitales y apoyarse mutuamente. Es el lugar perfecto para encontrar inspiración, compartir tu trabajo y conectar con personas que comparten tu pasión por crear. Si estás construyendo algo, definitivamente deberías echarle un vistazo.'
+      text: 'Descubrí Product Makers y me enganché: una comunidad en español donde makers, diseñadores y emprendedores construimos productos digitales paso a paso, en directo y con apoyo mutuo.\nSi buscas inspiración, feedback y compañeros de viaje para tu próximo proyecto, échale un vistazo y súmate. ¡Nos vemos dentro! 🚀'
     }
   ]
 
@@ -161,49 +161,43 @@ export default function AboutPage() {
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl flex items-center gap-2">
-                  <Share size={24} strokeWidth={1.5} />
-                  Comparte la Comunidad
-                </CardTitle>
-                <CardDescription>
-                  Product Makers crece cuando más makers se unen. Ayúdanos a expandir la comunidad compartiendo estos recursos.
-                </CardDescription>
+                <CardTitle className="text-2xl">Comparte la Comunidad</CardTitle>
               </CardHeader>
               <CardContent className="pt-1 pb-6 space-y-6">
+                <p className="text-muted-foreground">
+                  Product Makers crece cuando más makers se unen. Ayúdanos a expandir la comunidad compartiendo estos recursos.
+                </p>
                 
                 {/* Textos para Compartir */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold">Textos para Compartir</h3>
-                  <div className="grid grid-cols-1 gap-4">
-                    {shareTexts.map((item) => (
-                      <div key={item.id} className="border rounded-lg p-4 space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h4 className="font-medium">{item.title}</h4>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => copyToClipboard(item.text, item.id)}
-                            className="flex items-center gap-2"
-                          >
-                            {copiedText === item.id ? (
-                              <>
-                                <Check size={16} />
-                                Copiado
-                              </>
-                            ) : (
-                              <>
-                                <Copy size={16} />
-                                Copiar
-                              </>
-                            )}
-                          </Button>
-                        </div>
-                        <p className="text-sm text-muted-foreground bg-muted rounded p-3">
-                          {item.text}
-                        </p>
+                <div className="grid grid-cols-1 gap-4">
+                  {shareTexts.map((item) => (
+                    <div key={item.id} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium">{item.title}</h4>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => copyToClipboard(item.text, item.id)}
+                          className="flex items-center gap-2"
+                        >
+                          {copiedText === item.id ? (
+                            <>
+                              <Check size={16} />
+                              Copiado
+                            </>
+                          ) : (
+                            <>
+                              <Copy size={16} />
+                              Copiar
+                            </>
+                          )}
+                        </Button>
                       </div>
-                    ))}
-                  </div>
+                      <p className="text-sm text-muted-foreground bg-muted rounded p-3">
+                        {item.text}
+                      </p>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Assets Visuales */}
