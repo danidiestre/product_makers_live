@@ -1,6 +1,7 @@
 "use server";
 
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -9,7 +10,7 @@ import { App, Maker } from "@/lib/types";
 export async function createProduct(formData: FormData) {
   try {
     // Get current user
-    const session = await getServerSession();
+    const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
       return {
         success: false,
@@ -88,10 +89,15 @@ export async function createProduct(formData: FormData) {
 
 export async function getProducts() {
   try {
-    // Obtener productos con su relación de usuario (maker)
+    // Obtener sesión solo para información de votación, no es requerida
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
+    // Obtener productos con su relación de usuario (maker) y votos
     const products = await prisma.product.findMany({
       include: {
         user: true,
+        votes: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -140,6 +146,12 @@ export async function getProducts() {
           }
         : undefined;
 
+      // Calcular votos y si el usuario actual ha votado (solo si está autenticado)
+      const voteCount = product.votes.length;
+      const hasUserVoted = userId
+        ? product.votes.some((vote) => vote.userId === userId)
+        : false;
+
       // Convertir al formato App
       const app: App = {
         id: product.id,
@@ -148,7 +160,7 @@ export async function getProducts() {
         description: product.description,
         imageUrl: product.iconUrl,
         screenshots: product.screenshotUrls || [],
-        votes: 0, // Por ahora, dejamos los votos en 0 ya que no podemos contarlos
+        votes: voteCount,
         commentsCount: 0, // Por ahora, dejamos los comentarios en 0
         launchDate: product.createdAt.toISOString().split("T")[0],
         externalLinks: {
@@ -158,6 +170,8 @@ export async function getProducts() {
         // Campos adicionales requeridos por la interfaz App
         tags: [],
         badges: [],
+        // Campo para indicar si el usuario ha votado (false si no está autenticado)
+        initialHasVoted: hasUserVoted,
       };
 
       return app;
@@ -165,73 +179,90 @@ export async function getProducts() {
 
     return { success: true, data: formattedProducts };
   } catch (error) {
-    console.error('Failed to fetch products:', error);
-    return { success: false, error: 'Failed to fetch products' };
+    console.error("❌ Error en getProducts:", error);
+    return { success: false, error: "Failed to fetch products" };
   }
 }
 
 export async function getTopProducts(limit = 5) {
   try {
     const result = await getProducts();
-    
+
     if (!result.success || !result.data) {
       return result;
     }
-    
+
     // Get first 'limit' products
     const topProducts = result.data.slice(0, limit);
     return { success: true, data: topProducts };
   } catch (error) {
-    console.error('Failed to fetch top products:', error);
-    return { success: false, error: 'Failed to fetch top products' };
+    console.error("Failed to fetch top products:", error);
+    return { success: false, error: "Failed to fetch top products" };
   }
 }
 
 export async function getProductById(id: string) {
   try {
+    // Obtener sesión solo para información de votación, no es requerida
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
     const product = await prisma.product.findUnique({
       where: { id },
       include: {
-        user: true
-      }
+        user: true,
+        votes: true, // Solo necesitamos el conteo y userId
+      },
     });
 
     if (!product) {
-      return { success: false, error: 'Product not found' };
+      return { success: false, error: "Product not found" };
     }
 
     // Convert to App format (reusing the same conversion logic from getProducts)
-    const roleToCategory = (role?: string): Maker['category'] => {
+    const roleToCategory = (role?: string): Maker["category"] => {
       if (!role) return "Other";
-      
-      switch(role) {
+
+      switch (role) {
         case "Designer":
         case "Developer":
         case "Marketing":
         case "Founder":
         case "Product Manager":
-          return role as Maker['category'];
+          return role as Maker["category"];
         default:
           return "Other";
       }
     };
-    
-    const maker = product.user ? {
-      id: product.user.id,
-      name: product.user.name || 'Unknown',
-      avatar: product.user.image || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop',
-      role: roleToCategory(product.user.role?.toString()),
-      bio: product.user.bio || '',
-      category: roleToCategory(product.user.role?.toString()),
-      makerCategory: roleToCategory(product.user.role?.toString()),
-      isVerified: true,
-      joinedDate: product.user.emailVerified?.toISOString().split('T')[0] || new Date().toISOString().split('T')[0],
-      followers: 0,
-      twitter: product.user.twitter || undefined,
-      github: product.user.github || undefined,
-      website: product.user.website || undefined,
-      linkedin: product.user.linkedin || undefined
-    } : undefined;
+
+    const maker = product.user
+      ? {
+          id: product.user.id,
+          name: product.user.name || "Unknown",
+          avatar:
+            product.user.image ||
+            "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+          role: roleToCategory(product.user.role?.toString()),
+          bio: product.user.bio || "",
+          category: roleToCategory(product.user.role?.toString()),
+          makerCategory: roleToCategory(product.user.role?.toString()),
+          isVerified: true,
+          joinedDate:
+            product.user.emailVerified?.toISOString().split("T")[0] ||
+            new Date().toISOString().split("T")[0],
+          followers: 0,
+          twitter: product.user.twitter || undefined,
+          github: product.user.github || undefined,
+          website: product.user.website || undefined,
+          linkedin: product.user.linkedin || undefined,
+        }
+      : undefined;
+
+    // Calcular votos y si el usuario actual ha votado (solo si está autenticado)
+    const voteCount = product.votes.length;
+    const hasUserVoted = userId
+      ? product.votes.some((vote) => vote.userId === userId)
+      : false;
 
     const app: App = {
       id: product.id,
@@ -240,7 +271,7 @@ export async function getProductById(id: string) {
       description: product.description,
       imageUrl: product.iconUrl,
       screenshots: product.screenshotUrls || [],
-      votes: 0,
+      votes: voteCount,
       commentsCount: 0,
       launchDate: product.createdAt.toISOString().split("T")[0],
       externalLinks: {
@@ -249,6 +280,7 @@ export async function getProductById(id: string) {
       makers: maker ? [maker] : [],
       tags: [],
       badges: [],
+      initialHasVoted: hasUserVoted,
     };
 
     return { success: true, data: app };
@@ -260,6 +292,10 @@ export async function getProductById(id: string) {
 
 export async function getUserProducts(userId: string) {
   try {
+    // Obtener sesión solo para información de votación del usuario actual
+    const session = await getServerSession(authOptions);
+    const currentUserId = session?.user?.id;
+
     // Obtener productos de un usuario específico
     const products = await prisma.product.findMany({
       where: {
@@ -267,6 +303,7 @@ export async function getUserProducts(userId: string) {
       },
       include: {
         user: true,
+        votes: true, // Solo necesitamos el conteo y userId
       },
       orderBy: {
         createdAt: "desc",
@@ -315,6 +352,12 @@ export async function getUserProducts(userId: string) {
           }
         : undefined;
 
+      // Calcular votos y si el usuario actual ha votado (solo si está autenticado)
+      const voteCount = product.votes.length;
+      const hasUserVoted = currentUserId
+        ? product.votes.some((vote) => vote.userId === currentUserId)
+        : false;
+
       // Convertir al formato App
       const app: App = {
         id: product.id,
@@ -323,7 +366,7 @@ export async function getUserProducts(userId: string) {
         description: product.description,
         imageUrl: product.iconUrl,
         screenshots: product.screenshotUrls || [],
-        votes: 0, // Por ahora, dejamos los votos en 0 ya que no podemos contarlos
+        votes: voteCount,
         commentsCount: 0, // Por ahora, dejamos los comentarios en 0
         launchDate: product.createdAt.toISOString().split("T")[0],
         externalLinks: {
@@ -332,6 +375,7 @@ export async function getUserProducts(userId: string) {
         makers: maker ? [maker] : [],
         tags: [],
         badges: [],
+        initialHasVoted: hasUserVoted,
       };
 
       return app;

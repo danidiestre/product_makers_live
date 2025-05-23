@@ -24,7 +24,7 @@ const PRODUCTS_PER_PAGE = 8
 interface AppListProps {
   searchQuery: string;
   limit?: number;
-  initialProducts: App[];
+  initialProducts?: App[];
 }
 
 export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
@@ -34,7 +34,7 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
   const [currentPage, setCurrentPage] = useState(1)
 
   // Usar los datos que vienen del servidor
-  const apps = initialProducts
+  const apps = initialProducts || []
 
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
@@ -114,14 +114,21 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
       )}
 
       <div className="grid grid-cols-1 gap-4">
-        {displayApps.map((app, index) => (
-          <AppCard
-            key={app.id}
-            {...app}
-            onUpvote={() => console.log(`Upvoted ${app.name}`)}
-            ranking={limit ? index + 1 : undefined}
-          />
-        ))}
+        {displayApps.length > 0 ? (
+          displayApps.map((app, index) => (
+            <AppCard
+              key={app.id}
+              {...app}
+              ranking={limit ? index + 1 : undefined}
+            />
+          ))
+        ) : (
+          <div className="text-center py-12 text-muted-foreground">
+            <Telescope className="mx-auto h-12 w-12 mb-4 opacity-50" />
+            <p className="text-lg font-medium mb-2">No se encontraron productos</p>
+            <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
+          </div>
+        )}
       </div>
 
       {limit && sortedApps.length > limit && (

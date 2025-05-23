@@ -50,6 +50,7 @@ model User {
   accounts      Account[]
   products      Product[]
   sessions      Session[]
+  votes         Vote[]
 }
 
 model VerificationToken {
@@ -78,6 +79,20 @@ model Product {
   updatedAt       DateTime @updatedAt
   userId          String
   user            User     @relation(fields: [userId], references: [id])
+  votes           Vote[]
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@index([productId])
+  @@index([userId])
 }
 
 enum Role {

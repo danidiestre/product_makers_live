@@ -67,6 +67,7 @@ export interface App {
   externalLinks?: ExternalLinks;
   makers?: Maker[];
   metrics?: Metrics;
+  initialHasVoted?: boolean;
 }
 
 export type MakerCategory =
