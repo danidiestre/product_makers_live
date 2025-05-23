@@ -27,7 +27,7 @@ export default function AboutPage() {
     {
       id: 'medium',
       title: 'Para LinkedIn',
-      text: '¿Eres maker independiente, diseñador o emprendedor? Product Makers es la comunidad perfecta para ti. Aquí puedes mostrar tus productos, compartir conocimiento y conectar con otros makers que, como tú, están construyendo productos digitales innovadores. ¡Únete a nosotros!'
+      text: 'Si trabajas en producto (diseño, negocio, datos, tech… ¡lo que sea!) y quieres llevar ideas a productos reales de principio a fin, pásate por Product Makers. Ya somos cientos compartiendo retos, recursos y apoyo. ¿Te unes?'
     },
     {
       id: 'long',
