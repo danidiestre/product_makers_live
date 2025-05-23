@@ -12,11 +12,23 @@ import { PageHeader } from '@/components/PageHeader'
 import Faqs from '@/components/Faqs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck, Copy, Download, Share, Check } from 'lucide-react'
+import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck, Copy, Download, Share, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 
 export default function AboutPage() {
   const [copiedText, setCopiedText] = useState<string | null>(null)
+  const [currentMakerImage, setCurrentMakerImage] = useState(0)
+
+  const makerImages = [
+    {
+      src: '/assets/maker.png',
+      alt: 'Product Maker Illustration 1'
+    },
+    {
+      src: '/assets/maker2.png',
+      alt: 'Product Maker Illustration 2'
+    }
+  ]
 
   const shareTexts = [
     {
@@ -110,13 +122,58 @@ export default function AboutPage() {
                   Product Makers es el punto de encuentro para profesionales de producto: makers independientes, diseñadores, desarrolladores y emprendedores que quieren llevar sus ideas de principio a fin. Aquí mostramos lo que construimos, compartimos conocimiento y nos apoyamos mutuamente para convertir cada proyecto en un producto digital de éxito.
                 </p>
               </CardContent>
-              <Image
-                src="/assets/maker.png"
-                alt="Product Maker Illustration"
-                width={600}
-                height={600}
-                className="w-full"
-              />
+              <div className="relative group">
+                <Image
+                  src={makerImages[currentMakerImage].src}
+                  alt={makerImages[currentMakerImage].alt}
+                  width={600}
+                  height={600}
+                  className="w-full"
+                />
+                
+                {/* Navigation arrows */}
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => setCurrentMakerImage(currentMakerImage === 0 ? makerImages.length - 1 : currentMakerImage - 1)}
+                >
+                  <ChevronLeft size={20} />
+                </Button>
+                
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => setCurrentMakerImage(currentMakerImage === makerImages.length - 1 ? 0 : currentMakerImage + 1)}
+                >
+                  <ChevronRight size={20} />
+                </Button>
+
+                {/* Download button */}
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-2"
+                  onClick={() => downloadAsset(makerImages[currentMakerImage].src, `maker-illustration-${currentMakerImage + 1}.png`)}
+                >
+                  <Download size={16} />
+                  Descargar
+                </Button>
+
+                {/* Image indicator dots */}
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                  {makerImages.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === currentMakerImage ? 'bg-white' : 'bg-white/50'
+                      }`}
+                      onClick={() => setCurrentMakerImage(index)}
+                    />
+                  ))}
+                </div>
+              </div>
             </Card>
             <Card>
               <CardHeader>
