@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppCard } from '@/components/AppCard'
 import { Telescope } from 'lucide-react'
-import { getAllApps } from '@/lib/data'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -17,6 +16,7 @@ import {
   PaginationLink,
 } from '@/components/ui/pagination'
 import { LoadState } from '@/components/LoadState'
+import { getProducts } from '@/app/products/actions'
 
 type SortKey = 'votes' | 'name'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
@@ -36,10 +36,26 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   const [apps, setApps] = useState<App[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
+  // Cargar apps usando server actions en lugar de fetch
   useEffect(() => {
-    setApps(getAllApps())
-    setIsLoading(false)
-  }, [])
+    async function fetchApps() {
+      try {
+        setIsLoading(true);
+        const result = await getProducts();
+        if (result.success && result.data) {
+          setApps(result.data);
+        } else {
+          console.error('Error al cargar los productos:', result.error);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchApps();
+  }, []);
 
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
@@ -68,7 +84,7 @@ export function AppList({ searchQuery, limit }: AppListProps) {
     const modifier = sortAsc ? 1 : -1
     return sortKey === 'votes'
       ? (a.votes - b.votes) * modifier
-      : a.id.localeCompare(b.id) * modifier
+      : a.name.localeCompare(b.name) * modifier
   })
 
   // Calculate pagination

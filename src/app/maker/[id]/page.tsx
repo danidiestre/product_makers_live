@@ -1,9 +1,10 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { notFound } from 'next/navigation'
 import { Github, Globe, Linkedin, Mail, Twitter } from 'lucide-react'
 import { getMakerById } from '@/app/makers/actions'
+import { getUserProducts } from '@/app/products/actions'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
@@ -27,20 +28,67 @@ import Footer from '@/components/Footer'
 import { Navbar } from '@/components/Navbar'
 import Link from 'next/link'
 import { LinkSocial } from '@/components/LinkSocial'
+import { AppCard } from '@/components/AppCard'
+import { App } from '@/lib/types'
+import { LoadState } from '@/components/LoadState'
+import { FolderOpen } from 'lucide-react'
 
 interface MakerPageProps {
   params: { id: string }
 }
 
-const MakerPage: FC<MakerPageProps> = async ({ params }) => {
-  // Fetch maker data from your database
-  const result = await getMakerById(params.id)
+const MakerPage: FC<MakerPageProps> = ({ params }) => {
+  const [maker, setMaker] = useState<any>(null)
+  const [makerProducts, setMakerProducts] = useState<App[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<boolean>(false)
 
-  if (!result.success || !result.data) {
-    return notFound()
+  useEffect(() => {
+    const fetchMakerData = async () => {
+      try {
+        // Fetch maker data
+        const makerResult = await getMakerById(params.id)
+        if (!makerResult.success || !makerResult.data) {
+          setError(true)
+          return
+        }
+        setMaker(makerResult.data)
+
+        // Fetch maker's products
+        const productsResult = await getUserProducts(params.id)
+        if (productsResult.success && productsResult.data) {
+          setMakerProducts(productsResult.data)
+        }
+      } catch (error) {
+        console.error("Error fetching maker data:", error)
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchMakerData()
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <LayoutWrapper>
+        <Navbar />
+        <LayoutMain>
+          <LayoutSection>
+            <LayoutContainer>
+              <LoadState message="Cargando datos del maker..." />
+            </LayoutContainer>
+          </LayoutSection>
+        </LayoutMain>
+        <Footer />
+      </LayoutWrapper>
+    )
   }
 
-  const maker = result.data
+  if (error || !maker) {
+    return notFound()
+  }
 
   const styles = {
     card: "w-full bg-transparent border-none rounded-none gap-4",
@@ -145,8 +193,23 @@ const MakerPage: FC<MakerPageProps> = async ({ params }) => {
                   <CardTitle className={styles.cardTitle}>Productos</CardTitle>
                   <CardDescription>Productos creados por {maker.name}</CardDescription>
                 </CardHeader>
-                <CardContent className={styles.cardContent}>
-                  ### Añadir el componente de AppCard.tsx para cada producto ###
+                <CardContent className={`${styles.cardContent} mt-4`}>
+                  {makerProducts.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-4">
+                      {makerProducts.map((product) => (
+                        <AppCard
+                          key={product.id}
+                          {...product}
+                          onUpvote={() => console.log(`Upvoted ${product.name}`)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full flex flex-col items-center justify-center gap-2 h-72 text-sm font-semibold bg-muted rounded-md text-muted-foreground/50">
+                      <FolderOpen size={64} className="stroke-1" />
+                      No ha publicado ningún producto
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -159,7 +222,6 @@ const MakerPage: FC<MakerPageProps> = async ({ params }) => {
       <Footer />
 
     </LayoutWrapper >
-
   )
 }
 

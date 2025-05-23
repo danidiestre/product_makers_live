@@ -13,12 +13,38 @@ import Footer from '@/components/Footer'
 import { PageHeader } from '@/components/PageHeader'
 import { MakerCard } from '@/components/MakerCard'
 import { User } from '@prisma/client'
+import { useEffect, useState } from 'react'
+import { getUserProducts } from '@/app/products/actions'
+import { AppCard } from '@/components/AppCard'
+import { App } from '@/lib/types'
+import { LoadState } from '@/components/LoadState'
 
 interface DashboardContentProps {
   user: User
 }
 
 export default function DashboardContent({ user }: DashboardContentProps) {
+  const [userProducts, setUserProducts] = useState<App[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // Fetch user's products
+  useEffect(() => {
+    async function fetchUserProducts() {
+      try {
+        const result = await getUserProducts(user.id)
+        if (result.success && result.data) {
+          setUserProducts(result.data)
+        }
+      } catch (error) {
+        console.error('Error fetching user products:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserProducts()
+  }, [user.id])
+
   // Transform user data into Maker type
   const maker = {
     id: user.id,
@@ -80,10 +106,24 @@ export default function DashboardContent({ user }: DashboardContentProps) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="p-6 flex flex-col gap-6">
-                  <div className="w-full flex flex-col items-center justify-center gap-2 h-72 text-sm font-semibold bg-muted rounded-md text-muted-foreground/50">
-                    <FolderOpen size={64} className="stroke-1" />
-                    No has publicado ningún producto
-                  </div>
+                  {loading ? (
+                    <LoadState message="Cargando tus productos..." />
+                  ) : userProducts.length > 0 ? (
+                    <div className="grid grid-cols-1 gap-4">
+                      {userProducts.map((product) => (
+                        <AppCard
+                          key={product.id}
+                          {...product}
+                          onUpvote={() => console.log(`Upvoted ${product.name}`)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="w-full flex flex-col items-center justify-center gap-2 h-72 text-sm font-semibold bg-muted rounded-md text-muted-foreground/50">
+                      <FolderOpen size={64} className="stroke-1" />
+                      No has publicado ningún producto
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
