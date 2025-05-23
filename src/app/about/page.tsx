@@ -22,17 +22,17 @@ export default function AboutPage() {
     {
       id: 'short',
       title: 'Para Twitter/X',
-      text: '🚀 Acabo de unirme a Product Makers, la comunidad de makers independientes que están construyendo el futuro digital. ¡Únete y muestra tus productos! 💪 #ProductMakers #Makers'
+      text: '🚀 Acabo de unirme a Product Makers, la comunidad de makers independientes que están construyendo el futuro digital. ¡Únete y muestra tus productos! 💪 #ProductMakers #Makers\n\nÚnete en productmakers.ai y Discord: https://discord.com/invite/PnBJNwDW77'
     },
     {
       id: 'medium',
       title: 'Para LinkedIn',
-      text: 'Si trabajas en producto (diseño, negocio, datos, tech… ¡lo que sea!) y quieres llevar ideas a productos reales de principio a fin, pásate por Product Makers. Ya somos cientos compartiendo retos, recursos y apoyo. ¿Te unes?'
+      text: 'Si trabajas en producto (diseño, negocio, datos, tech… ¡lo que sea!) y quieres llevar ideas a productos reales de principio a fin, pásate por Product Makers. Ya somos cientos compartiendo retos, recursos y apoyo. ¿Te unes?\n\nÚnete en productmakers.ai y Discord: https://discord.com/invite/PnBJNwDW77'
     },
     {
       id: 'long',
       title: 'Para Blog/Newsletter',
-      text: 'Descubrí Product Makers y me enganché: una comunidad en español donde makers, diseñadores y emprendedores construimos productos digitales paso a paso, en directo y con apoyo mutuo.\nSi buscas inspiración, feedback y compañeros de viaje para tu próximo proyecto, échale un vistazo y súmate. ¡Nos vemos dentro! 🚀'
+      text: 'Descubrí Product Makers y me enganché: una comunidad en español donde makers, diseñadores y emprendedores construimos productos digitales paso a paso, en directo y con apoyo mutuo.\nSi buscas inspiración, feedback y compañeros de viaje para tu próximo proyecto, échale un vistazo y súmate. ¡Nos vemos dentro! 🚀\n\nÚnete en productmakers.ai y Discord: https://discord.com/invite/PnBJNwDW77'
     }
   ]
 
