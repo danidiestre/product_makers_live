@@ -4,15 +4,20 @@ import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
 import { LayoutMain } from '@/components/layout/LayoutMain'
 import StreamCountdownBanner from '@/components/StreamCountdownBanner'
 import { ProductsPageContent } from '@/components/ProductsPageContent'
+import { getProducts } from '@/app/products/actions'
 
-export default function Products() {
+export default async function Products() {
+  // Cargar datos en el servidor
+  const result = await getProducts()
+  const initialProducts = result.success ? result.data || [] : []
+
   return (
     <LayoutWrapper>
       {/* StreamCountdown banner */}
       <StreamCountdownBanner />
       <Navbar />
       <LayoutMain>
-        <ProductsPageContent />
+        <ProductsPageContent initialProducts={initialProducts} />
       </LayoutMain>
       <Footer />
     </LayoutWrapper>
