@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button"
 import { LayoutContainer } from "@/components/layout/LayoutContainer"
 import Countdown from "@/components/Countdown"
 import { getNextTuesdayAt18CEST } from "@/lib/utils"
+import { useLocalStorage } from "@/hooks/use-local-storage"
 
 export default function StreamCountdownBanner() {
 
-  const [isVisible, setIsVisible] = useState(true)
+  const [isBannerDismissed, setIsBannerDismissed] = useLocalStorage('stream-banner-dismissed', false)
   const [nextLive, setNextLive] = useState<number | null>(null)
   const [isMounted, setIsMounted] = useState(false)
 
@@ -20,7 +21,11 @@ export default function StreamCountdownBanner() {
     setIsMounted(true)
   }, [])
 
-  if (!isVisible || nextLive === null || !isMounted) return null
+  const handleCloseBanner = () => {
+    setIsBannerDismissed(true)
+  }
+
+  if (isBannerDismissed || nextLive === null || !isMounted) return null
 
   return (
     <div className="w-full bg-foreground text-background py-4">
@@ -69,7 +74,7 @@ export default function StreamCountdownBanner() {
           variant="ghost"
           size="icon"
           className="group shrink-0 hover:text-background hover:bg-transparent"
-          onClick={() => setIsVisible(false)}
+          onClick={handleCloseBanner}
           aria-label="Close banner"
         >
           <XIcon

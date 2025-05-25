@@ -1,8 +1,8 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function getNextTuesdayAt18CEST(): number {
@@ -23,16 +23,20 @@ export function getNextTuesdayAt18CEST(): number {
     daysUntilTuesday = 0;
   }
 
-  const nextTuesday = new Date(Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate() + daysUntilTuesday,
-    targetHourUTC,
-    0,
-    0
-  ));
+  const nextTuesday = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + daysUntilTuesday,
+      targetHourUTC,
+      0,
+      0
+    )
+  );
 
-  const diffInSeconds = Math.floor((nextTuesday.getTime() - now.getTime()) / 1000);
+  const diffInSeconds = Math.floor(
+    (nextTuesday.getTime() - now.getTime()) / 1000
+  );
   return diffInSeconds;
 }
 
@@ -48,61 +52,21 @@ export function getSecondsUntilEndOfWeekCEST(): number {
   const daysUntilSunday = (7 - day) % 7;
 
   // Create a Date object for next Sunday at 22:00 UTC
-  const nextSundayMidnight = new Date(Date.UTC(
-    now.getUTCFullYear(),
-    now.getUTCMonth(),
-    now.getUTCDate() + daysUntilSunday,
-    targetHourUTC,
-    0,
-    0
-  ));
+  const nextSundayMidnight = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + daysUntilSunday,
+      targetHourUTC,
+      0,
+      0
+    )
+  );
 
-  const diffInSeconds = Math.floor((nextSundayMidnight.getTime() - now.getTime()) / 1000);
+  const diffInSeconds = Math.floor(
+    (nextSundayMidnight.getTime() - now.getTime()) / 1000
+  );
   return diffInSeconds;
-}
-
-// Voting utilities
-const VOTES_STORAGE_KEY = 'product_makers_votes'
-
-interface VoteStorage {
-  date: string;
-  votes: { [key: string]: boolean };
-}
-
-export function getTodayVotes(): VoteStorage {
-  if (typeof window === 'undefined') return { date: getCurrentDate(), votes: {} };
-
-  const stored = localStorage.getItem(VOTES_STORAGE_KEY);
-  if (!stored) return { date: getCurrentDate(), votes: {} };
-
-  const data: VoteStorage = JSON.parse(stored);
-  if (data.date !== getCurrentDate()) {
-    // Reset votes for new day
-    return { date: getCurrentDate(), votes: {} };
-  }
-
-  return data;
-}
-
-export function hasVotedToday(appId: string): boolean {
-  const { votes } = getTodayVotes();
-  return !!votes[appId];
-}
-
-export function toggleVote(appId: string): boolean {
-  if (typeof window === 'undefined') return false;
-
-  const data = getTodayVotes();
-  const newVoteState = !data.votes[appId];
-
-  data.votes[appId] = newVoteState;
-  localStorage.setItem(VOTES_STORAGE_KEY, JSON.stringify(data));
-
-  return newVoteState;
-}
-
-function getCurrentDate(): string {
-  return new Date().toISOString().split('T')[0];
 }
 
 /**
@@ -112,13 +76,13 @@ function getCurrentDate(): string {
  * @returns Formatted string with appropriate unit (B, KB, MB, GB, etc.)
  */
 export function formatBytes(bytes: number, decimals: number = 2): string {
-  if (bytes === 0) return '0 Bytes'
+  if (bytes === 0) return "0 Bytes";
 
-  const k = 1024
-  const dm = decimals < 0 ? 0 : decimals
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+  const k = 1024;
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 }

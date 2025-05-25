@@ -15,8 +15,7 @@ import {
   PaginationNext,
   PaginationLink,
 } from '@/components/ui/pagination'
-import { LoadState } from '@/components/LoadState'
-import { getProducts } from '@/app/products/actions'
+import { useProductsWithVotes } from '@/hooks/useProductsWithVotes'
 
 type SortKey = 'votes' | 'name'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
@@ -26,36 +25,19 @@ const PRODUCTS_PER_PAGE = 8
 interface AppListProps {
   searchQuery: string;
   limit?: number;
+  initialProducts?: App[];
 }
 
-export function AppList({ searchQuery, limit }: AppListProps) {
+export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
   const [sortKey, setSortKey] = useState<SortKey>('votes')
   const [sortAsc, setSortAsc] = useState(false)
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
   const [currentPage, setCurrentPage] = useState(1)
-  const [apps, setApps] = useState<App[]>([])
-  const [isLoading, setIsLoading] = useState(true)
 
-  // Cargar apps usando server actions en lugar de fetch
-  useEffect(() => {
-    async function fetchApps() {
-      try {
-        setIsLoading(true);
-        const result = await getProducts();
-        if (result.success && result.data) {
-          setApps(result.data);
-        } else {
-          console.error('Error al cargar los productos:', result.error);
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchApps();
-  }, []);
+  // Usar el hook para combinar productos estáticos con información de votación
+  const { products: apps, isLoadingVotes } = useProductsWithVotes({
+    initialProducts: initialProducts || []
+  })
 
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
@@ -110,10 +92,6 @@ export function AppList({ searchQuery, limit }: AppListProps) {
   // Display limited apps on home page, or all apps with pagination on products page
   const displayApps = limit ? sortedApps.slice(0, limit) : paginatedApps;
 
-  if (isLoading) {
-    return <LoadState message="Cargando productos..." />
-  }
-
   return (
     <div className="w-full grid gap-6">
       {!limit && (
@@ -139,14 +117,21 @@ export function AppList({ searchQuery, limit }: AppListProps) {
       )}
 
       <div className="grid grid-cols-1 gap-4">
-        {displayApps.map((app, index) => (
-          <AppCard
-            key={app.id}
-            {...app}
-            onUpvote={() => console.log(`Upvoted ${app.name}`)}
-            ranking={limit ? index + 1 : undefined}
-          />
-        ))}
+        {displayApps.length > 0 ? (
+          displayApps.map((app, index) => (
+            <AppCard
+              key={app.id}
+              {...app}
+              ranking={limit ? index + 1 : undefined}
+            />
+          ))
+        ) : (
+          <div className="text-center py-12 text-muted-foreground">
+            <Telescope className="mx-auto h-12 w-12 mb-4 opacity-50" />
+            <p className="text-lg font-medium mb-2">No se encontraron productos</p>
+            <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
+          </div>
+        )}
       </div>
 
       {limit && sortedApps.length > limit && (

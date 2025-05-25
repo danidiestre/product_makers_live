@@ -1,22 +1,26 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { ThumbsUp, MessageCircle, Share2 } from 'lucide-react'
 import Link from 'next/link'
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Button } from '@/components/ui/button'
 import { App } from '@/lib/types'
+import { useVotes } from '@/hooks/useVotes'
 
 interface AppProfileActionsProps {
   app: App
 }
 
 export const AppProfileActions: FC<AppProfileActionsProps> = ({ app }) => {
-  const [hasUpvoted, setHasUpvoted] = useState(false)
+  const { votes, hasVoted, isLoading, toggleVote, error } = useVotes({
+    productId: app.id,
+    initialVotes: app.votes,
+    initialHasVoted: app.initialHasVoted || false
+  })
 
-  const handleUpvote = () => {
-    setHasUpvoted(!hasUpvoted)
-    // In a real app, you would call an API to update the vote count
+  const handleUpvote = async () => {
+    await toggleVote()
   }
 
   const handleShare = () => {
@@ -39,17 +43,18 @@ export const AppProfileActions: FC<AppProfileActionsProps> = ({ app }) => {
           <Button
             variant="secondary"
             onClick={handleUpvote}
-            className={`w-full sm:w-24 gap-2 ${hasUpvoted
+            disabled={isLoading}
+            className={`w-full sm:w-24 gap-2 ${hasVoted
               ? 'bg-brand-blue/10 hover:bg-brand-blue/20 dark:bg-brand-blue dark:hover:bg-brand-blue/90 text-brand-blue dark:text-white'
               : ''
-              }`}
+              } ${isLoading ? 'opacity-50' : ''}`}
           >
             <ThumbsUp size={16} />
-            <span>{hasUpvoted ? app.votes + 1 : app.votes}</span>
+            <span>{votes}</span>
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          {hasUpvoted ? "Quitar el voto" : "Votar este producto"}
+          {error ? error : hasVoted ? "Quitar el voto" : "Votar este producto"}
         </TooltipContent>
       </Tooltip>
 
