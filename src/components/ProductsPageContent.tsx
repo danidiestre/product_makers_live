@@ -35,7 +35,7 @@ export function ProductsPageContent({ initialProducts }: ProductsPageContentProp
           </div>
           {/* Add product button */}
           <Button asChild variant="default" className="gap-2 hidden sm:flex">
-            <Link href="/products/new">
+            <Link href="/dashboard/product/new">
               <Plus size={16} />
               Añadir producto
             </Link>

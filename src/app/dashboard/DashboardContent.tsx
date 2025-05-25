@@ -53,7 +53,7 @@ export default function DashboardContent({ user, userProducts }: DashboardConten
               </Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/products/new" className="flex gap-2">
+              <Link href="/dashboard/product/new" className="flex gap-2">
                 <FolderPlus className="size-5" />
                 Añadir producto
               </Link>
