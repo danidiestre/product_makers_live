@@ -15,6 +15,7 @@ import {
   PaginationNext,
   PaginationLink,
 } from '@/components/ui/pagination'
+import { useProductsWithVotes } from '@/hooks/useProductsWithVotes'
 
 type SortKey = 'votes' | 'name'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
@@ -33,8 +34,10 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
   const [currentPage, setCurrentPage] = useState(1)
 
-  // Usar los datos que vienen del servidor
-  const apps = initialProducts || []
+  // Usar el hook para combinar productos estáticos con información de votación
+  const { products: apps, isLoadingVotes } = useProductsWithVotes({
+    initialProducts: initialProducts || []
+  })
 
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {

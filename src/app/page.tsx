@@ -10,11 +10,11 @@ import { WeeklyCountdown } from '@/components/WeeklyCountdown'
 import { Flame } from 'lucide-react'
 import StreamCountdownBanner from '@/components/StreamCountdownBanner'
 import { PageHero } from '@/components/PageHero'
-import { getTopProducts } from '@/app/products/actions'
+import { getTopProductsStatic } from '@/app/products/actions'
 
 export default async function Home() {
-  // Cargar productos top para la página principal
-  const result = await getTopProducts(10)
+  // Cargar productos top para la página principal (versión estática)
+  const result = await getTopProductsStatic(10)
   const initialProducts = result.success ? result.data || [] : []
 
   // JSON-LD structured data for better SEO
