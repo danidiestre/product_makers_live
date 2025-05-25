@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import {
   toggleVote as toggleVoteAction,
   VoteResult,
@@ -29,6 +29,12 @@ export function useVotes({
   const [hasVoted, setHasVoted] = useState(initialHasVoted);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // Update state when props change (important for when useProductsWithVotes updates the data)
+  useEffect(() => {
+    setVotes(initialVotes);
+    setHasVoted(initialHasVoted);
+  }, [initialVotes, initialHasVoted]);
 
   const toggleVote = async () => {
     // Optimistic update
