@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode, DragEvent } from 'react'
 import { useLocalStorage } from '@/hooks/use-local-storage'
-import { useFileUpload } from '@/hooks/use-file-upload'
+import { useFileUpload, type FileMetadata as FileUploadMetadata } from '@/hooks/use-file-upload'
 import { toast } from 'sonner'
 
 // Constants
@@ -193,6 +193,25 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
   // Local state for screenshots (can't be stored in localStorage)
   const [screenshots, setScreenshots] = useState<File[]>([])
 
+  // State to track restored files from localStorage
+  const [restoredScreenshots, setRestoredScreenshots] = useState<FileWithPreview[]>([])
+  const [restoredIcon, setRestoredIcon] = useState<FileWithPreview | null>(null)
+
+  // Convert saved URLs to FileMetadata for initial files
+  const getInitialScreenshotFiles = (): FileUploadMetadata[] => {
+    if (!formData.screenshotUrls || formData.screenshotUrls.length === 0) {
+      return []
+    }
+
+    return formData.screenshotUrls.map((url, index) => ({
+      id: `restored-${index}-${Date.now()}`,
+      name: `screenshot-${index + 1}.jpg`,
+      size: 0, // Unknown size for restored files
+      type: 'image/jpeg',
+      url: url
+    }))
+  }
+
   // File upload for screenshots
   const [
     { files: screenshotFiles, isDragging, errors: screenshotErrors },
@@ -205,12 +224,14 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
       removeFile,
       clearFiles,
       getInputProps,
+      addFiles: addScreenshotFiles,
     },
   ] = useFileUpload({
     accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
     maxSize: MAX_FILE_SIZE_MB * 1024 * 1024,
     multiple: true,
     maxFiles: MAX_SCREENSHOTS,
+    initialFiles: getInitialScreenshotFiles(),
   })
 
   // Update screenshots whenever screenshotFiles changes
@@ -222,6 +243,44 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
     setScreenshots(files)
   }, [screenshotFiles])
 
+  // Sync screenshot files when formData.screenshotUrls changes (from localStorage)
+  useEffect(() => {
+    const savedUrls = formData.screenshotUrls || []
+
+    if (savedUrls.length > 0) {
+      // Create restored files from saved URLs
+      const restored = savedUrls.map((url, index) => ({
+        id: `restored-screenshot-${index}-${Date.now()}`,
+        file: {
+          name: `screenshot-${index + 1}.jpg`,
+          size: 0,
+          type: 'image/jpeg'
+        } as FileMetadata,
+        preview: url
+      }))
+
+      setRestoredScreenshots(restored)
+      console.log('Screenshots restaurados desde localStorage:', restored.length)
+    } else {
+      setRestoredScreenshots([])
+    }
+  }, [formData.screenshotUrls])
+
+  // Convert saved icon URL to FileMetadata for initial file
+  const getInitialIconFile = (): FileUploadMetadata[] => {
+    if (!formData.iconUrl) {
+      return []
+    }
+
+    return [{
+      id: `icon-restored-${Date.now()}`,
+      name: 'icon.jpg',
+      size: 0, // Unknown size for restored file
+      type: 'image/jpeg',
+      url: formData.iconUrl
+    }]
+  }
+
   // File upload for icon
   const [
     { files: iconFiles },
@@ -229,24 +288,38 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
       removeFile: removeIconFile,
       openFileDialog: openIconDialog,
       getInputProps: getIconInputProps,
+      clearFiles: clearIconFiles,
     },
   ] = useFileUpload({
     accept: "image/*",
     maxFiles: 1, // Only allow one file for the icon
+    initialFiles: getInitialIconFile(),
   })
 
-  // Show icon preview if saved in localStorage
+  // Sync icon file when formData.iconUrl changes (from localStorage)
   useEffect(() => {
-    if (formData.iconUrl && iconFiles.length === 0) {
-      console.log('Recuperando previsualización de icono desde localStorage:', formData.iconUrl);
+    const savedIconUrl = formData.iconUrl
 
-      // Workaround to show saved icon
-      openIconDialog();
-      setTimeout(() => {
-        document.body.click(); // Cancel dialog
-      }, 100);
+    if (savedIconUrl) {
+      // Create restored icon from saved URL
+      const restored = {
+        id: `restored-icon-${Date.now()}`,
+        file: {
+          name: 'icon.jpg',
+          size: 0,
+          type: 'image/jpeg'
+        } as FileMetadata,
+        preview: savedIconUrl
+      }
+
+      setRestoredIcon(restored)
+      console.log('Icono restaurado desde localStorage:', savedIconUrl)
+    } else {
+      setRestoredIcon(null)
     }
-  }, [formData.iconUrl, iconFiles.length]);
+  }, [formData.iconUrl])
+
+
 
   // Form field handlers
   const handleChange = (value: string, fieldId?: string) => {
@@ -270,11 +343,14 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
   const handleUploadImages = async () => {
     const currentUrls = formData.screenshotUrls || []
 
+    // Check if we have new icon file to upload (not from localStorage)
+    const hasNewIcon = iconFiles.length > 0 && iconFiles[0].file instanceof File && !formData.iconUrl
+
+    // Check if we have new screenshots to upload (not from localStorage)
+    const hasNewScreenshots = screenshots.length > 0 && currentUrls.length < screenshots.length
+
     // Skip if no new files to upload
-    if (
-      !(iconFiles.length > 0 && !formData.iconUrl) &&
-      !(screenshots.length > 0 && currentUrls.length < screenshots.length)
-    ) {
+    if (!hasNewIcon && !hasNewScreenshots) {
       return
     }
 
@@ -282,8 +358,8 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
 
     try {
       // Upload icon if new
-      if (iconFiles.length > 0 && iconFiles[0].file instanceof File && !formData.iconUrl) {
-        const result = await uploadFile(iconFiles[0].file)
+      if (hasNewIcon) {
+        const result = await uploadFile(iconFiles[0].file as File)
         if (result.success && result.url) {
           setFormData({
             ...formData,
@@ -358,6 +434,10 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Combine new files with restored files
+  const combinedScreenshotFiles = [...restoredScreenshots, ...screenshotFiles]
+  const combinedIconFiles = restoredIcon ? [restoredIcon, ...iconFiles] : iconFiles
+
   // Check if current step is valid
   const isStepValid = (): boolean => {
     const currentStepData = steps[currentStep]
@@ -370,10 +450,10 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
           formData.tagline.trim() !== '' &&
           formData.description.trim() !== '' &&
           formData.link.trim() !== '' &&
-          (iconFiles.length > 0 || formData.iconUrl)
+          (combinedIconFiles.length > 0 || formData.iconUrl)
         )
       case 'screenshots':
-        return Boolean(screenshotFiles.length > 0 || (formData.screenshotUrls && formData.screenshotUrls.length > 0))
+        return Boolean(combinedScreenshotFiles.length > 0 || (formData.screenshotUrls && formData.screenshotUrls.length > 0))
       default:
         return Boolean(currentValue.length > 0 && getCharsRemaining(currentValue) >= 0)
     }
@@ -386,6 +466,47 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
 
   const isOverLimit = (value: string) => {
     return getCharsRemaining(value) < 0
+  }
+
+  // Custom remove function that handles both new and restored files
+  const removeScreenshotFile = (id: string) => {
+    // Check if it's a restored file
+    const isRestored = restoredScreenshots.some(file => file.id === id)
+
+    if (isRestored) {
+      // Remove from restored screenshots and update formData
+      const updatedRestored = restoredScreenshots.filter(file => file.id !== id)
+      setRestoredScreenshots(updatedRestored)
+
+      // Update formData.screenshotUrls
+      const updatedUrls = formData.screenshotUrls?.filter((_, index) => {
+        const restoredFile = restoredScreenshots[index]
+        return restoredFile?.id !== id
+      }) || []
+
+      setFormData({
+        ...formData,
+        screenshotUrls: updatedUrls
+      })
+    } else {
+      // Remove from new files using the original function
+      removeFile(id)
+    }
+  }
+
+  const removeIconFileCustom = (id: string) => {
+    // Check if it's the restored icon
+    if (restoredIcon && restoredIcon.id === id) {
+      // Remove restored icon and update formData
+      setRestoredIcon(null)
+      setFormData({
+        ...formData,
+        iconUrl: ''
+      })
+    } else {
+      // Remove from new files using the original function
+      removeIconFile(id)
+    }
   }
 
   // Create context value
@@ -402,13 +523,13 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
     handleUploadImages,
     isUploading,
     isStepValid,
-    // Icon upload
-    iconFiles: iconFiles as unknown as FileWithPreview[],
-    removeIconFile,
+    // Icon upload - use combined files
+    iconFiles: combinedIconFiles as unknown as FileWithPreview[],
+    removeIconFile: removeIconFileCustom,
     openIconDialog,
     getIconInputProps,
-    // Screenshot upload
-    screenshotFiles: screenshotFiles as unknown as FileWithPreview[],
+    // Screenshot upload - use combined files
+    screenshotFiles: combinedScreenshotFiles as unknown as FileWithPreview[],
     isDragging,
     screenshotErrors,
     handleDragEnter: handleDragEnter as unknown as (e: DragEvent<Element>) => void,
@@ -416,7 +537,7 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
     handleDragOver: handleDragOver as unknown as (e: DragEvent<Element>) => void,
     handleDrop: handleDrop as unknown as (e: DragEvent<Element>) => void,
     openFileDialog,
-    removeFile,
+    removeFile: removeScreenshotFile,
     clearFiles,
     getInputProps,
     screenshots,

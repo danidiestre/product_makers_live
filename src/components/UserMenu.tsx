@@ -118,7 +118,7 @@ export function UserMenu() {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
-            <Link href="/products/new" className="cursor-pointer flex items-center gap-2">
+            <Link href="/dashboard/product/new" className="cursor-pointer flex items-center gap-2">
               <FolderPlus className="size-5" />
               <span>Añadir producto</span>
             </Link>
