@@ -150,6 +150,8 @@ export const AppCard: FC<AppCardProps> = ({
             </div>
             <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
               <div className="flex gap-2">
+                {/* Comments button - Commented out for first version */}
+                {/*
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
@@ -171,6 +173,7 @@ export const AppCard: FC<AppCardProps> = ({
                     </TooltipContent>
                   </Tooltip>
                 </div>
+                */}
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
