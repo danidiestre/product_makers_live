@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { getCurrentUser } from '@/app/dashboard/profile/actions'
-import DashboardContent from './DashboardContent'
+import { getUserProducts } from '@/app/products/actions'
+import DashboardContent from '@/app/dashboard/DashboardContent'
 
 export default async function DashboardPage() {
   const user = await getCurrentUser()
@@ -9,5 +10,9 @@ export default async function DashboardPage() {
     redirect('/')
   }
 
-  return <DashboardContent user={user} />
+  // Cargar los productos del usuario en el servidor
+  const userProductsResult = await getUserProducts(user.id)
+  const userProducts = userProductsResult.success ? userProductsResult.data || [] : []
+
+  return <DashboardContent user={user} userProducts={userProducts} />
 }
