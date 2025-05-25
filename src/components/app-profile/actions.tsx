@@ -58,7 +58,8 @@ export const AppProfileActions: FC<AppProfileActionsProps> = ({ app }) => {
         </TooltipContent>
       </Tooltip>
 
-      {/* Comments button */}
+      {/* Comments button - Commented out for first version */}
+      {/*
       <Tooltip>
         <TooltipTrigger asChild>
           <Button asChild variant="secondary">
@@ -75,6 +76,7 @@ export const AppProfileActions: FC<AppProfileActionsProps> = ({ app }) => {
           Ver comentarios
         </TooltipContent>
       </Tooltip>
+      */}
 
       {/* Share button */}
       <Tooltip>

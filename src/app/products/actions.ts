@@ -447,3 +447,66 @@ export async function getUserProductsStatic(userId: string) {
     return { success: false, error: "Failed to fetch user products" };
   }
 }
+
+/**
+ * Get random product and maker for hero section
+ */
+export async function getRandomProductAndMaker() {
+  try {
+    // Get all products with their users
+    const products = await prisma.product.findMany({
+      include: {
+        user: true,
+        votes: true,
+      },
+    });
+
+    if (products.length === 0) {
+      return { success: false, error: "No products found" };
+    }
+
+    // Select a random product
+    const randomProduct = products[Math.floor(Math.random() * products.length)];
+    
+    // Convert to App format
+    const voteCount = randomProduct.votes.length;
+    const app = convertProductToApp(randomProduct, voteCount, false);
+
+    // Extract the maker from the product
+    const maker = app.makers?.[0];
+
+    return { 
+      success: true, 
+      data: { 
+        product: app, 
+        maker: maker 
+      } 
+    };
+  } catch (error) {
+    console.error("Error fetching random product and maker:", error);
+    return { success: false, error: "Failed to fetch random product and maker" };
+  }
+}
+
+/**
+ * Get total counts for hero section
+ */
+export async function getHeroCounts() {
+  try {
+    const [productCount, userCount] = await Promise.all([
+      prisma.product.count(),
+      prisma.user.count(),
+    ]);
+
+    return { 
+      success: true, 
+      data: { 
+        totalProducts: productCount, 
+        totalMakers: userCount 
+      } 
+    };
+  } catch (error) {
+    console.error("Error fetching hero counts:", error);
+    return { success: false, error: "Failed to fetch counts" };
+  }
+}

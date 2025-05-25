@@ -172,7 +172,8 @@ export const AppProfileContentSkeleton: FC = () => {
         </CardContent>
       </Card>
 
-      {/* Comments Section Skeleton */}
+      {/* Comments Section Skeleton - Commented out for first version */}
+      {/*
       <hr className="border-t" />
       <Card className={styles.card}>
         <CardHeader className={styles.cardHeader}>
@@ -192,6 +193,7 @@ export const AppProfileContentSkeleton: FC = () => {
           </div>
         </CardContent>
       </Card>
+      */}
     </div>
   )
 }

@@ -1,30 +1,21 @@
-'use client'
-
-import React, { useState, useEffect } from "react"
+import React from "react"
 import Link from "next/link"
-import { getAllMakers, getAllApps } from '@/lib/data'
+import { getRandomProductAndMaker, getHeroCounts } from '@/app/products/actions'
 import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
-export function PageHero() {
-  const [randomApp, setRandomApp] = useState<any>(null)
-  const [randomMaker, setRandomMaker] = useState<any>(null)
+export async function PageHero() {
+  // Get random product and maker from database
+  const randomDataResult = await getRandomProductAndMaker()
+  const countsResult = await getHeroCounts()
 
-  const totalMakers = getAllMakers().length
-  const totalApps = getAllApps().length
-
-  useEffect(() => {
-    const apps = getAllApps()
-    const selectedApp = apps[Math.floor(Math.random() * apps.length)]
-    setRandomApp(selectedApp)
-
-    if ((selectedApp?.makers ?? []).length > 0) {
-      const selectedMaker = selectedApp.makers![Math.floor(Math.random() * selectedApp.makers!.length)]
-      setRandomMaker(selectedMaker)
-    }
-  }, [])
+  const randomApp = randomDataResult.success ? randomDataResult.data?.product : null
+  const randomMaker = randomDataResult.success ? randomDataResult.data?.maker : null
+  
+  const totalMakers = countsResult.success ? countsResult.data?.totalMakers || 0 : 0
+  const totalApps = countsResult.success ? countsResult.data?.totalProducts || 0 : 0
 
   return (
     <LayoutSection className="border-b bg-background">
@@ -69,7 +60,7 @@ export function PageHero() {
                   </Avatar>
                 </HoverCardTrigger>
                 <HoverCardContent side="right" sideOffset={-61} className="w-auto max-w-64 pr-4">
-                  <Link href={`/maker/${randomMaker.name.toLowerCase().replace(/\s+/g, '-')}`} className="flex gap-3">
+                  <Link href={`/maker/${randomMaker.id}`} className="flex gap-3">
                     <Avatar className="size-10 rounded-md bg-background ring-1 ring-border p-0 cursor-pointer">
                       <AvatarImage src={randomMaker.avatar} />
                       <AvatarFallback>{randomMaker.name?.charAt(0)}</AvatarFallback>
