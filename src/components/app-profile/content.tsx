@@ -1,5 +1,7 @@
-import { FC } from 'react'
-import { MessageCircle } from 'lucide-react'
+'use client'
+
+import { FC, useState } from 'react'
+import { MessageCircle, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
@@ -9,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Carousel } from '@/components/ui/carousel'
 import { App } from '@/lib/types'
 
 interface AppProfileContentProps {
@@ -16,11 +19,39 @@ interface AppProfileContentProps {
 }
 
 export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
+  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
+  const [fullscreenIndex, setFullscreenIndex] = useState(0)
+  
   const styles = {
     card: "w-full bg-transparent border-none rounded-none gap-4",
     cardHeader: "p-0",
     cardTitle: "text-2xl font-semibold text-foreground",
     cardContent: "p-0 text-base font-medium text-muted-foreground",
+  }
+
+  const openFullscreen = (index: number) => {
+    if (app.screenshots && app.screenshots.length > 0) {
+      setFullscreenIndex(index)
+      setFullscreenImage(app.screenshots[index])
+    }
+  }
+
+  const closeFullscreen = () => {
+    setFullscreenImage(null)
+  }
+
+  const nextFullscreenImage = () => {
+    if (!app.screenshots) return
+    const newIndex = (fullscreenIndex + 1) % app.screenshots.length
+    setFullscreenIndex(newIndex)
+    setFullscreenImage(app.screenshots[newIndex])
+  }
+
+  const prevFullscreenImage = () => {
+    if (!app.screenshots) return
+    const newIndex = fullscreenIndex === 0 ? app.screenshots.length - 1 : fullscreenIndex - 1
+    setFullscreenIndex(newIndex)
+    setFullscreenImage(app.screenshots[newIndex])
   }
 
   return (
@@ -62,19 +93,83 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
           <CardDescription>Imágenes y capturas de {app.name}</CardDescription>
         </CardHeader>
         <CardContent className={styles.cardContent}>
-          <div className="grid grid-cols-1 gap-4 mt-2">
-            {app.screenshots?.map((screenshot, index) => (
-              <div key={index} className="rounded-lg overflow-hidden ring-4 ring-border/50">
-                <img
-                  src={screenshot}
-                  alt={`${app.name} - Imagen ${index + 1}`}
-                  className="w-full h-auto"
-                />
-              </div>
-            ))}
-          </div>
+          {app.screenshots && app.screenshots.length > 0 ? (
+            <div className="mt-2">
+              <Carousel 
+                className="border border-border/50 rounded-lg aspect-auto"
+                showArrows={app.screenshots.length > 1}
+                showIndicators={app.screenshots.length > 1}
+              >
+                {app.screenshots.map((screenshot, index) => (
+                  <div 
+                    key={index} 
+                    className="flex items-center justify-center p-4 cursor-pointer"
+                    onClick={() => openFullscreen(index)}
+                  >
+                    <img
+                      src={screenshot}
+                      alt={`${app.name} - Imagen ${index + 1}`}
+                      className="max-w-full max-h-[70vh] object-contain"
+                    />
+                  </div>
+                ))}
+              </Carousel>
+            </div>
+          ) : (
+            <p className="text-muted-foreground italic mt-2">No hay capturas disponibles</p>
+          )}
         </CardContent>
       </Card>
+
+      {/* Fullscreen Image Modal */}
+      {fullscreenImage && (
+        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center" onClick={closeFullscreen}>
+          <div className="relative w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
+            <img
+              src={fullscreenImage}
+              alt={`${app.name} - Imagen de pantalla completa`}
+              className="max-w-full max-h-full object-contain p-4"
+            />
+            
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="absolute top-4 right-4 bg-background/20 hover:bg-background/40 rounded-full"
+              onClick={closeFullscreen}
+            >
+              <X className="size-5" />
+            </Button>
+            
+            {app.screenshots && app.screenshots.length > 1 && (
+              <>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/20 hover:bg-background/40 rounded-full"
+                  onClick={prevFullscreenImage}
+                >
+                  <ChevronLeft className="size-5" />
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/20 hover:bg-background/40 rounded-full"
+                  onClick={nextFullscreenImage}
+                >
+                  <ChevronRight className="size-5" />
+                </Button>
+
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
+                  <span className="text-white/90 bg-background/20 px-2 py-1 rounded text-sm">
+                    {fullscreenIndex + 1} / {app.screenshots.length}
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Problem Section */}
       <Card className={styles.card}>
@@ -83,7 +178,11 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
           <CardDescription>Que pretende resolver el producto</CardDescription>
         </CardHeader>
         <CardContent className={styles.cardContent}>
-          ### Añadir Problema aquí ###
+          {app.problem ? (
+            <p className="mt-2">{app.problem}</p>
+          ) : (
+            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+          )}
         </CardContent>
       </Card>
 
@@ -94,7 +193,11 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
           <CardDescription>Que aporta tu producto</CardDescription>
         </CardHeader>
         <CardContent className={styles.cardContent}>
-          ### Añadir Solución aquí ###
+          {app.solution ? (
+            <p className="mt-2">{app.solution}</p>
+          ) : (
+            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+          )}
         </CardContent>
       </Card>
 
@@ -105,7 +208,11 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
           <CardDescription>Funcionalidades principales del producto</CardDescription>
         </CardHeader>
         <CardContent className={styles.cardContent}>
-          ### Añadir Funcionalidades aquí ###
+          {app.features ? (
+            <p className="mt-2">{app.features}</p>
+          ) : (
+            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+          )}
         </CardContent>
       </Card>
 
@@ -116,7 +223,11 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
           <CardDescription>Cómo monetiza el producto</CardDescription>
         </CardHeader>
         <CardContent className={styles.cardContent}>
-          ### Añadir Monetización aquí ###
+          {app.monetization ? (
+            <p className="mt-2">{app.monetization}</p>
+          ) : (
+            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+          )}
         </CardContent>
       </Card>
 
@@ -127,7 +238,11 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
           <CardDescription>Que plan hay para el producto</CardDescription>
         </CardHeader>
         <CardContent className={styles.cardContent}>
-          ### Añadir Roadmap aquí ###
+          {app.roadmap ? (
+            <p className="mt-2">{app.roadmap}</p>
+          ) : (
+            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+          )}
         </CardContent>
       </Card>
 
@@ -138,19 +253,23 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
           <CardDescription>Herramientas usadas en el producto</CardDescription>
         </CardHeader>
         <CardContent className={styles.cardContent}>
-          {app.technologies ? (
-            <div className="flex flex-wrap gap-2 mt-2">
-              {app.technologies.map((tech, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 bg-muted rounded-md text-sm"
-                >
-                  {tech}
-                </span>
-              ))}
-            </div>
+          {app.technology ? (
+            <p className="mt-2">{app.technology}</p>
           ) : (
-            '### Añadir Tecnología aquí ###'
+            app.technologies ? (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {app.technologies.map((tech, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 bg-muted rounded-md text-sm"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+            )
           )}
         </CardContent>
       </Card>

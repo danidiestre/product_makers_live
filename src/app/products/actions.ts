@@ -158,6 +158,13 @@ export async function getProducts() {
         // Campos adicionales requeridos por la interfaz App
         tags: [],
         badges: [],
+        // Mapear los campos en español a sus equivalentes en inglés
+        problem: product.problema || '',
+        solution: product.solucion || '',
+        features: product.funcionalidades || '',
+        monetization: product.monetizacion || '',
+        roadmap: product.roadmap || '',
+        technology: product.tecnologia || ''
       };
 
       return app;
@@ -249,6 +256,13 @@ export async function getProductById(id: string) {
       makers: maker ? [maker] : [],
       tags: [],
       badges: [],
+      // Mapear los campos en español a sus equivalentes en inglés
+      problem: product.problema || '',
+      solution: product.solucion || '',
+      features: product.funcionalidades || '',
+      monetization: product.monetizacion || '',
+      roadmap: product.roadmap || '',
+      technology: product.tecnologia || ''
     };
 
     return { success: true, data: app };
@@ -332,6 +346,13 @@ export async function getUserProducts(userId: string) {
         makers: maker ? [maker] : [],
         tags: [],
         badges: [],
+        // Mapear los campos en español a sus equivalentes en inglés
+        problem: product.problema || '',
+        solution: product.solucion || '',
+        features: product.funcionalidades || '',
+        monetization: product.monetizacion || '',
+        roadmap: product.roadmap || '',
+        technology: product.tecnologia || ''
       };
 
       return app;

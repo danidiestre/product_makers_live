@@ -105,7 +105,9 @@ export const AppProfileHero: FC<AppProfileHeroProps> = ({ app }) => {
                     className="gap-2 pl-3 w-full sm:w-auto"
                   >
                     <SquareArrowOutUpRight size={16} />
-                    <span>{app.externalLinks.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
+                    <span className="truncate max-w-[150px] sm:max-w-[220px] md:max-w-[250px]">
+                      {app.externalLinks.website.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+                    </span>
                   </Link>
                 </Button>
               )}

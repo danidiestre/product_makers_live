@@ -67,6 +67,12 @@ export interface App {
   externalLinks?: ExternalLinks;
   makers?: Maker[];
   metrics?: Metrics;
+  problem?: string;
+  solution?: string;
+  features?: string;
+  monetization?: string;
+  roadmap?: string;
+  technology?: string;
 }
 
 export type MakerCategory =
