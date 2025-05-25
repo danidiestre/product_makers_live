@@ -3,10 +3,17 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppCard } from '@/components/AppCard'
-import { Telescope } from 'lucide-react'
+import { Telescope, Flame, Clock } from 'lucide-react'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import {
   Pagination,
   PaginationContent,
@@ -17,7 +24,7 @@ import {
 } from '@/components/ui/pagination'
 import { useProductsWithVotes } from '@/hooks/useProductsWithVotes'
 
-type SortKey = 'votes' | 'name'
+type SortKey = 'votes' | 'launchDate'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
 
 const PRODUCTS_PER_PAGE = 8
@@ -30,7 +37,6 @@ interface AppListProps {
 
 export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
   const [sortKey, setSortKey] = useState<SortKey>('votes')
-  const [sortAsc, setSortAsc] = useState(false)
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -63,10 +69,16 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
 
   // Sort apps based on current criteria
   const sortedApps = [...filteredApps].sort((a, b) => {
-    const modifier = sortAsc ? 1 : -1
-    return sortKey === 'votes'
-      ? (a.votes - b.votes) * modifier
-      : a.name.localeCompare(b.name) * modifier
+    if (sortKey === 'votes') {
+      // Para votos, queremos descendente (más votos primero)
+      return b.votes - a.votes
+    } else if (sortKey === 'launchDate') {
+      // Para fechas, queremos descendente (más recientes primero)
+      const dateA = new Date(a.launchDate).getTime()
+      const dateB = new Date(b.launchDate).getTime()
+      return dateB - dateA
+    }
+    return 0
   })
 
   // Calculate pagination
@@ -112,6 +124,35 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
                 <Badge variant={platformFilter === id ? "secondary" : "secondary"} className="w-8">{count}</Badge>
               </Button>
             ))}
+          </div>
+
+          {/* Sort controls */}
+          <div className="flex items-center gap-2">
+            <Select
+              value={sortKey}
+              onValueChange={(value) => {
+                setSortKey(value as SortKey)
+                setCurrentPage(1) // Reset to first page when sort changes
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Ordenar por..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="votes">
+                  <div className="flex items-center gap-2">
+                    <Flame size={16} className="text-orange-500" />
+                    Más populares
+                  </div>
+                </SelectItem>
+                <SelectItem value="launchDate">
+                  <div className="flex items-center gap-2">
+                    <Clock size={16} className="text-blue-500" />
+                    Más recientes
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       )}
