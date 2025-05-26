@@ -65,7 +65,11 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         <CardContent className={styles.cardContent}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
             {app.makers?.map((maker, index) => (
-              <div key={maker.id || index} className="p-4 border rounded-lg">
+              <Link 
+                key={maker.id || index} 
+                href={`/maker/${maker.id}`}
+                className="p-4 border rounded-lg hover:border-primary/50 hover:bg-accent/50 transition-all duration-200 cursor-pointer group"
+              >
                 <div className="flex items-center gap-3">
                   <img
                     src={maker.avatar}
@@ -73,14 +77,14 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
                     className="w-12 h-12 rounded-full object-cover"
                   />
                   <div>
-                    <h4 className="font-medium text-foreground">{maker.name}</h4>
+                    <h4 className="font-medium text-foreground group-hover:text-primary transition-colors">{maker.name}</h4>
                     <p className="text-sm text-muted-foreground">{maker.role}</p>
                   </div>
                 </div>
                 {maker.bio && (
                   <p className="mt-2 text-sm text-muted-foreground">{maker.bio}</p>
                 )}
-              </div>
+              </Link>
             ))}
           </div>
         </CardContent>

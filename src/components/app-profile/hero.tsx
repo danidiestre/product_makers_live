@@ -80,6 +80,7 @@ export const AppProfileHero: FC<AppProfileHeroProps> = ({ app, isOwner = false }
             {app.badges?.includes('new') && (
               <Badge variant="new">Novedad</Badge>
             )}
+            {/* Comentado temporalmente - plataformas
             {app.externalLinks?.website && (
               <Badge variant="secondary">Web</Badge>
             )}
@@ -89,6 +90,7 @@ export const AppProfileHero: FC<AppProfileHeroProps> = ({ app, isOwner = false }
             {app.externalLinks?.playStore && (
               <Badge variant="secondary">Android</Badge>
             )}
+            */}
           </div>
 
           <p className="text-sm text-muted-foreground mb-6">{app.description}</p>

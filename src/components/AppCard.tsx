@@ -93,6 +93,7 @@ export const AppCard: FC<AppCardProps> = ({
                 {badges.includes('new') && (
                   <Badge variant="new">Novedad</Badge>
                 )}
+                {/* Comentado temporalmente - plataformas
                 {externalLinks?.website && (
                   <Badge variant="secondary">Web</Badge>
                 )}
@@ -102,6 +103,7 @@ export const AppCard: FC<AppCardProps> = ({
                 {externalLinks?.playStore && (
                   <Badge variant="secondary">Android</Badge>
                 )}
+                */}
               </div>
               {makers.length > 0 && (
                 <div className="flex items-center mt-2.5">

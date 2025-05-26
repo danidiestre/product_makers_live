@@ -9,7 +9,11 @@ export default function EditProductLayout({
   children: React.ReactNode
 }) {
   const params = useParams()
-  const productId = params.id as string
+  const productId = params?.id as string
+
+  if (!params || !productId) {
+    return <div>Loading...</div>
+  }
 
   return (
     <ProductFormProvider mode="edit" productId={productId}>
