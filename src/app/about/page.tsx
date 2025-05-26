@@ -12,7 +12,7 @@ import { PageHeader } from '@/components/PageHeader'
 import Faqs from '@/components/Faqs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck, Copy, Download, Share, Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck, Copy, Download, Share, Check, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import { useState } from 'react'
 
 export default function AboutPage() {
@@ -228,6 +228,89 @@ export default function AboutPage() {
                     Recursos y herramientas que ayuden a los makers a tener éxito.
                   </li>
                 </ul>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">Únete a Nuestros Canales</CardTitle>
+              </CardHeader>
+              <CardContent className="pt-1 pb-6 space-y-4">
+                <p className="text-muted-foreground">
+                  Conecta con la comunidad Product Makers a través de nuestros principales canales de comunicación.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Discord Card */}
+                  <div className="bg-muted rounded-lg p-5 flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#5865F2]/10 rounded-lg flex items-center justify-center mt-1">
+                      <Image
+                        src="/assets/discord-logo.svg"
+                        alt="Discord Logo"
+                        width={24}
+                        height={24}
+                        className="object-contain opacity-70"
+                      />
+                    </div>
+                    <div className="flex-1 space-y-3">
+                      <div className="space-y-1">
+                        <h3 className="text-lg font-semibold">Discord</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          Únete a conversaciones diarias, comparte tu progreso y conecta con otros makers en tiempo real.
+                        </p>
+                      </div>
+                      <Button 
+                        asChild 
+                        size="sm"
+                        className="bg-[#5865F2] hover:bg-[#4752C4] text-white border-0 w-full"
+                      >
+                        <a 
+                          href="https://discord.com/invite/PnBJNwDW77" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          Únete al Discord
+                          <ExternalLink size={14} />
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* YouTube Card */}
+                  <div className="bg-muted rounded-lg p-5 flex items-start gap-4">
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#FF0000]/10 rounded-lg flex items-center justify-center mt-1">
+                      <Image
+                        src="/assets/youtube-logo.svg"
+                        alt="YouTube Logo"
+                        width={24}
+                        height={24}
+                        className="object-contain opacity-70"
+                      />
+                    </div>
+                    <div className="flex-1 space-y-3">
+                      <div className="space-y-1">
+                        <h3 className="text-lg font-semibold">YouTube</h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          Aprende con tutoriales, participa en streams en vivo y descubre casos de éxito de otros makers.
+                        </p>
+                      </div>
+                      <Button 
+                        asChild 
+                        size="sm"
+                        className="bg-[#FF0000] hover:bg-[#CC0000] text-white border-0 w-full"
+                      >
+                        <a 
+                          href="https://www.youtube.com/@productmakers" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          Ver en YouTube
+                          <ExternalLink size={14} />
+                        </a>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
             <Card>
