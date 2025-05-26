@@ -62,8 +62,10 @@ export async function toggleVote(productId: string): Promise<VoteResult> {
       where: { productId },
     });
 
+    revalidatePath("/");
     revalidatePath("/products");
     revalidatePath(`/app/${productId}`);
+    revalidatePath(`/maker/${session.user.id}`);
 
     return {
       success: true,

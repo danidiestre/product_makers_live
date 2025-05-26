@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { App, Maker } from "@/lib/types";
 
 export async function createProduct(formData: FormData) {
@@ -75,7 +74,10 @@ export async function createProduct(formData: FormData) {
     }
 
     // Revalidate products page
+    revalidatePath("/");
     revalidatePath("/products");
+    revalidatePath(`/app/${product.id}`);
+    revalidatePath(`/maker/${user.id}`);
 
     return { success: true, data: product };
   } catch (error: any) {
@@ -174,8 +176,11 @@ export async function updateProduct(formData: FormData) {
     }
 
     // Revalidate products page
+    revalidatePath("/");
     revalidatePath("/products");
     revalidatePath(`/products/${productId}`);
+    revalidatePath(`/app/${productId}`);
+    revalidatePath(`/maker/${user.id}`);
 
     return { success: true, data: product };
   } catch (error: any) {
