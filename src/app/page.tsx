@@ -1,4 +1,3 @@
-import Script from 'next/script'
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
 import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
@@ -17,40 +16,14 @@ export default async function Home() {
   const result = await getTopProductsStatic(10)
   const initialProducts = result.success ? result.data || [] : []
 
-  // JSON-LD structured data for better SEO
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Product Makers",
-    "url": "https://productmakers.ai",
-    "description": "A community showcasing innovative apps and tools created by indie makers and small teams.",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://productmakers.ai/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  };
-
   return (
     <LayoutWrapper>
-
-      {/* Add JSON-LD for SEO */}
-      <Script
-        id="product-makers-schema"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
       {/* StreamCountdown banner */}
       <StreamCountdownBanner />
-
       <Navbar />
-
       <LayoutMain>
-
         {/* Hero Section */}
         <PageHero />
-
         {/* Product List Section */}
         <LayoutSection>
           <LayoutContainer>
@@ -64,11 +37,8 @@ export default async function Home() {
             <AppList searchQuery="" limit={10} initialProducts={initialProducts} />
           </LayoutContainer>
         </LayoutSection>
-
       </LayoutMain>
-
       <Footer />
-
     </LayoutWrapper>
   )
 } 

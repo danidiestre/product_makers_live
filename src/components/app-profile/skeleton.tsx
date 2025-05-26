@@ -14,7 +14,7 @@ export const AppProfileHeroSkeleton: FC = () => {
   return (
     <LayoutContainer>
       {/* Breadcrumb Skeleton */}
-      <div className="flex items-center gap-2 mb-6">
+      <div className="w-full flex items-center justify-start gap-2">
         <Skeleton className="h-4 w-12" />
         <span className="text-muted-foreground">/</span>
         <Skeleton className="h-4 w-20" />

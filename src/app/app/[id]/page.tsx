@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ServerCrash } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
@@ -12,6 +12,7 @@ import { getProductById } from '@/app/products/actions'
 import { getCurrentUser } from '@/app/dashboard/profile/actions'
 import { AppProfileHero } from '@/components/app-profile/hero'
 import { AppProfileContent } from '@/components/app-profile/content'
+import { EmptyState } from '@/components/EmptyState'
 
 interface AppProfilePageProps {
   params: { id: string }
@@ -32,14 +33,14 @@ const AppProfilePage: FC<AppProfilePageProps> = async ({ params }) => {
         <LayoutMain>
           <LayoutSection>
             <LayoutContainer>
-              <h1 className="text-2xl font-bold text-foreground mb-2">Producto no encontrado</h1>
-              <p className="mt-4 text-muted-foreground mb-4">El producto que estás buscando no existe o ha sido eliminado.</p>
-              <Button asChild variant="secondary">
-                <Link href="/" className="gap-2">
-                  <ArrowLeft size={16} />
-                  Back to home
-                </Link>
-              </Button>
+              <EmptyState icon={<ServerCrash className="size-20 stroke-1" />} message="Producto no encontrado">
+                <p className="text-muted-foreground text-sm -mt-2 mb-4">El producto que estás buscando no existe o ha sido eliminado.</p>
+                <Button asChild variant="secondary">
+                  <Link href="/">
+                    Volver al inicio
+                  </Link>
+                </Button>
+              </EmptyState>
             </LayoutContainer>
           </LayoutSection>
         </LayoutMain>

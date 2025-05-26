@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { LinkSocial } from '@/components/LinkSocial'
 import { App, ExternalLinks } from '@/lib/types'
 import { useVotes } from '@/hooks/useVotes'
+import Link from 'next/link'
 
 // Extended App Card Props to include the additional fields from App profile
 interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
@@ -60,7 +61,7 @@ export const AppCard: FC<AppCardProps> = ({
   return (
     <div onClick={handleCardClick}>
       <Card data-testid={`app-card-${id}`}
-        className="cursor-pointer hover:bg-muted/50 transition-colors"
+        className="cursor-pointer hover:border-foreground/20 transition-all"
       >
         <CardHeader className="gap-0 p-6">
           <div className="flex flex-col md:flex-row items-start gap-4 relative">

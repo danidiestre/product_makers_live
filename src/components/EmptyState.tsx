@@ -10,7 +10,7 @@ export function EmptyState({ message, children, icon }: EmptyStateProps) {
   return (
     <div className="w-full flex flex-col items-center justify-center gap-4 text-muted-foreground p-12">
       {icon}
-      <span className="text-base font-medium">{message}</span>
+      <span className="text-lg font-medium">{message}</span>
       {children}
     </div>
   )

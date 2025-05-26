@@ -21,41 +21,52 @@ import { ServerCrash, WandSparkles } from 'lucide-react'
 const MAKERS_PER_PAGE = 12
 
 type MakersListProps = {
-  searchQuery: string
+  searchQuery: string;
+  onResetSearch?: () => void;
 }
 
-export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
+export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState<Role | 'All'>('All')
-  const [makers, setMakers] = useState<User[]>([])
+  const [allMakers, setAllMakers] = useState<User[]>([]) // Store ALL makers here
+  const [filteredMakers, setFilteredMakers] = useState<User[]>([]) // Makers filtered by category
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  // Fetch makers based on selected category
+  // Fetch ALL makers on initial load
   useEffect(() => {
     const fetchMakers = async () => {
       setLoading(true)
       try {
-        const result = await getUsersByRole(selectedCategory)
+        const result = await getUsers()
         if (result.success) {
-          setMakers(result.data || [])
+          setAllMakers(result.data || [])
           setError(null)
         } else {
           setError(result.error || 'Failed to fetch makers')
-          setMakers([])
+          setAllMakers([])
         }
       } catch (err) {
         setError('Failed to fetch makers')
-        setMakers([])
+        setAllMakers([])
       }
       setLoading(false)
     }
 
     fetchMakers()
-  }, [selectedCategory])
+  }, [])
+
+  // Filter makers based on selected category
+  useEffect(() => {
+    if (selectedCategory === 'All') {
+      setFilteredMakers(allMakers)
+    } else {
+      setFilteredMakers(allMakers.filter(maker => maker.role === selectedCategory))
+    }
+  }, [selectedCategory, allMakers])
 
   // Filter makers based on search query
-  const filteredMakers = makers.filter(maker => {
+  const searchedMakers = filteredMakers.filter(maker => {
     const searchTerm = searchQuery.toLowerCase()
     return searchQuery === '' ? true
       : (maker.name?.toLowerCase().includes(searchTerm) ||
@@ -69,18 +80,27 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
   }, [searchQuery, selectedCategory])
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredMakers.length / MAKERS_PER_PAGE)
+  const totalPages = Math.ceil(searchedMakers.length / MAKERS_PER_PAGE)
   const startIndex = (currentPage - 1) * MAKERS_PER_PAGE
-  const paginatedMakers = filteredMakers.slice(startIndex, startIndex + MAKERS_PER_PAGE)
+  const paginatedMakers = searchedMakers.slice(startIndex, startIndex + MAKERS_PER_PAGE)
 
-  // Calculate category counts
+  // Calculate category counts from ALL makers
   const categories: (Role | 'All')[] = ['All', 'Developer', 'Designer', 'ProductManager', 'Marketer', 'Founder', 'Other']
   const categoryCounts = categories.map(category => ({
     name: category,
     count: category === 'All'
-      ? makers.length
-      : makers.filter(maker => maker.role === category).length
+      ? allMakers.length
+      : allMakers.filter(maker => maker.role === category).length
   }))
+
+  const handleReset = () => {
+    setSelectedCategory('All')
+    setCurrentPage(1)
+    if (onResetSearch) {
+      onResetSearch()
+    }
+  }
+
 
   if (loading) {
     return <LoadState message="Cargando makers..." />
@@ -91,12 +111,10 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
       <EmptyState icon={<ServerCrash className="size-20 stroke-1" />} message={error}>
         <Button
           variant="secondary"
-          onClick={() => {
-            setSelectedCategory('All')
-          }}
+          onClick={handleReset}
           className="mt-4"
         >
-          Try again
+          Vuelve a probar
         </Button>
       </EmptyState>
     )
@@ -131,10 +149,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery }) => {
       {paginatedMakers.length === 0 && (
         <EmptyState icon={<WandSparkles className="size-20 stroke-1" />} message="No hay makers que coincidan con tu búsqueda.">
           <Button variant="secondary"
-            onClick={() => {
-              setSelectedCategory('All')
-            }}
-          >
+            onClick={handleReset}>
             Ver todos los makers
           </Button>
         </EmptyState>

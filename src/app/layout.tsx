@@ -26,10 +26,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://productmakers.ai'),
   title: {
-    default: 'Product Makers - Discover Amazing Products Built by Indie Makers',
+    default: 'Product Makers - La comunidad en español donde pros de producto de todas las áreas llevamos ideas a lanzamientos reales.',
     template: '%s | Product Makers'
   },
-  description: 'A community showcasing innovative apps and tools created by indie makers and small teams.',
+  description: 'Product Makers es el punto de encuentro para profesionales de producto: makers independientes, diseñadores, desarrolladores y emprendedores que quieren llevar sus ideas de principio a fin.',
   keywords: ['product makers', 'indie makers', 'product discovery', 'maker community'],
   authors: [{ name: 'Product Makers Team' }],
   creator: 'Product Makers',
@@ -54,11 +54,11 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://productmakers.ai',
     siteName: 'Product Makers',
-    title: 'Product Makers - Discover Amazing Products Built by Indie Makers',
-    description: 'A community showcasing innovative apps and tools created by indie makers and small teams.',
+    title: 'Product Makers - La comunidad en español donde pros de producto de todas las áreas llevamos ideas a lanzamientos reales.',
+    description: 'Product Makers es el punto de encuentro para profesionales de producto: makers independientes, diseñadores, desarrolladores y emprendedores que quieren llevar sus ideas de principio a fin.',
     images: [
       {
-        url: 'https://productmakers.ai/og.png',
+        url: 'https://productmakers.ai/assets/social_assets/logo_big.png',
         width: 1200,
         height: 630,
       },
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     description: 'A community showcasing innovative apps and tools created by indie makers and small teams.',
     images: [
       {
-        url: 'https://productmakers.ai/og.png',
+        url: 'https://productmakers.ai/assets/social_assets/logo_big.png',
         width: 1200,
         height: 630,
       },

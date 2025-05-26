@@ -46,7 +46,7 @@ export function ProductsPageContent({ initialProducts }: ProductsPageContentProp
       {/* Product List */}
       <LayoutSection>
         <LayoutContainer>
-          <AppList searchQuery={searchQuery} initialProducts={initialProducts} />
+          <AppList searchQuery={searchQuery} onResetSearch={() => setSearchQuery('')} initialProducts={initialProducts} />
         </LayoutContainer>
       </LayoutSection>
     </>

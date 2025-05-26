@@ -23,6 +23,7 @@ import {
   PaginationLink,
 } from '@/components/ui/pagination'
 import { useProductsWithVotes } from '@/hooks/useProductsWithVotes'
+import { EmptyState } from './EmptyState'
 
 type SortKey = 'votes' | 'launchDate'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
@@ -33,9 +34,10 @@ interface AppListProps {
   searchQuery: string;
   limit?: number;
   initialProducts?: App[];
+  onResetSearch?: () => void;
 }
 
-export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
+export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: AppListProps) {
   const [sortKey, setSortKey] = useState<SortKey>('votes')
   const [platformFilter, setPlatformFilter] = useState<PlatformFilter>('all')
   const [currentPage, setCurrentPage] = useState(1)
@@ -104,6 +106,19 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
   // Display limited apps on home page, or all apps with pagination on products page
   const displayApps = limit ? sortedApps.slice(0, limit) : paginatedApps;
 
+  const handleReset = () => {
+    // Reset sort to default
+    setSortKey('votes');
+    // Reset platform filter to 'all'
+    setPlatformFilter('all');
+    // Reset to first page
+    setCurrentPage(1);
+    // If there's a search query reset handler, call it
+    if (onResetSearch) {
+      onResetSearch();
+    }
+  };
+
   return (
     <div className="w-full grid gap-6">
       {!limit && (
@@ -135,13 +150,13 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
                 setCurrentPage(1) // Reset to first page when sort changes
               }}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] border-none">
                 <SelectValue placeholder="Ordenar por..." />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="votes">
                   <div className="flex items-center gap-2">
-                    <Flame size={16} className="text-orange-500" />
+                    <Flame size={16} className="text-red-600" />
                     Más populares
                   </div>
                 </SelectItem>
@@ -167,11 +182,13 @@ export function AppList({ searchQuery, limit, initialProducts }: AppListProps) {
             />
           ))
         ) : (
-          <div className="text-center py-12 text-muted-foreground">
-            <Telescope className="mx-auto h-12 w-12 mb-4 opacity-50" />
-            <p className="text-lg font-medium mb-2">No se encontraron productos</p>
-            <p className="text-sm">Intenta ajustar los filtros de búsqueda</p>
-          </div>
+          <EmptyState icon={<Telescope className="size-20 stroke-1" />} message="No se encontraron productos">
+            <Button variant="secondary"
+              onClick={handleReset}
+            >
+              Ver todos los productos
+            </Button>
+          </EmptyState>
         )}
       </div>
 
