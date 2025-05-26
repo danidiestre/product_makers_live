@@ -32,6 +32,7 @@ interface Product {
   monetization?: string
   roadmap?: string
   technology?: string
+  productType?: string
 }
 
 interface EditProductFormProps {
@@ -77,6 +78,7 @@ export function EditProductForm({ product, productId }: EditProductFormProps) {
           monetization: product.monetization || '',
           roadmap: product.roadmap || '',
           technology: product.technology || '',
+          productType: product.productType || 'WEB',
           iconUrl: product.imageUrl || '',
           screenshotUrls: product.screenshots || []
         }

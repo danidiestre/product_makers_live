@@ -49,6 +49,8 @@ export interface Metrics {
   avgRating?: number;
 }
 
+export type ProductType = "WEB" | "IOS" | "ANDROID" | "OTHERS";
+
 export interface App {
   id: string;
   name: string;
@@ -73,6 +75,7 @@ export interface App {
   monetization?: string;
   roadmap?: string;
   technology?: string;
+  productType?: ProductType;
   initialHasVoted?: boolean;
 }
 

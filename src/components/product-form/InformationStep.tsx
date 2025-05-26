@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { CircleUserRound, X } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { CircleUserRound, X, Monitor, Smartphone, TabletSmartphone, Package } from 'lucide-react'
 import { ProductImagePreview } from '@/components/ProductImagePreview'
 import { useProductFormProvider } from '@/contexts/ProductFormContext'
 import { useState } from 'react'
@@ -176,6 +177,44 @@ export function InformationStep() {
               className={urlError ? "border-red-500" : ""}
             />
             {urlError && <p className="text-red-500 text-xs mt-1">{urlError}</p>}
+          </div>
+
+          <div className="w-full flex flex-col gap-3">
+            <Label htmlFor="productType">Tipo de producto</Label>
+            <Select
+              value={formData.productType}
+              onValueChange={(value) => setFormData({ ...formData, productType: value })}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona el tipo de producto" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="WEB">
+                  <div className="flex items-center gap-2">
+                    <Monitor size={16} />
+                    Web
+                  </div>
+                </SelectItem>
+                <SelectItem value="IOS">
+                  <div className="flex items-center gap-2">
+                    <Smartphone size={16} />
+                    iOS
+                  </div>
+                </SelectItem>
+                <SelectItem value="ANDROID">
+                  <div className="flex items-center gap-2">
+                    <TabletSmartphone size={16} />
+                    Android
+                  </div>
+                </SelectItem>
+                <SelectItem value="OTHERS">
+                  <div className="flex items-center gap-2">
+                    <Package size={16} />
+                    Otros
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>

@@ -37,6 +37,7 @@ export async function createProduct(formData: FormData) {
     const monetization = formData.get("monetization") as string;
     const roadmap = formData.get("roadmap") as string;
     const technology = formData.get("technology") as string;
+    const productType = formData.get("productType") as string;
 
     // Extraer URLs de imágenes
     const iconUrl = formData.get("iconUrl") as string;
@@ -65,6 +66,7 @@ export async function createProduct(formData: FormData) {
         monetizacion: monetization,
         roadmap,
         tecnologia: technology,
+        productType: productType as any, // Prisma will validate the enum
         userId: user.id,
       },
     });
@@ -139,6 +141,7 @@ export async function updateProduct(formData: FormData) {
     const monetization = formData.get("monetization") as string;
     const roadmap = formData.get("roadmap") as string;
     const technology = formData.get("technology") as string;
+    const productType = formData.get("productType") as string;
 
     // Extraer URLs de imágenes
     const iconUrl = formData.get("iconUrl") as string;
@@ -168,6 +171,7 @@ export async function updateProduct(formData: FormData) {
         monetizacion: monetization,
         roadmap,
         tecnologia: technology,
+        productType: productType as any, // Prisma will validate the enum
       },
     });
 
@@ -317,6 +321,7 @@ function convertProductToApp(
     monetization: product.monetizacion || "",
     roadmap: product.roadmap || "",
     technology: product.tecnologia || "",
+    productType: product.productType || "WEB",
     initialHasVoted: hasUserVoted,
   };
 
