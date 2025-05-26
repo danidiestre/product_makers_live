@@ -8,7 +8,7 @@ export default function NewProductLayout({
   children: React.ReactNode
 }) {
   return (
-    <ProductFormProvider>
+    <ProductFormProvider mode="create">
       {children}
     </ProductFormProvider>
   )
