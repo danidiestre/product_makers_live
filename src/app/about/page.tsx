@@ -12,8 +12,9 @@ import { PageHeader } from '@/components/PageHeader'
 import Faqs from '@/components/Faqs'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck, Copy, Download, Share, Check, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
+import { Blocks, MessageCircleHeart, Package, PartyPopper, ShieldPlus, ShieldCheck, Copy, Download, Share, Check, ChevronLeft, ChevronRight, ExternalLink, SquareArrowOutUpRight } from 'lucide-react'
 import { useState } from 'react'
+import Link from 'next/link'
 
 export default function AboutPage() {
   const [copiedText, setCopiedText] = useState<string | null>(null)
@@ -59,8 +60,8 @@ export default function AboutPage() {
   const visualAssets = [
     {
       id: 'linkedin',
-      title: 'Banner LinkedIn',
-      description: 'Para LinkedIn, Twitter, Facebook',
+      title: 'Banner',
+      description: 'Para Linkedin, Twitter, Facebook',
       dimensions: '1200x630px',
       src: '/assets/social_assets/linkedin.png'
     },
@@ -143,7 +144,7 @@ export default function AboutPage() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all"
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm border border-white/0 hover:bg-white/30 transition-all"
                   onClick={() => setCurrentMakerImage(currentMakerImage === 0 ? makerImages.length - 1 : currentMakerImage - 1)}
                 >
                   <ChevronLeft size={20} className="text-white" />
@@ -152,7 +153,7 @@ export default function AboutPage() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 backdrop-blur-sm border border-white/0 hover:bg-white/30 transition-all"
                   onClick={() => setCurrentMakerImage(currentMakerImage === makerImages.length - 1 ? 0 : currentMakerImage + 1)}
                 >
                   <ChevronRight size={20} className="text-white" />
@@ -160,9 +161,9 @@ export default function AboutPage() {
 
                 {/* Download button */}
                 <Button
-                  variant="ghost"
+                  variant="default"
                   size="sm"
-                  className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-white/20 backdrop-blur-sm border border-white/30 hover:bg-white/30 text-white flex items-center gap-2"
+                  className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-white/20 backdrop-blur-sm border border-white/0 hover:bg-white/30 text-white flex items-center gap-2"
                   onClick={() => downloadAsset(makerImages[currentMakerImage].src, `maker-illustration-${currentMakerImage + 1}.png`)}
                 >
                   <Download size={16} />
@@ -240,75 +241,57 @@ export default function AboutPage() {
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Discord Card */}
-                  <div className="bg-muted rounded-lg p-5 flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#5865F2]/10 rounded-lg flex items-center justify-center mt-1">
-                      <Image
-                        src="/assets/discord-logo.svg"
-                        alt="Discord Logo"
-                        width={24}
-                        height={24}
-                        className="object-contain opacity-70"
-                      />
+                  <div className="bg-muted rounded-lg p-6 flex flex-col gap-4">
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-semibold">Discord</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Únete a conversaciones diarias, comparte tu progreso y conecta con otros makers en tiempo real.
+                      </p>
                     </div>
-                    <div className="flex-1 space-y-3">
-                      <div className="space-y-1">
-                        <h3 className="text-lg font-semibold">Discord</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          Únete a conversaciones diarias, comparte tu progreso y conecta con otros makers en tiempo real.
-                        </p>
-                      </div>
-                      <Button 
-                        asChild 
-                        size="sm"
-                        className="bg-[#5865F2] hover:bg-[#4752C4] text-white border-0 w-full"
+                    <Button
+                      asChild
+                      size="default"
+                      className="bg-[#5865F2] hover:bg-[#5865F2] text-white font-medium border-0 w-full"
+                    >
+                      <Link
+                        href="https://discord.com/invite/PnBJNwDW77"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-3"
                       >
-                        <a 
-                          href="https://discord.com/invite/PnBJNwDW77" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2"
-                        >
-                          Únete al Discord
-                          <ExternalLink size={14} />
-                        </a>
-                      </Button>
-                    </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                          <path d="M20.317 4.492c-1.53-.69-3.17-1.2-4.885-1.49a.075.075 0 0 0-.079.036c-.21.369-.444.85-.608 1.23a18.566 18.566 0 0 0-5.487 0 12.36 12.36 0 0 0-.617-1.23A.077.077 0 0 0 8.562 3c-1.714.29-3.354.8-4.885 1.491a.07.07 0 0 0-.032.027C.533 9.093-.32 13.555.099 17.961a.08.08 0 0 0 .031.055 20.03 20.03 0 0 0 5.993 2.98.078.078 0 0 0 .084-.026c.462-.62.874-1.275 1.226-1.963.021-.04.001-.088-.041-.104a13.201 13.201 0 0 1-1.872-.878.075.075 0 0 1-.008-.125c.126-.093.252-.19.372-.287a.075.075 0 0 1 .078-.01c3.927 1.764 8.18 1.764 12.061 0a.075.075 0 0 1 .079.009c.12.098.245.195.372.288a.075.075 0 0 1-.006.125c-.598.344-1.22.635-1.873.877a.075.075 0 0 0-.041.105c.36.687.772 1.341 1.225 1.962a.077.077 0 0 0 .084.028 19.963 19.963 0 0 0 6.002-2.981.076.076 0 0 0 .032-.054c.5-5.094-.838-9.52-3.549-13.442a.06.06 0 0 0-.031-.028zM8.02 15.278c-1.182 0-2.157-1.069-2.157-2.38 0-1.312.956-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.956 2.38-2.157 2.38zm7.975 0c-1.183 0-2.157-1.069-2.157-2.38 0-1.312.955-2.38 2.157-2.38 1.21 0 2.176 1.077 2.157 2.38 0 1.312-.946 2.38-2.157 2.38z" />
+                        </svg>
+                        <span>Únete al Discord</span>
+                      </Link>
+                    </Button>
                   </div>
 
                   {/* YouTube Card */}
-                  <div className="bg-muted rounded-lg p-5 flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#FF0000]/10 rounded-lg flex items-center justify-center mt-1">
-                      <Image
-                        src="/assets/youtube-logo.svg"
-                        alt="YouTube Logo"
-                        width={24}
-                        height={24}
-                        className="object-contain opacity-70"
-                      />
+                  <div className="bg-muted rounded-lg p-6 flex flex-col gap-4">
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-semibold">YouTube</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Aprende con tutoriales, participa en streams en vivo y descubre casos de éxito de otros makers.
+                      </p>
                     </div>
-                    <div className="flex-1 space-y-3">
-                      <div className="space-y-1">
-                        <h3 className="text-lg font-semibold">YouTube</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">
-                          Aprende con tutoriales, participa en streams en vivo y descubre casos de éxito de otros makers.
-                        </p>
-                      </div>
-                      <Button 
-                        asChild 
-                        size="sm"
-                        className="bg-[#FF0000] hover:bg-[#CC0000] text-white border-0 w-full"
+                    <Button
+                      asChild
+                      size="default"
+                      className="bg-[#FF0000] hover:bg-[#FF0000] text-white font-medium border-0 w-full"
+                    >
+                      <Link
+                        href="https://www.youtube.com/@productmakers"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-3"
                       >
-                        <a 
-                          href="https://www.youtube.com/@productmakers" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center gap-2"
-                        >
-                          Ver en YouTube
-                          <ExternalLink size={14} />
-                        </a>
-                      </Button>
-                    </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                          <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                        </svg>
+                        <span>Ver en YouTube</span>
+                      </Link>
+                    </Button>
                   </div>
                 </div>
               </CardContent>

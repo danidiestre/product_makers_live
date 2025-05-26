@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { SquareArrowOutUpRight, Edit } from 'lucide-react'
+import { SquareArrowOutUpRight, Pencil } from 'lucide-react'
 import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
@@ -119,12 +119,12 @@ export const AppProfileHero: FC<AppProfileHeroProps> = ({ app, isOwner = false }
 
               {/* Edit button - only show for product owner */}
               {isOwner && (
-                <Button asChild variant="outline">
+                <Button asChild variant="secondary">
                   <Link
                     href={`/dashboard/product/${app.id}/edit`}
                     className="gap-2 w-full sm:w-auto"
                   >
-                    <Edit size={16} />
+                    <Pencil size={16} />
                     Editar producto
                   </Link>
                 </Button>
