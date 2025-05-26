@@ -6,9 +6,23 @@ import { Role } from '@prisma/client'
 export async function getUsers() {
   try {
     const users = await prisma.user.findMany({
-      orderBy: {
-        name: 'asc'
-      }
+      include: {
+        products: {
+          select: {
+            id: true
+          }
+        }
+      },
+      orderBy: [
+        {
+          products: {
+            _count: 'desc'
+          }
+        },
+        {
+          name: 'asc'
+        }
+      ]
     })
     return { success: true, data: users }
   } catch (error) {
@@ -27,9 +41,23 @@ export async function getUsersByRole(role: Role | 'All') {
       where: {
         role
       },
-      orderBy: {
-        name: 'asc'
-      }
+      include: {
+        products: {
+          select: {
+            id: true
+          }
+        }
+      },
+      orderBy: [
+        {
+          products: {
+            _count: 'desc'
+          }
+        },
+        {
+          name: 'asc'
+        }
+      ]
     })
     return { success: true, data: users }
   } catch (error) {
