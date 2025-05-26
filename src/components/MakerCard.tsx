@@ -1,7 +1,7 @@
 'use client'
 
 import { FC } from 'react'
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { useRouter } from 'next/navigation'
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { LinkSocial } from '@/components/LinkSocial'
@@ -15,6 +15,7 @@ interface MakerCardProps {
 
 export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
   const { id, name, role, image, bio, twitter, github, linkedin, website } = maker
+  const router = useRouter()
 
   // Helper function to handle social URLs
   const getSocialUrl = (type: 'linkedin' | 'twitter' | 'github', value?: string | null): string => {
@@ -41,62 +42,66 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
     }
   }
 
+  const handleCardClick = () => {
+    router.push(`/maker/${id}`)
+  }
+
   return (
-    <Card>
-      <CardHeader className="gap-0 p-6">
-        <div className="flex flex-col md:flex-row items-start gap-4 relative">
-          <Avatar className="size-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
-            <AvatarImage src={image || undefined} />
-            <AvatarFallback className="text-xl bg-muted-foreground text-background">{name?.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col flex-1 gap-1">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Link href={`/maker/${id}`}>
+    <div onClick={handleCardClick}>
+      <Card className="cursor-pointer hover:border-foreground/20 transition-all">
+        <CardHeader className="gap-0 p-6">
+          <div className="flex flex-col md:flex-row items-start gap-4 relative">
+            <Avatar className="size-14 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center bg-background ring-1 ring-border relative">
+              <AvatarImage src={image || undefined} />
+              <AvatarFallback className="text-xl bg-muted-foreground text-background">{name?.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col flex-1 gap-1">
+              <CardTitle className="flex items-center gap-2 text-lg">
                 {name}
-              </Link>
-            </CardTitle>
-            <CardDescription className="line-clamp-1">
-              {bio ? bio : '...'}
-            </CardDescription>
+              </CardTitle>
+              <CardDescription className="line-clamp-1">
+                {bio ? bio : '...'}
+              </CardDescription>
+            </div>
           </div>
-        </div>
-      </CardHeader>
-      <CardFooter className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-6 border-t py-4 px-6">
-        <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground cursor-default">
-          <Tag size={16} />
-          <span>{role ? role : '?'}</span>
-        </div>
-        <div className="hidden md:flex items-center gap-6">
-          {website && (
-            <LinkSocial
-              href={website}
-              icon={<Globe size={16} />}
-              name="Website"
-            />
-          )}
-          {linkedin && (
-            <LinkSocial
-              href={getSocialUrl('linkedin', linkedin)}
-              icon={<Linkedin size={16} />}
-              name="LinkedIn"
-            />
-          )}
-          {twitter && (
-            <LinkSocial
-              href={getSocialUrl('twitter', twitter)}
-              icon={<Twitter size={16} />}
-              name="Twitter"
-            />
-          )}
-          {github && (
-            <LinkSocial
-              href={getSocialUrl('github', github)}
-              icon={<Github size={16} />}
-              name="GitHub"
-            />
-          )}
-        </div>
-      </CardFooter>
-    </Card>
+        </CardHeader>
+        <CardFooter className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-6 border-t py-4 px-6">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground cursor-default">
+            <Tag size={16} />
+            <span>{role ? role : '?'}</span>
+          </div>
+          <div className="hidden md:flex items-center gap-6">
+            {website && (
+              <LinkSocial
+                href={website}
+                icon={<Globe size={16} />}
+                name="Website"
+              />
+            )}
+            {linkedin && (
+              <LinkSocial
+                href={getSocialUrl('linkedin', linkedin)}
+                icon={<Linkedin size={16} />}
+                name="LinkedIn"
+              />
+            )}
+            {twitter && (
+              <LinkSocial
+                href={getSocialUrl('twitter', twitter)}
+                icon={<Twitter size={16} />}
+                name="Twitter"
+              />
+            )}
+            {github && (
+              <LinkSocial
+                href={getSocialUrl('github', github)}
+                icon={<Github size={16} />}
+                name="GitHub"
+              />
+            )}
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
   )
 } 

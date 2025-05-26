@@ -18,6 +18,7 @@ import Link from 'next/link'
 interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
   externalLinks?: ExternalLinks
   makers?: Array<{
+    id: string
     name: string
     role: string
     avatar: string
@@ -120,16 +121,14 @@ export const AppCard: FC<AppCardProps> = ({
                     Creado por {makers.map((m, i) => (
                       <HoverCard key={i} openDelay={0} closeDelay={0}>
                         <HoverCardTrigger asChild>
-                          <span
+                          <Link
+                            href={`/maker/${m.id}`}
                             className="hover:text-foreground transition-colors"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                            }}
+                            onClick={(e) => e.stopPropagation()}
                           >
                             {m.name}
                             {i < makers.length - 1 ? ', ' : ''}
-                          </span>
+                          </Link>
                         </HoverCardTrigger>
                         <HoverCardContent sideOffset={8} className="w-auto max-w-80 pr-4">
                           <div className="flex gap-3">

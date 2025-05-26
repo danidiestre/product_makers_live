@@ -12,11 +12,18 @@ import {
   PaginationNext,
   PaginationLink,
 } from '@/components/ui/pagination'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Role, User } from '@prisma/client'
 import { getUsers, getUsersByRole } from '@/app/makers/actions'
 import { LoadState } from '@/components/LoadState'
 import { EmptyState } from '@/components/EmptyState'
-import { ServerCrash, WandSparkles } from 'lucide-react'
+import { ServerCrash, Tag, WandSparkles } from 'lucide-react'
 
 const MAKERS_PER_PAGE = 12
 
@@ -124,7 +131,7 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) 
     <div className="w-full grid gap-6">
       {/* Category filters */}
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-background p-2 rounded-xl border">
-        <div className="flex flex-wrap gap-1">
+        <div className="hidden md:flex flex-wrap gap-1">
           {categoryCounts.map(({ name, count }) => (
             <Button
               key={name}
@@ -135,6 +142,27 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) 
               {name === 'ProductManager' ? 'Product Manager' : name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="w-8">{count}</Badge>
             </Button>
           ))}
+        </div>
+        <div className="w-full flex md:hidden">
+          <Select
+            value={selectedCategory}
+            onValueChange={(value) => setSelectedCategory(value as Role | 'All')}
+          >
+            <SelectTrigger className="border-none">
+              <Tag size={16} />
+              <SelectValue placeholder="Categorías" />
+            </SelectTrigger>
+            <SelectContent>
+              {categoryCounts.map(({ name, count }) => (
+                <SelectItem key={name} value={name}>
+                  <div className="w-full flex items-center gap-2 font-medium">
+                    <span className="w-full">{name === 'ProductManager' ? 'Product Manager' : name}</span>
+                    <Badge variant="secondary" className="w-8">{count}</Badge>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

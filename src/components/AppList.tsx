@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { AppCard } from '@/components/AppCard'
-import { Telescope, Flame, Clock } from 'lucide-react'
+import { Telescope, Flame, Clock, MonitorSmartphone } from 'lucide-react'
 import { App } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -23,7 +23,7 @@ import {
   PaginationLink,
 } from '@/components/ui/pagination'
 import { useProductsWithVotes } from '@/hooks/useProductsWithVotes'
-import { EmptyState } from './EmptyState'
+import { EmptyState } from '@/components/EmptyState'
 
 type SortKey = 'votes' | 'launchDate'
 type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
@@ -122,9 +122,9 @@ export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: 
   return (
     <div className="w-full grid gap-6">
       {!limit && (
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-background p-2 rounded-xl border">
+        <div className="flex flex-row gap-4 items-center justify-between bg-background p-2 rounded-xl border">
           {/* Platform filter */}
-          <div className="flex flex-wrap gap-1">
+          <div className="hidden md:flex flex-wrap gap-1">
             {platformStats.map(({ id, label, count }) => (
               <Button
                 key={id}
@@ -140,6 +140,30 @@ export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: 
               </Button>
             ))}
           </div>
+          <div className="flex md:hidden">
+            <Select
+              value={platformFilter}
+              onValueChange={(value) => {
+                setPlatformFilter(value as PlatformFilter)
+                setCurrentPage(1)
+              }}
+            >
+              <SelectTrigger className="gap-2 border-none">
+                <MonitorSmartphone size={16} />
+                <SelectValue placeholder="Plataformas" />
+              </SelectTrigger>
+              <SelectContent>
+                {platformStats.map(({ id, label, count }) => (
+                  <SelectItem key={id} value={id}>
+                    <div className="flex items-center justify-between gap-2 font-medium">
+                      {label}
+                      <Badge variant="secondary" className="w-8">{count}</Badge>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
           {/* Sort controls */}
           <div className="flex items-center gap-2">
@@ -150,20 +174,20 @@ export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: 
                 setCurrentPage(1) // Reset to first page when sort changes
               }}
             >
-              <SelectTrigger className="w-[180px] border-none">
+              <SelectTrigger className="w-[140px] border-none">
                 <SelectValue placeholder="Ordenar por..." />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="votes">
-                  <div className="flex items-center gap-2">
-                    <Flame size={16} className="text-red-600" />
-                    Más populares
+                  <div className="flex items-center gap-2 font-medium">
+                    <Flame size={16} />
+                    Populares
                   </div>
                 </SelectItem>
                 <SelectItem value="launchDate">
-                  <div className="flex items-center gap-2">
-                    <Clock size={16} className="text-blue-500" />
-                    Más recientes
+                  <div className="flex items-center gap-2 font-medium">
+                    <Clock size={16} />
+                    Recientes
                   </div>
                 </SelectItem>
               </SelectContent>

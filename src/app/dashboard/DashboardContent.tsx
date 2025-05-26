@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { UserPen, FolderOpen, FolderPlus } from 'lucide-react'
+import { UserPen, FolderOpen, FolderPlus, Pencil } from 'lucide-react'
 import { LayoutWrapper } from '@/components/layout/LayoutWrapper'
 import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
@@ -91,9 +91,10 @@ export default function DashboardContent({ user, userProducts }: DashboardConten
                           <AppCard
                             {...product}
                           />
-                          <div className="absolute bottom-2 right-6 flex gap-2">
-                            <Button asChild size="sm" variant="outline">
+                          <div className="absolute bottom-6 left-6 md:left-24 flex gap-2 bg-background w-[calc(100%-48px)] md:w-[calc(100%-120px)]">
+                            <Button asChild size="sm" variant="secondary" className="gap-2">
                               <Link href={`/dashboard/product/${product.id}/edit`}>
+                                <Pencil className="size-4" />
                                 Editar
                               </Link>
                             </Button>

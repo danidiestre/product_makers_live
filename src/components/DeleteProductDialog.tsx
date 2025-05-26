@@ -49,16 +49,16 @@ export function DeleteProductDialog({ productId, productName }: DeleteProductDia
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="destructive">
+        <Button size="sm" variant="secondary" className="gap-2">
           <Trash2 className="size-4" />
-          Borrar
+          Eliminar
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>¿Estás seguro?</DialogTitle>
           <DialogDescription>
-            Esta acción no se puede deshacer. Esto borrará permanentemente el producto{' '}
+            Esta acción no se puede deshacer. Esto eliminará permanentemente el producto{' '}
             <strong>"{productName}"</strong> y todos sus datos asociados.
           </DialogDescription>
         </DialogHeader>
@@ -67,7 +67,7 @@ export function DeleteProductDialog({ productId, productName }: DeleteProductDia
             Cancelar
           </Button>
           <Button variant="destructive" onClick={handleDelete} disabled={isDeleting}>
-            {isDeleting ? 'Borrando...' : 'Sí, borrar producto'}
+            {isDeleting ? 'Eliminando...' : 'Sí, eliminar producto'}
           </Button>
         </DialogFooter>
       </DialogContent>

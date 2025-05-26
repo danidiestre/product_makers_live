@@ -27,32 +27,25 @@ export const AppProfileHeroSkeleton: FC = () => {
         <Skeleton className="size-28 rounded-xl flex-shrink-0" />
 
         <div className="flex-1 space-y-4">
-          {/* Title and Tagline */}
-          <div className="space-y-3">
-            <Skeleton className="h-9 w-80 max-w-full" />
-            <Skeleton className="h-6 w-64 max-w-full" />
-          </div>
-
-          {/* Makers */}
-          <div className="flex items-center gap-3">
-            <div className="flex -space-x-2">
-              <Skeleton className="size-6 rounded-full border-2 border-background" />
-              <Skeleton className="size-6 rounded-full border-2 border-background" />
-              <Skeleton className="size-6 rounded-full border-2 border-background" />
+          {/* Title, Tagline, Makers */}
+          <div className="">
+            <Skeleton className="h-9 w-80 max-w-full mb-2" />
+            <Skeleton className="h-6 w-64 max-w-full mb-3" />
+            <div className="flex items-center gap-2">
+              <Skeleton className="size-5 rounded-full" />
+              <Skeleton className="h-5 w-40" />
             </div>
-            <Skeleton className="h-4 w-40" />
           </div>
 
           {/* Badges */}
           <div className="flex flex-wrap gap-2">
-            <Skeleton className="h-6 w-16 rounded-full" />
-            <Skeleton className="h-6 w-20 rounded-full" />
-            <Skeleton className="h-6 w-12 rounded-full" />
-            <Skeleton className="h-6 w-14 rounded-full" />
+            <Skeleton className="h-6 w-16" />
+            <Skeleton className="h-6 w-20" />
+            <Skeleton className="h-6 w-14" />
           </div>
 
           {/* Description */}
-          <div className="space-y-2">
+          <div className="space-y-1">
             <Skeleton className="h-4 w-full max-w-2xl" />
             <Skeleton className="h-4 w-3/4 max-w-xl" />
           </div>
@@ -61,9 +54,9 @@ export const AppProfileHeroSkeleton: FC = () => {
           <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <Skeleton className="h-11 w-48" />
             <div className="flex gap-2">
-              <Skeleton className="h-11 w-24" />
-              <Skeleton className="h-11 w-24" />
-              <Skeleton className="h-11 w-28" />
+              <Skeleton className="h-10 w-24" />
+              <Skeleton className="h-10 w-24" />
+              <Skeleton className="h-10 w-28" />
             </div>
           </div>
         </div>
@@ -207,9 +200,12 @@ export const AppProfilePageSkeleton: FC = () => {
       </LayoutSection>
 
       {/* Content Section Skeleton */}
-      <LayoutSection className="py-12">
+      <LayoutSection className="py-12 h-dvh">
         <LayoutContainer>
-          <AppProfileContentSkeleton />
+          {/* Main Content Skeleton hidden because it does not match with current content and maybe we don't need that much detail */}
+          <div className="hidden">
+            <AppProfileContentSkeleton />
+          </div>
         </LayoutContainer>
       </LayoutSection>
     </>
