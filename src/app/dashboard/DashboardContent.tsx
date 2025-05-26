@@ -15,6 +15,7 @@ import { MakerCard } from '@/components/MakerCard'
 import { User } from '@prisma/client'
 import { AppCard } from '@/components/AppCard'
 import { App } from '@/lib/types'
+import { DeleteProductDialog } from '@/components/DeleteProductDialog'
 
 interface DashboardContentProps {
   user: User
@@ -90,12 +91,16 @@ export default function DashboardContent({ user, userProducts }: DashboardConten
                           <AppCard
                             {...product}
                           />
-                          <div className="absolute bottom-2 right-6">
+                          <div className="absolute bottom-2 right-6 flex gap-2">
                             <Button asChild size="sm" variant="outline">
                               <Link href={`/dashboard/product/${product.id}/edit`}>
                                 Editar
                               </Link>
                             </Button>
+                            <DeleteProductDialog
+                              productId={product.id}
+                              productName={product.name}
+                            />
                           </div>
                         </div>
                       ))}

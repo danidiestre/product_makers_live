@@ -192,6 +192,61 @@ export async function updateProduct(formData: FormData) {
   }
 }
 
+export async function deleteProduct(productId: string) {
+  try {
+    // Get current user
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return {
+        success: false,
+        error: "You must be logged in to delete a product",
+      };
+    }
+
+    // Get the user from DB
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+
+    // Verificar que el producto existe y pertenece al usuario
+    const existingProduct = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!existingProduct) {
+      return { success: false, error: "Product not found" };
+    }
+
+    if (existingProduct.userId !== user.id) {
+      return { success: false, error: "You can only delete your own products" };
+    }
+
+    // Delete the product and all related data (votes will be deleted via cascade)
+    await prisma.product.delete({
+      where: { id: productId },
+    });
+
+    // Revalidate pages
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath("/dashboard");
+    revalidatePath(`/app/${productId}`);
+    revalidatePath(`/maker/${user.id}`);
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("Error deleting product:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to delete product",
+    };
+  }
+}
+
 // Helper function to convert user role to Maker category
 function roleToCategory(role?: string): Maker["category"] {
   if (!role) return "Other";
