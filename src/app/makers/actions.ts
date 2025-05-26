@@ -7,9 +7,9 @@ export async function getUsers() {
   try {
     const users = await prisma.user.findMany({
       include: {
-        products: {
+        _count: {
           select: {
-            id: true
+            products: true
           }
         }
       },
@@ -42,9 +42,9 @@ export async function getUsersByRole(role: Role | 'All') {
         role
       },
       include: {
-        products: {
+        _count: {
           select: {
-            id: true
+            products: true
           }
         }
       },
