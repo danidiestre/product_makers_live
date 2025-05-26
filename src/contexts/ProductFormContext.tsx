@@ -269,7 +269,7 @@ export function ProductFormProvider({ children, mode = 'create', productId }: {
       addFiles: addScreenshotFiles,
     },
   ] = useFileUpload({
-    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
+    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif,image/webp,image/avif",
     maxSize: MAX_FILE_SIZE_MB * 1024 * 1024,
     multiple: true,
     maxFiles: MAX_SCREENSHOTS,
