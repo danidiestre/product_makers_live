@@ -86,10 +86,18 @@ export default function DashboardContent({ user, userProducts }: DashboardConten
                   {userProducts.length > 0 ? (
                     <div className="grid grid-cols-1 gap-4">
                       {userProducts.map((product) => (
-                        <AppCard
-                          key={product.id}
-                          {...product}
-                        />
+                        <div key={product.id} className="relative">
+                          <AppCard
+                            {...product}
+                          />
+                          <div className="absolute bottom-2 right-6">
+                            <Button asChild size="sm" variant="outline">
+                              <Link href={`/dashboard/product/${product.id}/edit`}>
+                                Editar
+                              </Link>
+                            </Button>
+                          </div>
+                        </div>
                       ))}
                     </div>
                   ) : (

@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode, DragEvent } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode, DragEvent, useRef, useCallback } from 'react'
 import { useLocalStorage } from '@/hooks/use-local-storage'
 import { useFileUpload, type FileMetadata as FileUploadMetadata } from '@/hooks/use-file-upload'
 import { toast } from 'sonner'
@@ -134,6 +134,7 @@ interface ProductFormContextType {
   formData: FormData;
   setFormData: (data: FormData) => void;
   clearFormData: () => void;
+  clearAllData: () => void;
   steps: typeof steps;
   handleChange: (value: string, fieldId?: string) => void;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
@@ -167,7 +168,11 @@ interface ProductFormContextType {
 const ProductFormContext = createContext<ProductFormContextType | undefined>(undefined)
 
 // Provider component
-export function ProductFormProvider({ children }: { children: ReactNode }) {
+export function ProductFormProvider({ children, mode = 'create', productId }: {
+  children: ReactNode
+  mode?: 'create' | 'edit'
+  productId?: string
+}) {
   const [isUploading, setIsUploading] = useState(false)
 
   // Initial form data
@@ -186,9 +191,42 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
     screenshotUrls: []
   }
 
-  // Use localStorage hooks
-  const [currentStep, setCurrentStep, clearCurrentStep] = useLocalStorage<number>('productForm_currentStep', 0)
-  const [formData, setFormData, clearFormData] = useLocalStorage<FormData>('productForm_data', initialFormData)
+  // Generate unique keys based on mode and productId
+  const stepKey = mode === 'edit' && productId
+    ? `productForm_edit_${productId}_currentStep`
+    : 'productForm_create_currentStep'
+
+  const dataKey = mode === 'edit' && productId
+    ? `productForm_edit_${productId}_data`
+    : 'productForm_create_data'
+
+  // Use localStorage hooks with dynamic keys
+  const [currentStep, setCurrentStep, clearCurrentStep] = useLocalStorage<number>(stepKey, 0)
+  const [formData, setFormDataInternal, clearFormData] = useLocalStorage<FormData>(dataKey, initialFormData)
+
+  // Wrapper for setFormData - using useCallback to prevent re-renders
+  const setFormData = useCallback((data: FormData) => {
+    setFormDataInternal(data)
+  }, [setFormDataInternal])
+
+  // Function to clear all localStorage data for this specific mode/product
+  const clearAllData = useCallback(() => {
+    clearFormData()
+    clearCurrentStep()
+
+    // Also clear any other related localStorage keys for this mode/product
+    if (typeof window !== 'undefined') {
+      if (mode === 'edit' && productId) {
+        // Clear edit-specific keys
+        localStorage.removeItem(`productForm_edit_${productId}_currentStep`)
+        localStorage.removeItem(`productForm_edit_${productId}_data`)
+      } else {
+        // Clear create-specific keys
+        localStorage.removeItem('productForm_create_currentStep')
+        localStorage.removeItem('productForm_create_data')
+      }
+    }
+  }, [clearFormData, clearCurrentStep, mode, productId])
 
   // Local state for screenshots (can't be stored in localStorage)
   const [screenshots, setScreenshots] = useState<File[]>([])
@@ -196,6 +234,10 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
   // State to track restored files from localStorage
   const [restoredScreenshots, setRestoredScreenshots] = useState<FileWithPreview[]>([])
   const [restoredIcon, setRestoredIcon] = useState<FileWithPreview | null>(null)
+
+  // Refs to track previous values and prevent infinite loops
+  const prevScreenshotUrls = useRef<string[]>([])
+  const prevIconUrl = useRef<string>('')
 
   // Convert saved URLs to FileMetadata for initial files
   const getInitialScreenshotFiles = (): FileUploadMetadata[] => {
@@ -227,7 +269,7 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
       addFiles: addScreenshotFiles,
     },
   ] = useFileUpload({
-    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
+    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif,image/webp,image/avif",
     maxSize: MAX_FILE_SIZE_MB * 1024 * 1024,
     multiple: true,
     maxFiles: MAX_SCREENSHOTS,
@@ -247,22 +289,28 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedUrls = formData.screenshotUrls || []
 
-    if (savedUrls.length > 0) {
-      // Create restored files from saved URLs
-      const restored = savedUrls.map((url, index) => ({
-        id: `restored-screenshot-${index}-${Date.now()}`,
-        file: {
-          name: `screenshot-${index + 1}.jpg`,
-          size: 0,
-          type: 'image/jpeg'
-        } as FileMetadata,
-        preview: url
-      }))
+    // Only restore if URLs have actually changed
+    const urlsChanged = JSON.stringify(savedUrls) !== JSON.stringify(prevScreenshotUrls.current)
 
-      setRestoredScreenshots(restored)
-      console.log('Screenshots restaurados desde localStorage:', restored.length)
-    } else {
-      setRestoredScreenshots([])
+    if (urlsChanged) {
+      prevScreenshotUrls.current = savedUrls
+
+      if (savedUrls.length > 0) {
+        // Create restored files from saved URLs
+        const restored = savedUrls.map((url, index) => ({
+          id: `restored-screenshot-${index}-${Date.now()}`,
+          file: {
+            name: `screenshot-${index + 1}.jpg`,
+            size: 0,
+            type: 'image/jpeg'
+          } as FileMetadata,
+          preview: url
+        }))
+
+        setRestoredScreenshots(restored)
+      } else {
+        setRestoredScreenshots([])
+      }
     }
   }, [formData.screenshotUrls])
 
@@ -300,22 +348,26 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedIconUrl = formData.iconUrl
 
-    if (savedIconUrl) {
-      // Create restored icon from saved URL
-      const restored = {
-        id: `restored-icon-${Date.now()}`,
-        file: {
-          name: 'icon.jpg',
-          size: 0,
-          type: 'image/jpeg'
-        } as FileMetadata,
-        preview: savedIconUrl
-      }
+    // Only restore if the URL has actually changed
+    if (savedIconUrl !== prevIconUrl.current) {
+      prevIconUrl.current = savedIconUrl
 
-      setRestoredIcon(restored)
-      console.log('Icono restaurado desde localStorage:', savedIconUrl)
-    } else {
-      setRestoredIcon(null)
+      if (savedIconUrl) {
+        // Create restored icon from saved URL
+        const restored = {
+          id: `restored-icon-${Date.now()}`,
+          file: {
+            name: 'icon.jpg',
+            size: 0,
+            type: 'image/jpeg'
+          } as FileMetadata,
+          preview: savedIconUrl
+        }
+
+        setRestoredIcon(restored)
+      } else {
+        setRestoredIcon(null)
+      }
     }
   }, [formData.iconUrl])
 
@@ -517,6 +569,7 @@ export function ProductFormProvider({ children }: { children: ReactNode }) {
     formData,
     setFormData,
     clearFormData,
+    clearAllData,
     steps,
     handleChange,
     handleInputChange,

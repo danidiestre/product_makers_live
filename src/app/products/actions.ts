@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth-options";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { App, Maker } from "@/lib/types";
 
 export async function createProduct(formData: FormData) {
@@ -75,7 +74,10 @@ export async function createProduct(formData: FormData) {
     }
 
     // Revalidate products page
+    revalidatePath("/");
     revalidatePath("/products");
+    revalidatePath(`/app/${product.id}`);
+    revalidatePath(`/maker/${user.id}`);
 
     return { success: true, data: product };
   } catch (error: any) {
@@ -83,6 +85,109 @@ export async function createProduct(formData: FormData) {
     return {
       success: false,
       error: error.message || "Failed to create product",
+    };
+  }
+}
+
+export async function updateProduct(formData: FormData) {
+  try {
+    // Get current user
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.email) {
+      return {
+        success: false,
+        error: "You must be logged in to update a product",
+      };
+    }
+
+    // Get the user from DB
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) {
+      return { success: false, error: "User not found" };
+    }
+
+    // Extraer ID del producto
+    const productId = formData.get("id") as string;
+    if (!productId) {
+      return { success: false, error: "Product ID is required" };
+    }
+
+    // Verificar que el producto existe y pertenece al usuario
+    const existingProduct = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+
+    if (!existingProduct) {
+      return { success: false, error: "Product not found" };
+    }
+
+    if (existingProduct.userId !== user.id) {
+      return { success: false, error: "You can only edit your own products" };
+    }
+
+    // Extraer datos del formulario
+    const name = formData.get("name") as string;
+    const tagline = formData.get("tagline") as string;
+    const description = formData.get("description") as string;
+    const link = formData.get("link") as string;
+    const problem = formData.get("problem") as string;
+    const solution = formData.get("solution") as string;
+    const features = formData.get("features") as string;
+    const monetization = formData.get("monetization") as string;
+    const roadmap = formData.get("roadmap") as string;
+    const technology = formData.get("technology") as string;
+
+    // Extraer URLs de imágenes
+    const iconUrl = formData.get("iconUrl") as string;
+    const screenshotUrls = formData.getAll("screenshotUrls") as string[];
+
+    // Validación básica
+    if (!name || !description || !iconUrl) {
+      return {
+        success: false,
+        error: "Los campos nombre, descripción e icono son obligatorios",
+      };
+    }
+
+    // Update product in database
+    const product = await prisma.product.update({
+      where: { id: productId },
+      data: {
+        name,
+        tagline,
+        description,
+        link,
+        iconUrl,
+        screenshotUrls,
+        problema: problem,
+        solucion: solution,
+        funcionalidades: features,
+        monetizacion: monetization,
+        roadmap,
+        tecnologia: technology,
+      },
+    });
+
+    if (!product) {
+      return { success: false, error: "Failed to update product" };
+    }
+
+    // Revalidate products page
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath(`/products/${productId}`);
+    revalidatePath(`/app/${productId}`);
+    revalidatePath(`/maker/${user.id}`);
+
+    return { success: true, data: product };
+  } catch (error: any) {
+    console.error("Error updating product:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to update product",
     };
   }
 }
@@ -467,7 +572,7 @@ export async function getRandomProductAndMaker() {
 
     // Select a random product
     const randomProduct = products[Math.floor(Math.random() * products.length)];
-    
+
     // Convert to App format
     const voteCount = randomProduct.votes.length;
     const app = convertProductToApp(randomProduct, voteCount, false);
@@ -475,16 +580,19 @@ export async function getRandomProductAndMaker() {
     // Extract the maker from the product
     const maker = app.makers?.[0];
 
-    return { 
-      success: true, 
-      data: { 
-        product: app, 
-        maker: maker 
-      } 
+    return {
+      success: true,
+      data: {
+        product: app,
+        maker: maker,
+      },
     };
   } catch (error) {
     console.error("Error fetching random product and maker:", error);
-    return { success: false, error: "Failed to fetch random product and maker" };
+    return {
+      success: false,
+      error: "Failed to fetch random product and maker",
+    };
   }
 }
 
@@ -498,12 +606,12 @@ export async function getHeroCounts() {
       prisma.user.count(),
     ]);
 
-    return { 
-      success: true, 
-      data: { 
-        totalProducts: productCount, 
-        totalMakers: userCount 
-      } 
+    return {
+      success: true,
+      data: {
+        totalProducts: productCount,
+        totalMakers: userCount,
+      },
     };
   } catch (error) {
     console.error("Error fetching hero counts:", error);

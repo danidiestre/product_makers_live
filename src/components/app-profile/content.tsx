@@ -58,7 +58,6 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
 
   return (
     <div className="w-full flex flex-col gap-12">
-
       {/* Product Screenshots */}
       <Card className={styles.card}>
         <CardHeader className={styles.cardHeader}>

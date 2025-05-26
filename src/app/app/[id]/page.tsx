@@ -9,6 +9,7 @@ import { LayoutMain } from '@/components/layout/LayoutMain'
 import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { getProductById } from '@/app/products/actions'
+import { getCurrentUser } from '@/app/dashboard/profile/actions'
 import { AppProfileHero } from '@/components/app-profile/hero'
 import { AppProfileContent } from '@/components/app-profile/content'
 import { EmptyState } from '@/components/EmptyState'
@@ -20,7 +21,10 @@ interface AppProfilePageProps {
 const AppProfilePage: FC<AppProfilePageProps> = async ({ params }) => {
   const { id } = params
 
-  const result = await getProductById(id)
+  const [result, currentUser] = await Promise.all([
+    getProductById(id),
+    getCurrentUser()
+  ])
 
   if (!result.success || !result.data) {
     return (
@@ -47,13 +51,16 @@ const AppProfilePage: FC<AppProfilePageProps> = async ({ params }) => {
 
   const app = result.data
 
+  // Check if current user owns this product
+  const isOwner = Boolean(currentUser && app.makers && app.makers.some(maker => maker.id === currentUser.id))
+
   return (
     <LayoutWrapper>
       <Navbar />
       <LayoutMain>
         {/* App header - Hero section */}
         <LayoutSection className="border-b pt-6 pb-12 bg-background">
-          <AppProfileHero app={app} />
+          <AppProfileHero app={app} isOwner={isOwner} />
         </LayoutSection>
 
         {/* Main content */}
