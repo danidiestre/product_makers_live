@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/card"
 import { Carousel } from '@/components/ui/carousel'
 import { App } from '@/lib/types'
+import { MakerCard } from '../MakerCard'
+import { Role } from '@prisma/client'
 
 interface AppProfileContentProps {
   app: App
@@ -21,7 +23,7 @@ interface AppProfileContentProps {
 export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null)
   const [fullscreenIndex, setFullscreenIndex] = useState(0)
-  
+
   const styles = {
     card: "w-full bg-transparent border-none rounded-none gap-4",
     cardHeader: "p-0",
@@ -56,35 +58,6 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
 
   return (
     <div className="w-full flex flex-col gap-12">
-      {/* Makers Section */}
-      <Card className={styles.card}>
-        <CardHeader className={styles.cardHeader}>
-          <CardTitle className={styles.cardTitle}>Makers</CardTitle>
-          <CardDescription>Creadores de {app.name}</CardDescription>
-        </CardHeader>
-        <CardContent className={styles.cardContent}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-            {app.makers?.map((maker, index) => (
-              <div key={maker.id || index} className="p-4 border rounded-lg">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={maker.avatar}
-                    alt={maker.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div>
-                    <h4 className="font-medium text-foreground">{maker.name}</h4>
-                    <p className="text-sm text-muted-foreground">{maker.role}</p>
-                  </div>
-                </div>
-                {maker.bio && (
-                  <p className="mt-2 text-sm text-muted-foreground">{maker.bio}</p>
-                )}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Product Screenshots */}
       <Card className={styles.card}>
@@ -94,29 +67,27 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         </CardHeader>
         <CardContent className={styles.cardContent}>
           {app.screenshots && app.screenshots.length > 0 ? (
-            <div className="mt-2">
-              <Carousel 
-                className="border border-border/50 rounded-lg aspect-auto"
-                showArrows={app.screenshots.length > 1}
-                showIndicators={app.screenshots.length > 1}
-              >
-                {app.screenshots.map((screenshot, index) => (
-                  <div 
-                    key={index} 
-                    className="flex items-center justify-center p-4 cursor-pointer"
-                    onClick={() => openFullscreen(index)}
-                  >
-                    <img
-                      src={screenshot}
-                      alt={`${app.name} - Imagen ${index + 1}`}
-                      className="max-w-full max-h-[70vh] object-contain"
-                    />
-                  </div>
-                ))}
-              </Carousel>
-            </div>
+            <Carousel
+              className="border border-border bg-white rounded-xl aspect-auto"
+              showArrows={app.screenshots.length > 1}
+              showIndicators={app.screenshots.length > 1}
+            >
+              {app.screenshots.map((screenshot, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-center cursor-pointer"
+                  onClick={() => openFullscreen(index)}
+                >
+                  <img
+                    src={screenshot}
+                    alt={`${app.name} - Imagen ${index + 1}`}
+                    className="max-w-full max-h-[70vh] object-contain"
+                  />
+                </div>
+              ))}
+            </Carousel>
           ) : (
-            <p className="text-muted-foreground italic mt-2">No hay capturas disponibles</p>
+            <p className="text-muted-foreground italic">No hay capturas disponibles</p>
           )}
         </CardContent>
       </Card>
@@ -130,34 +101,34 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
               alt={`${app.name} - Imagen de pantalla completa`}
               className="max-w-full max-h-full object-contain p-4"
             />
-            
-            <Button 
-              variant="outline" 
-              size="icon" 
+
+            <Button
+              variant="ghost"
+              size="icon"
               className="absolute top-4 right-4 bg-background/20 hover:bg-background/40 rounded-full"
               onClick={closeFullscreen}
             >
               <X className="size-5" />
             </Button>
-            
+
             {app.screenshots && app.screenshots.length > 1 && (
               <>
-                <Button 
-                  variant="outline" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="absolute left-4 top-1/2 -translate-y-1/2 bg-background/20 hover:bg-background/40 rounded-full"
                   onClick={prevFullscreenImage}
                 >
-                  <ChevronLeft className="size-5" />
+                  <ChevronLeft className="size-6" />
                 </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="icon" 
+
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="absolute right-4 top-1/2 -translate-y-1/2 bg-background/20 hover:bg-background/40 rounded-full"
                   onClick={nextFullscreenImage}
                 >
-                  <ChevronRight className="size-5" />
+                  <ChevronRight className="size-6" />
                 </Button>
 
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1.5">
@@ -179,9 +150,9 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         </CardHeader>
         <CardContent className={styles.cardContent}>
           {app.problem ? (
-            <p className="mt-2">{app.problem}</p>
+            <p>{app.problem}</p>
           ) : (
-            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+            <p className="text-muted-foreground italic">No hay información disponible</p>
           )}
         </CardContent>
       </Card>
@@ -194,9 +165,9 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         </CardHeader>
         <CardContent className={styles.cardContent}>
           {app.solution ? (
-            <p className="mt-2">{app.solution}</p>
+            <p>{app.solution}</p>
           ) : (
-            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+            <p className="text-muted-foreground italic">No hay información disponible</p>
           )}
         </CardContent>
       </Card>
@@ -209,9 +180,9 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         </CardHeader>
         <CardContent className={styles.cardContent}>
           {app.features ? (
-            <p className="mt-2">{app.features}</p>
+            <p>{app.features}</p>
           ) : (
-            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+            <p className="text-muted-foreground italic">No hay información disponible</p>
           )}
         </CardContent>
       </Card>
@@ -224,9 +195,9 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         </CardHeader>
         <CardContent className={styles.cardContent}>
           {app.monetization ? (
-            <p className="mt-2">{app.monetization}</p>
+            <p>{app.monetization}</p>
           ) : (
-            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+            <p className="text-muted-foreground italic">No hay información disponible</p>
           )}
         </CardContent>
       </Card>
@@ -239,9 +210,9 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         </CardHeader>
         <CardContent className={styles.cardContent}>
           {app.roadmap ? (
-            <p className="mt-2">{app.roadmap}</p>
+            <p>{app.roadmap}</p>
           ) : (
-            <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+            <p className="text-muted-foreground italic">No hay información disponible</p>
           )}
         </CardContent>
       </Card>
@@ -254,10 +225,10 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
         </CardHeader>
         <CardContent className={styles.cardContent}>
           {app.technology ? (
-            <p className="mt-2">{app.technology}</p>
+            <p>{app.technology}</p>
           ) : (
             app.technologies ? (
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="flex flex-wrap gap-2">
                 {app.technologies.map((tech, index) => (
                   <span
                     key={index}
@@ -268,9 +239,42 @@ export const AppProfileContent: FC<AppProfileContentProps> = ({ app }) => {
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground italic mt-2">No hay información disponible</p>
+              <p className="text-muted-foreground italic">No hay información disponible</p>
             )
           )}
+        </CardContent>
+      </Card>
+
+      {/* Makers Section */}
+      <Card className={styles.card}>
+        <CardHeader className={styles.cardHeader}>
+          <CardTitle className={styles.cardTitle}>Makers</CardTitle>
+          <CardDescription>Creadores de {app.name}</CardDescription>
+        </CardHeader>
+        <CardContent className={styles.cardContent}>
+          <div className="grid grid-cols-1 gap-4">
+            {app.makers?.map((maker, index) => (
+              <MakerCard
+                key={maker.id || index}
+                maker={{
+                  ...maker,
+                  image: maker.avatar ?? null,
+                  name: maker.name ?? null,
+                  id: maker.id,
+                  role: (maker.role as Role) ?? null,
+                  email: (maker as any).email ?? null,
+                  emailVerified: (maker as any).emailVerified ?? null,
+                  banner: (maker as any).banner ?? null,
+                  accentColor: (maker as any).accentColor ?? null,
+                  bio: maker.bio ?? null,
+                  github: (maker as any).github ?? null,
+                  twitter: (maker as any).twitter ?? null,
+                  linkedin: (maker as any).linkedin ?? null,
+                  website: (maker as any).website ?? null,
+                }}
+              />
+            ))}
+          </div>
         </CardContent>
       </Card>
 

@@ -24,7 +24,7 @@ export const AppProfileHero: FC<AppProfileHeroProps> = ({ app }) => {
   return (
     <LayoutContainer>
       {/* Breadcrumb */}
-      <Breadcrumb className="w-full items-start mb-6">
+      <Breadcrumb className="w-full items-start">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>

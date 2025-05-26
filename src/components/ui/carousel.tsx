@@ -16,14 +16,14 @@ interface CarouselProps {
 }
 
 const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
-  ({ 
-    children, 
-    className, 
-    showArrows = true, 
-    showIndicators = true, 
-    autoPlay = false, 
-    interval = 5000, 
-    loop = true 
+  ({
+    children,
+    className,
+    showArrows = true,
+    showIndicators = true,
+    autoPlay = false,
+    interval = 5000,
+    loop = true
   }, ref) => {
     const [activeIndex, setActiveIndex] = React.useState(0)
     const [touchStart, setTouchStart] = React.useState<number | null>(null)
@@ -70,7 +70,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
 
     const handleTouchEnd = () => {
       if (!touchStart || !touchEnd) return
-      
+
       const distance = touchStart - touchEnd
       const isLeftSwipe = distance > 50
       const isRightSwipe = distance < -50
@@ -88,7 +88,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
     }
 
     return (
-      <div 
+      <div
         className={cn("relative w-full overflow-hidden rounded-lg", className)}
         ref={ref}
         onTouchStart={handleTouchStart}
@@ -96,7 +96,7 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
         onTouchEnd={handleTouchEnd}
         data-slot="carousel"
       >
-        <div 
+        <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
@@ -110,22 +110,22 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
         {showArrows && slideCount > 1 && (
           <>
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               className="absolute left-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background/90 opacity-70 hover:opacity-100 md:left-5"
               onClick={handlePrevious}
               aria-label="Previous slide"
             >
-              <ChevronLeft className="size-4" />
+              <ChevronLeft className="size-6" />
             </Button>
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               className="absolute right-3 top-1/2 z-10 -translate-y-1/2 rounded-full bg-background/80 hover:bg-background/90 opacity-70 hover:opacity-100 md:right-5"
               onClick={handleNext}
               aria-label="Next slide"
             >
-              <ChevronRight className="size-4" />
+              <ChevronRight className="size-6" />
             </Button>
           </>
         )}
@@ -137,8 +137,8 @@ const Carousel = React.forwardRef<HTMLDivElement, CarouselProps>(
                 key={index}
                 className={cn(
                   "size-2 rounded-full transition-colors",
-                  activeIndex === index 
-                    ? "bg-foreground" 
+                  activeIndex === index
+                    ? "bg-foreground"
                     : "bg-foreground/30 hover:bg-foreground/50"
                 )}
                 onClick={() => setActiveIndex(index)}

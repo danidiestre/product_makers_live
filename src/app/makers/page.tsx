@@ -18,14 +18,10 @@ export default function MakersPage() {
 
   return (
     <LayoutWrapper>
-
       {/* StreamCountdown banner */}
       <StreamCountdownBanner />
-
       <Navbar />
-
       <LayoutMain>
-
         <PageHeader title="Makers">
           {/* Search bar */}
           <div className="relative">
@@ -39,18 +35,14 @@ export default function MakersPage() {
             />
           </div>
         </PageHeader>
-
         {/* Makers List */}
         <LayoutSection>
           <LayoutContainer>
-            <MakersList searchQuery={searchQuery} />
+            <MakersList searchQuery={searchQuery} onResetSearch={() => setSearchQuery('')} />
           </LayoutContainer>
         </LayoutSection>
-
       </LayoutMain>
-
       <Footer />
-
     </LayoutWrapper>
   )
 } 

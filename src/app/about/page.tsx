@@ -138,7 +138,7 @@ export default function AboutPage() {
                   height={600}
                   className="w-full"
                 />
-                
+
                 {/* Navigation arrows */}
                 <Button
                   variant="ghost"
@@ -148,7 +148,7 @@ export default function AboutPage() {
                 >
                   <ChevronLeft size={20} className="text-white" />
                 </Button>
-                
+
                 <Button
                   variant="ghost"
                   size="icon"
@@ -174,9 +174,8 @@ export default function AboutPage() {
                   {makerImages.map((_, index) => (
                     <button
                       key={index}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        index === currentMakerImage ? 'bg-white' : 'bg-white/50'
-                      }`}
+                      className={`w-2 h-2 rounded-full transition-colors ${index === currentMakerImage ? 'bg-white' : 'bg-white/50'
+                        }`}
                       onClick={() => setCurrentMakerImage(index)}
                     />
                   ))}
@@ -239,34 +238,33 @@ export default function AboutPage() {
                 <p className="text-muted-foreground">
                   Product Makers crece cuando más makers se unen. Ayúdanos a expandir la comunidad compartiendo estos recursos.
                 </p>
-                
                 {/* Textos para Compartir */}
                 <div className="grid grid-cols-1 gap-4">
                   {shareTexts.map((item) => (
-                    <div key={item.id} className="border rounded-lg p-4 space-y-3">
-                      <h4 className="font-medium">{item.title}</h4>
-                      <div className="relative bg-muted rounded p-3">
-                        <p className="text-sm text-muted-foreground pr-24">
+                    <div key={item.id} className="bg-muted rounded-lg px-6 py-5 relative">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => copyToClipboard(item.text, item.id)}
+                        className="absolute top-2 right-2 flex items-center gap-2"
+                      >
+                        {copiedText === item.id ? (
+                          <>
+                            <Check size={16} />
+                            Copiado
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={16} />
+                            Copiar
+                          </>
+                        )}
+                      </Button>
+                      <div className="flex flex-col gap-3">
+                        <h4 className="text-lg font-medium">{item.title}</h4>
+                        <p className="text-sm text-muted-foreground">
                           {item.text}
                         </p>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => copyToClipboard(item.text, item.id)}
-                          className="absolute top-1/2 right-3 transform -translate-y-1/2 flex items-center gap-2"
-                        >
-                          {copiedText === item.id ? (
-                            <>
-                              <Check size={16} />
-                              Copiado
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={16} />
-                              Copiar
-                            </>
-                          )}
-                        </Button>
                       </div>
                     </div>
                   ))}
@@ -277,17 +275,17 @@ export default function AboutPage() {
                   <h3 className="text-lg font-semibold">Assets Visuales</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {visualAssets.map((asset) => (
-                      <div key={asset.id} className="border rounded-lg p-4 space-y-3">
+                      <div key={asset.id} className="bg-muted rounded-lg p-4 space-y-3">
                         <div className="aspect-video bg-muted rounded-lg overflow-hidden">
                           <Image
                             src={asset.src}
                             alt={asset.title}
                             width={300}
                             height={200}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover object-center"
                           />
                         </div>
-                        <div className="space-y-2">
+                        <div className="flex flex-col gap-2">
                           <h4 className="font-medium">{asset.title}</h4>
                           <p className="text-xs text-muted-foreground">{asset.description}</p>
                           <p className="text-xs font-mono text-muted-foreground">{asset.dimensions}</p>
