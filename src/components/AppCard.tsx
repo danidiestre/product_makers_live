@@ -26,6 +26,7 @@ interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
   }>
   ranking?: number
   initialHasVoted?: boolean // New prop for server-side vote status
+  productType?: string
 }
 
 export const AppCard: FC<AppCardProps> = ({
@@ -42,6 +43,7 @@ export const AppCard: FC<AppCardProps> = ({
   makers = [],
   ranking,
   initialHasVoted = false,
+  productType,
 }) => {
   const router = useRouter()
   const { votes, hasVoted, isLoading, toggleVote, error } = useVotes({
@@ -94,6 +96,14 @@ export const AppCard: FC<AppCardProps> = ({
                 )}
                 {badges.includes('new') && (
                   <Badge variant="new">Novedad</Badge>
+                )}
+                {productType && (
+                  <Badge variant="secondary">
+                    {productType === 'WEB' && 'Web'}
+                    {productType === 'IOS' && 'iOS'}
+                    {productType === 'ANDROID' && 'Android'}
+                    {productType === 'OTHERS' && 'Otros'}
+                  </Badge>
                 )}
                 {/* Comentado temporalmente - plataformas
                 {externalLinks?.website && (

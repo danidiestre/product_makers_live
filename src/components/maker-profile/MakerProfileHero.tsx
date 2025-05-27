@@ -64,6 +64,7 @@ export const MakerProfileHero: FC<MakerProfileHeroProps> = ({ maker }) => {
                   name="Website"
                 />
               )}
+              {/*
               {maker.email && (
                 <LinkSocial
                   href={`mailto:${maker.email}`}
@@ -71,6 +72,7 @@ export const MakerProfileHero: FC<MakerProfileHeroProps> = ({ maker }) => {
                   name="Email"
                 />
               )}
+              */}
               {maker.linkedin && (
                 <LinkSocial
                   href={maker.linkedin}

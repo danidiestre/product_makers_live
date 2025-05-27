@@ -260,7 +260,7 @@ function roleToCategory(role?: string): Maker["category"] {
     case "Developer":
     case "Marketing":
     case "Founder":
-    case "Product Manager":
+    case "ProductManager":
       return role as Maker["category"];
     default:
       return "Other";

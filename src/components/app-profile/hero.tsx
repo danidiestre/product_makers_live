@@ -80,6 +80,14 @@ export const AppProfileHero: FC<AppProfileHeroProps> = ({ app, isOwner = false }
             {app.badges?.includes('new') && (
               <Badge variant="new">Novedad</Badge>
             )}
+            {app.productType && (
+              <Badge variant="secondary">
+                {app.productType === 'WEB' && 'Web'}
+                {app.productType === 'IOS' && 'iOS'}
+                {app.productType === 'ANDROID' && 'Android'}
+                {app.productType === 'OTHERS' && 'Otros'}
+              </Badge>
+            )}
             {/* Comentado temporalmente - plataformas
             {app.externalLinks?.website && (
               <Badge variant="secondary">Web</Badge>
