@@ -4,6 +4,8 @@ import { getUserProducts } from '@/app/products/actions'
 import DashboardContent from '@/app/dashboard/DashboardContent'
 
 export default async function DashboardPage() {
+  // getCurrentUser ahora maneja automáticamente la creación de usuarios
+  // para casos como usuarios de Discord sin email
   const user = await getCurrentUser()
 
   if (!user) {
