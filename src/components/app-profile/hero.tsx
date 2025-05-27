@@ -52,7 +52,7 @@ export const AppProfileHero: FC<AppProfileHeroProps> = ({ app, isOwner = false }
 
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-foreground mb-2">{app.name}</h1>
-          <p className="text-base text-foreground mb-3 line-clamp-1">{app.tagline}</p>
+          <p className="text-base text-foreground mb-3 text-balance break-words">{app.tagline}</p>
 
           {/* Makers */}
           <div className="flex items-center mb-4">
