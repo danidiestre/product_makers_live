@@ -26,7 +26,7 @@ interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
   }>
   ranking?: number
   initialHasVoted?: boolean // New prop for server-side vote status
-  productType?: string
+  productType?: import("@/lib/types").ProductType
 }
 
 export const AppCard: FC<AppCardProps> = ({
