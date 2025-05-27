@@ -50,10 +50,10 @@ export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: 
   // Filter apps based on platform and search query
   const filteredApps = apps.filter(app => {
     const matchesPlatform = platformFilter === 'all' ? true
-      : platformFilter === 'web' ? app.externalLinks?.website
-        : platformFilter === 'ios' ? app.externalLinks?.appStore
-          : platformFilter === 'android' ? app.externalLinks?.playStore
-            : !app.externalLinks?.website && !app.externalLinks?.appStore && !app.externalLinks?.playStore
+      : platformFilter === 'web' ? app.productType === 'WEB'
+        : platformFilter === 'ios' ? app.productType === 'IOS'
+          : platformFilter === 'android' ? app.productType === 'ANDROID'
+            : app.productType === 'OTHERS'
 
     const searchTerm = searchQuery.toLowerCase()
     const matchesSearch = searchQuery === '' ? true
@@ -91,16 +91,10 @@ export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: 
   // Calculate platform counts
   const platformStats = [
     { id: 'all', label: 'All', count: apps.length },
-    { id: 'web', label: 'Web', count: apps.filter(app => app.externalLinks?.website).length },
-    { id: 'ios', label: 'iOS', count: apps.filter(app => app.externalLinks?.appStore).length },
-    { id: 'android', label: 'Android', count: apps.filter(app => app.externalLinks?.playStore).length },
-    {
-      id: 'others', label: 'Others', count: apps.filter(app =>
-        !app.externalLinks?.website &&
-        !app.externalLinks?.appStore &&
-        !app.externalLinks?.playStore
-      ).length
-    }
+    { id: 'web', label: 'Web', count: apps.filter(app => app.productType === 'WEB').length },
+    { id: 'ios', label: 'iOS', count: apps.filter(app => app.productType === 'IOS').length },
+    { id: 'android', label: 'Android', count: apps.filter(app => app.productType === 'ANDROID').length },
+    { id: 'others', label: 'Others', count: apps.filter(app => app.productType === 'OTHERS').length }
   ]
 
   // Display limited apps on home page, or all apps with pagination on products page

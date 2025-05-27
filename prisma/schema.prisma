@@ -62,7 +62,7 @@ model VerificationToken {
 }
 
 model Product {
-  id              String   @id @default(cuid())
+  id              String      @id @default(cuid())
   name            String
   tagline         String
   description     String
@@ -75,10 +75,11 @@ model Product {
   monetizacion    String
   roadmap         String
   tecnologia      String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  productType     ProductType @default(WEB)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
   userId          String
-  user            User     @relation(fields: [userId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
   votes           Vote[]
 }
 
@@ -102,4 +103,11 @@ enum Role {
   Marketer
   Founder
   Other
+}
+
+enum ProductType {
+  WEB
+  IOS
+  ANDROID
+  OTHERS
 }

@@ -22,6 +22,7 @@ export interface FormData {
   monetization: string;
   roadmap: string;
   technology: string;
+  productType: string;
   iconUrl: string;
   screenshotUrls: string[];
 }
@@ -187,6 +188,7 @@ export function ProductFormProvider({ children, mode = 'create', productId }: {
     monetization: '',
     roadmap: '',
     technology: '',
+    productType: 'WEB',
     iconUrl: '',
     screenshotUrls: []
   }
