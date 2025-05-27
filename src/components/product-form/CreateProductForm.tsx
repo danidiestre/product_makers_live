@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 import { createProduct } from '@/app/products/actions'
 import { useProductFormProvider } from '@/contexts/ProductFormContext'
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 import { TextStep } from '@/components/product-form/TextStep'
 import { InformationStep } from '@/components/product-form/InformationStep'
@@ -19,6 +20,17 @@ import { ScreenshotsStep } from '@/components/product-form/ScreenshotsStep'
 export function CreateProductForm() {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const {
+    trackProductCreationStarted,
+    trackProductCreationStep,
+    trackProductCreationAbandoned,
+    trackProductPublished
+  } = useAnalytics()
+
+  // Refs to track form timing
+  const formStartTime = useRef<Date | null>(null)
+  const stepStartTime = useRef<Date | null>(null)
+  const hasTrackedStart = useRef(false)
 
   const {
     currentStep,
@@ -30,6 +42,74 @@ export function CreateProductForm() {
     steps,
     iconFiles
   } = useProductFormProvider()
+
+  // Track form creation start
+  useEffect(() => {
+    if (!hasTrackedStart.current) {
+      formStartTime.current = new Date()
+      stepStartTime.current = new Date()
+
+      trackProductCreationStarted({
+        creation_source: "dashboard", // Could be dynamic based on how user arrived
+        user_products_count: 0 // Could be passed as prop if available
+      })
+
+      hasTrackedStart.current = true
+    }
+  }, [trackProductCreationStarted])
+
+  // Track step changes
+  useEffect(() => {
+    if (stepStartTime.current && hasTrackedStart.current) {
+      const timeOnPreviousStep = Date.now() - stepStartTime.current.getTime()
+
+      trackProductCreationStep({
+        step: steps[currentStep].id as any,
+        step_number: currentStep + 1,
+        time_on_step: Math.round(timeOnPreviousStep / 1000),
+        fields_completed: getCompletedFields()
+      })
+
+      stepStartTime.current = new Date()
+    }
+  }, [currentStep, trackProductCreationStep])
+
+  // Helper to get completed fields
+  const getCompletedFields = () => {
+    const fields = []
+    if (formData.name?.trim()) fields.push('name')
+    if (formData.tagline?.trim()) fields.push('tagline')
+    if (formData.description?.trim()) fields.push('description')
+    if (formData.link?.trim()) fields.push('link')
+    if (formData.problem?.trim()) fields.push('problem')
+    if (formData.solution?.trim()) fields.push('solution')
+    if (formData.features?.trim()) fields.push('features')
+    if (formData.monetization?.trim()) fields.push('monetization')
+    if (formData.roadmap?.trim()) fields.push('roadmap')
+    if (formData.technology?.trim()) fields.push('technology')
+    if (formData.iconUrl || iconFiles.length > 0) fields.push('icon')
+    if (formData.screenshotUrls?.length > 0) fields.push('screenshots')
+    return fields
+  }
+
+  // Track form abandonment on unmount
+  useEffect(() => {
+    return () => {
+      if (formStartTime.current && hasTrackedStart.current && !isSubmitting) {
+        const totalTime = Date.now() - formStartTime.current.getTime()
+        const completedFields = getCompletedFields()
+        const totalFields = ['name', 'tagline', 'description', 'link', 'problem', 'solution', 'features', 'monetization', 'roadmap', 'technology', 'icon', 'screenshots']
+        const completionPercentage = Math.round((completedFields.length / totalFields.length) * 100)
+
+        trackProductCreationAbandoned({
+          last_step: steps[currentStep].id,
+          total_time_spent: Math.round(totalTime / 1000),
+          fields_completed: completedFields,
+          completion_percentage: completionPercentage
+        })
+      }
+    }
+  }, [isSubmitting, currentStep, trackProductCreationAbandoned])
 
   const currentStepData = steps[currentStep]
   const isLastStep = currentStep === steps.length - 1
@@ -53,6 +133,8 @@ export function CreateProductForm() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
+    const submitStartTime = Date.now()
+
     try {
       // Upload images before validation to ensure iconUrl is updated
       await handleUploadImages()
@@ -99,6 +181,25 @@ export function CreateProductForm() {
 
       if (!result.success) {
         throw new Error(result.error || 'Error al crear el producto')
+      }
+
+      // Track successful product publication
+      if (formStartTime.current && result.data) {
+        const totalTimeToComplete = Date.now() - formStartTime.current.getTime()
+
+        trackProductPublished({
+          product_id: result.data.id,
+          product_category: currentFormData.productType || 'WEB',
+          product_stage: 'launched', // Default stage
+          has_images: screenshotUrls.length > 0,
+          has_video: false, // Not implemented yet
+          description_length: currentFormData.description?.length || 0,
+          tags_count: 0, // Not implemented yet
+          links_count: currentFormData.link ? 1 : 0,
+          time_to_complete: Math.round(totalTimeToComplete / 1000),
+          is_first_product: true, // Could be dynamic if we track user's product count
+          draft_saved_count: 0 // Could track localStorage saves
+        })
       }
 
       // Clear localStorage after successful submission

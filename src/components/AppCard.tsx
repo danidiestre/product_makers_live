@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 import { LinkSocial } from '@/components/LinkSocial'
 import { App, ExternalLinks } from '@/lib/types'
 import { useVotes } from '@/hooks/useVotes'
+import { useAnalytics } from '@/hooks/useAnalytics'
 import Link from 'next/link'
 
 // Extended App Card Props to include the additional fields from App profile
@@ -27,6 +28,10 @@ interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
   ranking?: number
   initialHasVoted?: boolean // New prop for server-side vote status
   productType?: import("@/lib/types").ProductType
+  // Analytics props
+  clickSource?: "feed" | "search" | "profile" | "category" | "trending" | "featured"
+  position?: number
+  totalProducts?: number
 }
 
 export const AppCard: FC<AppCardProps> = ({
@@ -44,6 +49,9 @@ export const AppCard: FC<AppCardProps> = ({
   ranking,
   initialHasVoted = false,
   productType,
+  clickSource = "feed",
+  position = 0,
+  totalProducts = 0,
 }) => {
   const router = useRouter()
   const { votes, hasVoted, isLoading, toggleVote, error } = useVotes({
@@ -52,13 +60,78 @@ export const AppCard: FC<AppCardProps> = ({
     initialHasVoted
   })
 
+  const {
+    trackProductClick,
+    trackProductVote,
+    trackVoteAuthentication,
+    trackExternalLink,
+    trackUserProfileClick
+  } = useAnalytics()
+
   const handleUpvote = async (e: React.MouseEvent) => {
     e.stopPropagation()
+
+    // Check if user is authenticated
+    // This will be checked in the useVotes hook, but we can track authentication requirement here
+    const voteType = hasVoted ? "remove_vote" : "upvote"
+
+    // Track vote attempt
+    trackProductVote({
+      product_id: id,
+      product_title: name,
+      product_category: tags[0] || 'unknown',
+      vote_type: voteType,
+      vote_source: "product_card",
+      product_current_votes: votes,
+      user_has_voted_before: hasVoted
+    })
+
     await toggleVote()
+
+    // If there's an error after toggle, it might be auth-related
+    // The useVotes hook will handle setting the error state
   }
 
   const handleCardClick = () => {
+    // Track product click
+    trackProductClick({
+      product_id: id,
+      product_title: name,
+      product_category: tags[0] || 'unknown',
+      click_source: clickSource,
+      click_position: position,
+      total_products_shown: totalProducts
+    })
+
     router.push(`/app/${id}`)
+  }
+
+  const handleExternalLinkClick = (linkType: "website" | "github", url: string) => {
+    trackExternalLink({
+      link_type: linkType,
+      product_id: id,
+      link_position: "product_card"
+    })
+    // The actual navigation will be handled by LinkSocial component
+  }
+
+  const handleMakerClick = (maker: any, e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+
+    trackUserProfileClick({
+      viewed_user_id: maker.id || 'unknown',
+      viewed_user_name: maker.name,
+      click_source: "product_card",
+      viewer_following_viewed: false, // Could be dynamic if we track follows
+      viewed_user_products_count: 0, // Could be passed as prop
+      viewed_user_followers_count: 0 // Could be passed as prop
+    })
+
+    // Navigate to maker profile if we have an ID
+    if (maker.id) {
+      router.push(`/maker/${maker.id}`)
+    }
   }
 
   return (
@@ -131,15 +204,14 @@ export const AppCard: FC<AppCardProps> = ({
                     Creado por {makers.map((m, i) => (
                       <HoverCard key={i} openDelay={0} closeDelay={0}>
                         <HoverCardTrigger asChild>
-                          <Link
-                            href={`/maker/${m.id}`}
-                            className="hover:text-foreground transition-colors"
-                            onClick={(e) => e.stopPropagation()}
+                          <span
+                            className="hover:text-foreground transition-colors cursor-pointer"
+                            onClick={(e) => handleMakerClick(m, e)}
                           >
                             {m.name}
                             {i < makers.length - 1 ? ', ' : ''}
-                          </Link>
-                        </HoverCardTrigger>
+                          </span>
+                        </HoverCardTrigger >
                         <HoverCardContent sideOffset={8} className="w-auto max-w-80 pr-4">
                           <div className="flex gap-3">
                             <Avatar className="size-10 rounded-md">
@@ -154,12 +226,12 @@ export const AppCard: FC<AppCardProps> = ({
                             </div>
                           </div>
                         </HoverCardContent>
-                      </HoverCard>
+                      </HoverCard >
                     ))}
-                  </span>
-                </div>
+                  </span >
+                </div >
               )}
-            </div>
+            </div >
             <div className="absolute top-0 right-0 md:relative md:flex flex-shrink-0">
               <div className="flex gap-2">
                 {/* Comments button - Commented out for first version */}
@@ -216,8 +288,8 @@ export const AppCard: FC<AppCardProps> = ({
                 </div>
               </div>
             </div>
-          </div>
-        </CardHeader>
+          </div >
+        </CardHeader >
         <CardFooter className="hidden flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-6 border-t py-4 px-6">
           {makers.length > 0 && (
             <div className="flex items-center">
@@ -234,11 +306,8 @@ export const AppCard: FC<AppCardProps> = ({
                   <HoverCard key={i} openDelay={0} closeDelay={0}>
                     <HoverCardTrigger asChild>
                       <span
-                        className="hover:text-foreground transition-colors"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
-                        }}
+                        className="hover:text-foreground transition-colors cursor-pointer"
+                        onClick={(e) => handleMakerClick(m, e)}
                       >
                         {m.name}
                         {i < makers.length - 1 ? ', ' : ''}
@@ -269,6 +338,7 @@ export const AppCard: FC<AppCardProps> = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
+                  handleExternalLinkClick("website", externalLinks.website!);
                 }}
               >
                 <LinkSocial
@@ -283,6 +353,7 @@ export const AppCard: FC<AppCardProps> = ({
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
+                  handleExternalLinkClick("github", externalLinks.github!);
                 }}
               >
                 <LinkSocial
@@ -294,7 +365,7 @@ export const AppCard: FC<AppCardProps> = ({
             )}
           </div>
         </CardFooter>
-      </Card>
-    </div>
+      </Card >
+    </div >
   )
 } 

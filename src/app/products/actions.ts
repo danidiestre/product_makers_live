@@ -6,24 +6,42 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { App, Maker } from "@/lib/types";
 
+// Helper function to get current user from session
+async function getCurrentUserFromSession() {
+  const session = await getServerSession(authOptions);
+
+  // Check if we have either ID or email to identify the user
+  if (!session?.user?.id && !session?.user?.email) {
+    return null;
+  }
+
+  // Try to find user by ID first (more reliable), then fallback to email
+  let user = null;
+  if (session.user.id) {
+    user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+    });
+  }
+
+  // Fallback to email if ID search didn't work and email is available
+  if (!user && session.user.email) {
+    user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+  }
+
+  return user;
+}
+
 export async function createProduct(formData: FormData) {
   try {
     // Get current user
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await getCurrentUserFromSession();
+    if (!user) {
       return {
         success: false,
         error: "You must be logged in to create a product",
       };
-    }
-
-    // Get the user from DB
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return { success: false, error: "User not found" };
     }
 
     // Extraer datos del formulario
@@ -94,21 +112,12 @@ export async function createProduct(formData: FormData) {
 export async function updateProduct(formData: FormData) {
   try {
     // Get current user
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await getCurrentUserFromSession();
+    if (!user) {
       return {
         success: false,
         error: "You must be logged in to update a product",
       };
-    }
-
-    // Get the user from DB
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return { success: false, error: "User not found" };
     }
 
     // Extraer ID del producto
@@ -199,21 +208,12 @@ export async function updateProduct(formData: FormData) {
 export async function deleteProduct(productId: string) {
   try {
     // Get current user
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.email) {
+    const user = await getCurrentUserFromSession();
+    if (!user) {
       return {
         success: false,
         error: "You must be logged in to delete a product",
       };
-    }
-
-    // Get the user from DB
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-
-    if (!user) {
-      return { success: false, error: "User not found" };
     }
 
     // Verificar que el producto existe y pertenece al usuario

@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import Link from 'next/link'
 import { Github, Globe, Linkedin, Mail, Twitter } from 'lucide-react'
 import { User } from '@prisma/client'
@@ -15,12 +15,26 @@ import {
   BreadcrumbPage
 } from "@/components/ui/breadcrumb"
 import { LinkSocial } from '@/components/LinkSocial'
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 interface MakerProfileHeroProps {
   maker: User
 }
 
 export const MakerProfileHero: FC<MakerProfileHeroProps> = ({ maker }) => {
+  const { trackUserProfileView } = useAnalytics()
+
+  useEffect(() => {
+    // Track user profile view when component mounts
+    trackUserProfileView({
+      viewed_user_id: maker.id,
+      viewed_user_name: maker.name || 'Unknown',
+      view_source: "profile_click",
+      tab_viewed: "products", // Default tab
+      is_own_profile: false // Could be dynamic if we pass current user
+    })
+  }, [maker.id, maker.name, trackUserProfileView])
+
   return (
     <LayoutSection className="border-b pt-6 pb-12 bg-background">
       <LayoutContainer>

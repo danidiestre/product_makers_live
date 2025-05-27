@@ -8,15 +8,29 @@ import { revalidatePath } from "next/cache";
 export async function getCurrentUser(): Promise<User | null> {
   const session = await getServerSession();
 
-  if (!session?.user?.email) {
+  // Check if we have either ID or email to identify the user
+  if (!session?.user?.id && !session?.user?.email) {
     return null;
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      email: session.user.email,
-    },
-  });
+  // Try to find user by ID first (more reliable), then fallback to email
+  let user = null;
+  if (session.user.id) {
+    user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+    });
+  }
+
+  // Fallback to email if ID search didn't work and email is available
+  if (!user && session.user.email) {
+    user = await prisma.user.findUnique({
+      where: {
+        email: session.user.email,
+      },
+    });
+  }
 
   return user;
 }
@@ -35,7 +49,8 @@ export async function updateProfile(data: UpdateProfileData) {
   try {
     const session = await getServerSession();
 
-    if (!session?.user?.email) {
+    // Check if we have either ID or email to identify the user
+    if (!session?.user?.id && !session?.user?.email) {
       throw new Error("You must be logged in to update your profile");
     }
 
@@ -44,11 +59,14 @@ export async function updateProfile(data: UpdateProfileData) {
       throw new Error("Invalid role selected");
     }
 
+    // Determine which field to use for update (prefer ID over email)
+    const whereCondition = session.user.id
+      ? { id: session.user.id }
+      : { email: session.user.email! }; // We know email exists if ID doesn't due to the check above
+
     // Update user profile
     const user = await prisma.user.update({
-      where: {
-        email: session.user.email,
-      },
+      where: whereCondition,
       data: {
         name: data.name || null,
         bio: data.bio || null,
@@ -63,7 +81,7 @@ export async function updateProfile(data: UpdateProfileData) {
     // Revalidate both profile and dashboard pages
     revalidatePath("/dashboard/profile");
     revalidatePath("/dashboard");
-    
+
     return { success: true, user };
   } catch (error: any) {
     console.error("Error updating profile:", error);

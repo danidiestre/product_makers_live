@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import {
   toggleVote as toggleVoteAction,
   VoteResult,
@@ -29,6 +30,7 @@ export function useVotes({
   const [hasVoted, setHasVoted] = useState(initialHasVoted);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const { data: session } = useSession();
 
   // Update state when props change (important for when useProductsWithVotes updates the data)
   useEffect(() => {
@@ -37,6 +39,13 @@ export function useVotes({
   }, [initialVotes, initialHasVoted]);
 
   const toggleVote = async () => {
+    // Check if user is authenticated before proceeding
+    if (!session?.user) {
+      // Don't track here as it's handled in AppCard component
+      setError("Debes iniciar sesión para votar");
+      return;
+    }
+
     // Optimistic update
     const newHasVoted = !hasVoted;
     const newVotes = newHasVoted ? votes + 1 : votes - 1;
