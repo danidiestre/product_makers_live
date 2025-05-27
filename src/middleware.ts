@@ -8,9 +8,11 @@ export default withAuth(
   {
     callbacks: {
       authorized({ req, token }) {
-        // Return true if the user is logged in
-        // console.log("middleware:", token);
-        return !!token;
+        // Verificar que existe el token y que tiene al menos ID o email
+        // Esto permite usuarios tanto con email como sin email
+        const hasValidIdentifier = token && (token.id || token.email);
+
+        return !!hasValidIdentifier;
       },
     },
   }

@@ -34,7 +34,7 @@ interface DiscordProfile {
   id: string;
   username: string;
   discriminator: string;
-  email: string;
+  email?: string | null; // Email es opcional ya que el usuario puede no compartirlo
   avatar: string | null;
   banner: string | null;
   accent_color: number | null;
@@ -47,6 +47,11 @@ export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt", // Change to JWT to fix session errors
     maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+  // Permitir autenticación incluso sin email verificado
+  pages: {
+    signIn: "/",
+    error: "/",
   },
   providers: [
     Discord({
@@ -78,7 +83,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: profile.id,
           name: profile.username,
-          email: profile.email,
+          email: profile.email || null, // Manejar el caso donde email puede ser undefined
           image: image_url,
           banner: banner_url || null,
           accentColor: profile.accent_color,
@@ -98,9 +103,6 @@ export const authOptions: NextAuthOptions = {
           token.banner = (profile as any).banner;
           token.accent_color = (profile as any).accent_color;
         }
-        
-        console.log('JWT callback - token:', token);
-        console.log('JWT callback - user:', user);
       }
       return token;
     },
@@ -110,12 +112,9 @@ export const authOptions: NextAuthOptions = {
         session.user.banner = token.banner as string | null;
         session.user.accentColor = token.accent_color as number | null;
         session.user.role = token.role as string | null;
-        
-        console.log('Session callback - session:', session);
-        console.log('Session callback - token:', token);
       }
       return session;
     },
   },
   debug: process.env.NODE_ENV === "development",
-}; 
+};

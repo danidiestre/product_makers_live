@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Button } from '@/components/ui/button'
 import { LinkSocial } from '@/components/LinkSocial'
-import { App, ExternalLinks } from '@/lib/types'
+import { App, ExternalLinks, ProductType } from '@/lib/types'
 import { useVotes } from '@/hooks/useVotes'
 import { useAnalytics } from '@/hooks/useAnalytics'
 import Link from 'next/link'
@@ -27,7 +27,7 @@ interface AppCardProps extends Omit<App, 'externalLinks' | 'makers'> {
   }>
   ranking?: number
   initialHasVoted?: boolean // New prop for server-side vote status
-  productType?: import("@/lib/types").ProductType
+  productType?: ProductType
   // Analytics props
   clickSource?: "feed" | "search" | "profile" | "category" | "trending" | "featured"
   position?: number
