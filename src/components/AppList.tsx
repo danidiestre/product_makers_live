@@ -113,8 +113,31 @@ export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: 
     }
   };
 
+  // Determine click source based on context
+  const getClickSource = () => {
+    if (searchQuery) return "search" as const
+    if (limit) return "featured" as const
+    return "feed" as const
+  }
+
   return (
     <div className="w-full grid gap-6">
+      {searchQuery && (
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <p className="text-sm text-muted-foreground">
+            Mostrando <span className="font-medium">{filteredApps.length}</span> resultados para "<span className="font-medium">{searchQuery}</span>"
+          </p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleReset}
+            className="gap-2"
+          >
+            Limpiar filtros
+          </Button>
+        </div>
+      )}
+
       {!limit && (
         <div className="flex flex-row gap-4 items-center justify-between bg-background p-2 rounded-xl border">
           {/* Platform filter */}
@@ -196,6 +219,9 @@ export function AppList({ searchQuery, limit, initialProducts, onResetSearch }: 
             <AppCard
               key={app.id}
               {...app}
+              clickSource={getClickSource()}
+              position={index + 1}
+              totalProducts={displayApps.length}
               ranking={limit ? index + 1 : undefined}
             />
           ))

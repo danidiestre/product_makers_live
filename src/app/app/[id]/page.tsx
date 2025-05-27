@@ -13,6 +13,7 @@ import { getCurrentUser } from '@/app/dashboard/profile/actions'
 import { AppProfileHero } from '@/components/app-profile/hero'
 import { AppProfileContent } from '@/components/app-profile/content'
 import { EmptyState } from '@/components/EmptyState'
+import { ProductDetailAnalytics } from '@/components/ProductDetailAnalytics'
 
 interface AppProfilePageProps {
   params: { id: string }
@@ -58,6 +59,12 @@ const AppProfilePage: FC<AppProfilePageProps> = async ({ params }) => {
     <LayoutWrapper>
       <Navbar />
       <LayoutMain>
+        {/* Analytics tracking component */}
+        <ProductDetailAnalytics
+          productId={app.id}
+          productCategory={app.tags?.[0] || 'unknown'}
+        />
+
         {/* App header - Hero section */}
         <LayoutSection className="border-b pt-6 pb-12 bg-background">
           <AppProfileHero app={app} isOwner={isOwner} />
