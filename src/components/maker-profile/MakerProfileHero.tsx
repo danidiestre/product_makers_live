@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { LinkSocial } from '@/components/LinkSocial'
 import { useAnalytics } from '@/hooks/useAnalytics'
+import { Badge } from '../ui/badge'
 
 interface MakerProfileHeroProps {
   maker: User
@@ -65,8 +66,10 @@ export const MakerProfileHero: FC<MakerProfileHeroProps> = ({ maker }) => {
           </div>
 
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-foreground mb-2">{maker.name}</h1>
-            <p className="text-base text-foreground mb-4 line-clamp-1">{maker.role}</p>
+            <h1 className="text-3xl font-bold text-foreground mb-3">{maker.name}</h1>
+            <Badge variant="outline" className="mb-4">
+              {maker.role === 'ProductManager' ? 'Product Manager' : maker.role}
+            </Badge>
             <p className="text-sm text-muted-foreground mb-6">{maker.bio}</p>
 
             {/* Social Links */}

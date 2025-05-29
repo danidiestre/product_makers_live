@@ -240,15 +240,15 @@ export function CreateProductForm() {
       <CardContent className="p-6 flex-1 overflow-y-auto">
         {renderStepContent()}
       </CardContent>
-      <CardFooter className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 p-6 border-t">
+      <CardFooter className="grid grid-cols-3 gap-2 sm:gap-6 p-6 border-t">
         <Button
           variant="outline"
           onClick={handleBack}
           disabled={isFirstStep || isSubmitting}
-          className="w-auto gap-2 pl-3 justify-self-start"
+          className="w-auto gap-2 md:pl-3 justify-self-start"
         >
           <ArrowLeft size={20} />
-          Anterior
+          <span className="hidden md:flex">Anterior</span>
         </Button>
 
         <div className="w-full text-sm font-medium h-10 flex items-center justify-center text-muted-foreground cursor-default">
@@ -257,7 +257,7 @@ export function CreateProductForm() {
 
         <Button
           onClick={handleNext}
-          className="w-auto gap-2 pr-3 justify-self-end"
+          className="w-auto gap-2 md:pr-3 justify-self-end"
           disabled={!isStepValid() || isSubmitting}
         >
           {isLastStep ? (
@@ -265,13 +265,13 @@ export function CreateProductForm() {
               'Guardando...'
             ) : (
               <>
-                Finalizar
+                <span className="hidden md:flex">Finalizar</span>
                 <Check size={20} />
               </>
             )
           ) : (
             <>
-              Siguiente
+              <span className="hidden md:flex">Siguiente</span>
               <ArrowRight size={20} />
             </>
           )}

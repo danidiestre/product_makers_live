@@ -68,7 +68,7 @@ export const MakerCard: FC<MakerCardProps> = ({ maker }) => {
         <CardFooter className="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between md:gap-6 border-t py-4 px-6">
           <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground cursor-default">
             <Tag size={16} />
-            <span>{role ? role : '?'}</span>
+            <span>{role ? (role === 'ProductManager' ? 'Product Manager' : role) : '?'}</span>
           </div>
           <div className="hidden md:flex items-center gap-6">
             {website && (

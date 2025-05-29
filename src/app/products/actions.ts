@@ -276,25 +276,24 @@ function convertProductToApp(
   // Convertir el usuario a formato Maker
   const maker = product.user
     ? {
-        id: product.user.id,
-        name: product.user.name || "Unknown",
-        avatar:
-          product.user.image ||
-          "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-        role: roleToCategory(product.user.role?.toString()),
-        bio: product.user.bio || "",
-        category: roleToCategory(product.user.role?.toString()),
-        makerCategory: roleToCategory(product.user.role?.toString()),
-        isVerified: true,
-        joinedDate:
-          product.user.emailVerified?.toISOString().split("T")[0] ||
-          new Date().toISOString().split("T")[0],
-        followers: 0,
-        twitter: product.user.twitter || undefined,
-        github: product.user.github || undefined,
-        website: product.user.website || undefined,
-        linkedin: product.user.linkedin || undefined,
-      }
+      id: product.user.id,
+      name: product.user.name || "Unknown",
+      avatar:
+        product.user.image ||
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+      role: roleToCategory(product.user.role?.toString()),
+      bio: product.user.bio || "",
+      category: roleToCategory(product.user.role?.toString()),
+      isVerified: true,
+      joinedDate:
+        product.user.emailVerified?.toISOString().split("T")[0] ||
+        new Date().toISOString().split("T")[0],
+      followers: 0,
+      twitter: product.user.twitter || undefined,
+      github: product.user.github || undefined,
+      website: product.user.website || undefined,
+      linkedin: product.user.linkedin || undefined,
+    }
     : undefined;
 
   // Convertir al formato App

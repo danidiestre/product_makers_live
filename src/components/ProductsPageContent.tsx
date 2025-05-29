@@ -1,16 +1,22 @@
 'use client'
 
-import { Search, Plus } from 'lucide-react'
+import { Search, Plus, Flame, Clock } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import {
+  ToggleGroup,
+  ToggleGroupItem,
+} from '@/components/ui/toggle-group'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { AppList } from '@/components/AppList'
 import { PageHeader } from '@/components/PageHeader'
 import { LayoutSection } from '@/components/layout/LayoutSection'
 import { LayoutContainer } from '@/components/layout/LayoutContainer'
 import { App } from '@/lib/types'
 import { useAnalytics } from '@/hooks/useAnalytics'
+import { SortKey } from '@/lib/types'
 
 interface ProductsPageContentProps {
   initialProducts: App[]
@@ -18,6 +24,7 @@ interface ProductsPageContentProps {
 
 export function ProductsPageContent({ initialProducts }: ProductsPageContentProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [sortKey, setSortKey] = useState<SortKey>('votes')
   const { trackSearch } = useAnalytics()
   const searchTimeoutRef = useRef<NodeJS.Timeout>()
 
@@ -60,12 +67,17 @@ export function ProductsPageContent({ initialProducts }: ProductsPageContentProp
     setSearchQuery(e.target.value)
   }
 
+  const handleResetSearch = () => {
+    setSearchQuery('')
+    setSortKey('votes') // Reset sort to default when clearing search
+  }
+
   return (
     <>
       <PageHeader title="Productos">
-        <div className="flex items-center gap-3">
+        <div className="w-full flex items-center justify-end gap-3">
           {/* Search bar */}
-          <div className="relative">
+          <div className="w-full md:w-auto relative">
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="text"
@@ -75,8 +87,33 @@ export function ProductsPageContent({ initialProducts }: ProductsPageContentProp
               className="w-full sm:w-[240px] pl-10"
             />
           </div>
-          {/* Add product button */}
-          <Button asChild variant="default" className="gap-2 hidden sm:flex">
+          {/* Sort control */}
+          <ToggleGroup
+            type="single"
+            value={sortKey}
+            defaultValue="votes"
+            onValueChange={(value) => value && setSortKey(value as SortKey)}
+            className="border rounded-md gap-0 overflow-hidden divide-x h-10 flex-shrink-0"
+          >
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ToggleGroupItem value="votes" aria-label="Populares" className="rounded-none">
+                  <Flame className="size-5" />
+                </ToggleGroupItem>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Populares</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <ToggleGroupItem value="launchDate" aria-label="Recientes" className="rounded-none">
+                  <Clock className="size-5" />
+                </ToggleGroupItem>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Recientes</TooltipContent>
+            </Tooltip>
+          </ToggleGroup>
+          {/* Add product button, hidden for now */}
+          <Button asChild variant="default" className="gap-2 hidden">
             <Link href="/dashboard/product/new">
               <Plus size={16} />
               Añadir producto
@@ -90,7 +127,8 @@ export function ProductsPageContent({ initialProducts }: ProductsPageContentProp
         <LayoutContainer>
           <AppList
             searchQuery={searchQuery}
-            onResetSearch={() => setSearchQuery('')}
+            sortKey={sortKey}
+            onResetSearch={handleResetSearch}
             initialProducts={initialProducts}
           />
         </LayoutContainer>
