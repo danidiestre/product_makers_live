@@ -4,6 +4,8 @@ export type ViewType = 'grid' | 'list';
 
 export type SortKey = 'votes' | 'launchDate';
 
+export type PlatformFilter = 'all' | 'web' | 'ios' | 'android' | 'others'
+
 export interface Update {
   date: string;
   version: string;
