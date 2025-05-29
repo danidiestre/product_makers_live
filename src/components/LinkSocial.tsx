@@ -6,7 +6,7 @@ import React from "react"
 interface LinkSocialProps {
   href: string;
   icon: React.ReactNode;
-  name: string;
+  name?: string;
 }
 
 export function LinkSocial({ href, icon, name }: LinkSocialProps) {
@@ -19,7 +19,7 @@ export function LinkSocial({ href, icon, name }: LinkSocialProps) {
       onClick={(e) => e.stopPropagation()}
     >
       {icon}
-      <span>{name}</span>
+      {name && <span>{name}</span>}
     </Link>
   )
 } 

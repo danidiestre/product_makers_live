@@ -1,5 +1,9 @@
 export type BadgeType = "new" | "trending" | "top";
 
+export type ViewType = 'grid' | 'list';
+
+export type SortKey = 'votes' | 'launchDate';
+
 export interface Update {
   date: string;
   version: string;
@@ -21,12 +25,12 @@ export type Maker = {
   bio: string;
   isVerified: boolean;
   category:
-    | "Designer"
-    | "Developer"
-    | "Marketing"
-    | "Founder"
-    | "Other"
-    | "Product Manager";
+  | "Designer"
+  | "Developer"
+  | "Marketing"
+  | "Founder"
+  | "Other"
+  | "Product Manager";
   joinedDate: string;
   followers: number;
   twitter?: string;
@@ -34,13 +38,6 @@ export type Maker = {
   website?: string;
   linkedin?: string;
   dribbble?: string;
-  makerCategory?:
-    | "Designer"
-    | "Developer"
-    | "Marketing"
-    | "Founder"
-    | "Other"
-    | "Product Manager";
 };
 
 export interface Metrics {
@@ -78,11 +75,3 @@ export interface App {
   productType?: ProductType;
   initialHasVoted?: boolean;
 }
-
-export type MakerCategory =
-  | "Designer"
-  | "Developer"
-  | "Marketing"
-  | "Founder"
-  | "Other"
-  | "Product Manager";

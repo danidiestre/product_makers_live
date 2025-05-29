@@ -34,7 +34,7 @@ export const MakerProfileProducts: FC<MakerProfileProductsProps> = ({ maker, pro
         <div className="w-full flex flex-col gap-12">
           <Card className={styles.card}>
             <CardHeader className={styles.cardHeader}>
-              <CardTitle className={styles.cardTitle}>Productos</CardTitle>
+              <CardTitle className={styles.cardTitle}>Productos ({products.length})</CardTitle>
               <CardDescription>Productos creados por {maker.name}</CardDescription>
             </CardHeader>
             <CardContent className={`${styles.cardContent} mt-4`}>

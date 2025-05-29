@@ -23,16 +23,20 @@ import { Role, User } from '@prisma/client'
 import { getUsers, getUsersByRole } from '@/app/makers/actions'
 import { LoadState } from '@/components/LoadState'
 import { EmptyState } from '@/components/EmptyState'
-import { ServerCrash, Tag, WandSparkles } from 'lucide-react'
+import { ServerCrash, WandSparkles } from 'lucide-react'
+import { MakerCardGrid } from './MakerCardGrid'
+import { cn } from '@/lib/utils'
+import { ViewType } from '@/lib/types'
 
-const MAKERS_PER_PAGE = 12
+const MAKERS_PER_PAGE = 20
 
 type MakersListProps = {
   searchQuery: string;
   onResetSearch?: () => void;
+  viewType: ViewType;
 }
 
-export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) => {
+export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch, viewType }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedCategory, setSelectedCategory] = useState<Role | 'All'>('All')
   const [allMakers, setAllMakers] = useState<User[]>([]) // Store ALL makers here
@@ -86,6 +90,11 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) 
     setCurrentPage(1)
   }, [searchQuery, selectedCategory])
 
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentPage])
+
   // Calculate pagination
   const totalPages = Math.ceil(searchedMakers.length / MAKERS_PER_PAGE)
   const startIndex = (currentPage - 1) * MAKERS_PER_PAGE
@@ -108,7 +117,6 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) 
     }
   }
 
-
   if (loading) {
     return <LoadState message="Cargando makers..." />
   }
@@ -128,36 +136,37 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) 
   }
 
   return (
-    <div className="w-full grid gap-6">
-      {/* Category filters */}
-      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-background p-2 rounded-xl border">
+    <div className="w-full grid gap-10">
+      {/* Category filters and view toggle */}
+      <div className="flex flex-row items-center justify-center">
         <div className="hidden md:flex flex-wrap gap-1">
           {categoryCounts.map(({ name, count }) => (
             <Button
+              size="sm"
               key={name}
               variant={selectedCategory === name ? "secondary" : "ghost"}
               onClick={() => setSelectedCategory(name)}
-              className="flex items-center gap-2 pr-2 rounded-lg"
+              className={cn("flex items-center gap-1.5 px-2 font-semibold bg-transparent hover:bg-transparent border-none", selectedCategory === name ? "opacity-100" : "opacity-40")}
             >
-              {name === 'ProductManager' ? 'Product Manager' : name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="w-8">{count}</Badge>
+              {name === 'ProductManager' ? 'Product Manager' : name} <Badge variant={selectedCategory === name ? "secondary" : "secondary"} className="px-1.5">{count}</Badge>
             </Button>
           ))}
         </div>
-        <div className="w-full flex md:hidden">
+
+        <div className="flex md:hidden">
           <Select
             value={selectedCategory}
             onValueChange={(value) => setSelectedCategory(value as Role | 'All')}
           >
-            <SelectTrigger className="border-none">
-              <Tag size={16} />
+            <SelectTrigger className="gap-2 border-none bg-transparent">
               <SelectValue placeholder="Categorías" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent align="center">
               {categoryCounts.map(({ name, count }) => (
                 <SelectItem key={name} value={name}>
                   <div className="w-full flex items-center gap-2 font-medium">
                     <span className="w-full">{name === 'ProductManager' ? 'Product Manager' : name}</span>
-                    <Badge variant="secondary" className="w-8">{count}</Badge>
+                    <Badge variant="secondary" className="w-8 mr-2 md:mr-0">{count}</Badge>
                   </div>
                 </SelectItem>
               ))}
@@ -166,10 +175,15 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) 
         </div>
       </div>
 
-      {/* Makers grid */}
-      <div className="grid grid-cols-1 gap-4">
+      {/* Makers grid or list */}
+      <div className={viewType === 'grid'
+        ? "grid grid-cols-2 lg:grid-cols-4 gap-4"
+        : "flex flex-col gap-4"
+      }>
         {paginatedMakers.map((maker) => (
-          <MakerCard key={maker.id} maker={maker} />
+          viewType === 'grid'
+            ? <MakerCardGrid key={maker.id} maker={maker} />
+            : <MakerCard key={maker.id} maker={maker} />
         ))}
       </div>
 
@@ -230,4 +244,4 @@ export const MakersList: FC<MakersListProps> = ({ searchQuery, onResetSearch }) 
       )}
     </div>
   )
-} 
+}
